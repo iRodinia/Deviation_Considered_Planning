@@ -1,0 +1,8 @@
+prefix=/home/czhang/Documents/deviation_considered_planner/install
+
+Name: global_map_gen
+Description: Description of global_map_gen
+Version: 0.1.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: roscpp pcl_ros pcl_conversions

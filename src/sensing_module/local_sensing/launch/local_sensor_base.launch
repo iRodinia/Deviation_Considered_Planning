@@ -1,0 +1,29 @@
+<launch>
+    <arg name="sensing_horizon"                     default="3.5"/>
+    <arg name="sensing_rate"                        default="30.0"/>
+    <arg name="map_size_x"                          default="5.0"/>
+    <arg name="map_size_y"                          default="5.0"/>
+    <arg name="map_size_z"                          default="2.5"/>
+    <arg name="global_map_topic"                    default="global_map"/>
+    <arg name="local_map_topic"                     default="local_map"/>
+    <arg name="camera_odometry_topic"               default="cam_odom"/>
+  
+    <node pkg="local_sensing" type="local_sensing_node" name="local_sensing_node" output="screen">
+        <param name="cam_width"     value="640"/>
+        <param name="cam_height"    value="480"/>
+        <param name="cam_fx"        value="387.229248046875"/>
+        <param name="cam_fy"        value="387.229248046875"/>
+        <param name="cam_cx"        value="321.04638671875"/>
+        <param name="cam_cy"        value="243.44969177246094"/>
+
+        <param name="sensing_horizon"  value="$(arg sensing_horizon)" />
+        <param name="sensing_rate"     value="$(arg sensing_rate)"/>
+        <param name="map_size_x"       value="$(arg map_size_x)"/>
+        <param name="map_size_y"       value="$(arg map_size_y)"/>
+        <param name="map_size_z"       value="$(arg map_size_z)"/>
+        <param name="global_map_topic"     value="$(arg global_map_topic)"/>
+        <param name="local_map_topic"      value="$(arg local_map_topic)"/>
+        <param name="camera_odometry_topic"      value="$(arg camera_odometry_topic)"/>
+    </node>
+
+</launch>

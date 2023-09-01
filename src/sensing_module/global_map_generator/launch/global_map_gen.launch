@@ -1,0 +1,45 @@
+<launch>
+    <arg name="map_size_x"                     default="5.0"/>
+    <arg name="map_size_y"                     default="5.0"/>
+    <arg name="map_size_z"                     default="2.5"/>
+    <arg name="resolution"                     default="0.05"/>
+    <arg name="map_pub_topic"                  default="/global_map"/>
+
+    <node pkg="global_map_generator" type="global_map_node" name="global_map_node" output="screen">
+        <param name="seed" type="int" value="511"/>
+        <param name="update_freq" type="double" value="1.0"/>
+        <!--  box edge length, unit meter-->
+        <param name="resolution" type="double" value="$(arg resolution)"/>
+        <!-- map size unit meter-->
+        <param name="x_length" type="int" value="$(arg map_size_x)"/>
+        <param name="y_length" type="int" value="$(arg map_size_y)"/>
+        <param name="z_length" type="int" value="$(arg map_size_z)"/>
+        <param name="global_map_topic" type="string" value="$(arg map_pub_topic)"/>
+        <param name="type" type="int" value="1"/>   <!-- 1 perlin noise 3D -->
+                                                    <!-- 2 perlin box random map -->
+                                                    <!-- 3 2d maze still developing -->
+                                                    <!-- 4 3d maze -->
+        <!-- type 1 perlin noise parameters -->
+        <param name="complexity"    type="double" value="0.03"/> <!-- base noise frequency, large value will be complex. typical 0.0 ~ 0.5 -->
+        <param name="fill"          type="double" value="0.3"/> <!-- infill persentage. typical: 0.4 ~ 0.0 -->
+        <param name="fractal"       type="int"    value="1"/> <!-- large value will have more detail-->
+        <param name="attenuation"   type="double" value="0.1"/> <!-- for fractal attenuation. typical: 0.0 ~ 0.5 -->
+
+        <!-- type 2 -->
+        <param name="width_min"         type="double" value="0.6"/>
+        <param name="width_max"         type="double" value="1.5"/>
+        <param name="obstacle_number"   type="int"    value="50"/>
+
+        <!-- type 3 -->
+        <param name="road_width"        type="double" value="0.5"/>
+        <param name="add_wall_x"        type="int"    value="0"/>
+        <param name="add_wall_y"        type="int"    value="1"/>
+        <param name="maze_type"         type="int"    value="1"/> <!-- 1 recursive division maze-->
+
+        <!-- type 4 maze 3d -->
+        <param name="numNodes"        type="int"    value="40"/>
+        <param name="connectivity"    type="double" value="0.8"/>
+        <param name="nodeRad"         type="int"    value="1"/>
+        <param name="roadRad"         type="int"    value="10"/>
+    </node>
+</launch>

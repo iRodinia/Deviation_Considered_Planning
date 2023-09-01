@@ -1,0 +1,12 @@
+Symlinking /home/czhang/Documents/deviation_considered_planner/devel/include/local_sensing/local_sensing_nodeConfig.h
+Symlinking /home/czhang/Documents/deviation_considered_planner/devel/share/local_sensing/cmake/local_sensingConfig.cmake
+Symlinking /home/czhang/Documents/deviation_considered_planner/devel/share/local_sensing/cmake/local_sensingConfig-version.cmake
+Symlinking /home/czhang/Documents/deviation_considered_planner/devel/share/local_sensing/docs/local_sensing_nodeConfig.wikidoc
+Symlinking /home/czhang/Documents/deviation_considered_planner/devel/share/local_sensing/docs/local_sensing_nodeConfig.dox
+Symlinking /home/czhang/Documents/deviation_considered_planner/devel/share/local_sensing/docs/local_sensing_nodeConfig-usage.dox
+Symlinking /home/czhang/Documents/deviation_considered_planner/devel/lib/libdepth_render_cuda.so
+Symlinking /home/czhang/Documents/deviation_considered_planner/devel/lib/local_sensing/local_sensing_node
+Symlinking /home/czhang/Documents/deviation_considered_planner/devel/lib/python3/dist-packages/local_sensing/__init__.py
+Symlinking /home/czhang/Documents/deviation_considered_planner/devel/lib/python3/dist-packages/local_sensing/cfg/__init__.py
+Symlinking /home/czhang/Documents/deviation_considered_planner/devel/lib/python3/dist-packages/local_sensing/cfg/local_sensing_nodeConfig.py
+Symlinking /home/czhang/Documents/deviation_considered_planner/devel/lib/pkgconfig/local_sensing.pc

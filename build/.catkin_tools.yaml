@@ -1,0 +1,6 @@
+devel_space: /home/czhang/Documents/deviation_considered_planner/devel
+install: false
+install_space: /home/czhang/Documents/deviation_considered_planner/install
+profile: default
+source_space: /home/czhang/Documents/deviation_considered_planner/src
+workspace: /home/czhang/Documents/deviation_considered_planner

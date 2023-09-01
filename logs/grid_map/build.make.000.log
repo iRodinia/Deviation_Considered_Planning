@@ -1,0 +1,5 @@
+[35m[1mScanning dependencies of target grid_map[0m
+[ 66%] [32mBuilding CXX object CMakeFiles/grid_map.dir/src/raycast.cpp.o[0m
+[ 66%] [32mBuilding CXX object CMakeFiles/grid_map.dir/src/grid_map.cpp.o[0m
+[100%] [32m[1mLinking CXX shared library /home/czhang/Documents/deviation_considered_planner/devel/.private/grid_map/lib/libgrid_map.so[0m
+[100%] Built target grid_map

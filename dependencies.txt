@@ -1,0 +1,2 @@
+install octomap:
+	sudo apt-get install ros-noetic-octomap*
