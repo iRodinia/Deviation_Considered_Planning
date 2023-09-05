@@ -1,2 +1,3 @@
 install octomap:
 	sudo apt-get install ros-noetic-octomap*
+	crazyswarm, git clone --recursive, and add to the $PYTHON_PATH
