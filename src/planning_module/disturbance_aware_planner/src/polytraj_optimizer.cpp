@@ -6,6 +6,9 @@ void PolyTrajOptimizer::setParameters(ros::NodeHandle& nh){
     nh.param("Optimization/poly_order", poly_order, 4);
     nh.param("Optimization/predict_num", pred_N, 100);
     nh.param("Optimization/predict_dt", pred_dt, 0.02);
+    nh.param("Optimization/smoothness_cost_weight", w_smooth, 1.0);
+    nh.param("Optimization/frs_cost_weight", w_frs, 1.0);
+    nh.param("Optimization/terminal_cost_weight", w_terminal, 1.0);
     pred_T = pred_dt * pred_N;
     nh.param("Optimization/max_constraints_num", max_cons_num, 20);
     convex_layer_num = 0;
@@ -110,7 +113,6 @@ void PolyTrajOptimizer::wrapTotalConstraints(unsigned m, double *result, unsigne
         ros::shutdown();
         exit(-1);
     }
-
     int coef_num = optimizer->poly_order + 1;
     double mid_dt = optimizer->cons_dt;
     if(n != 3*(coef_num-3)){
@@ -139,7 +141,6 @@ void PolyTrajOptimizer::wrapTotalConstraints(unsigned m, double *result, unsigne
     }
 }
 
-
 double PolyTrajOptimizer::calcSmoothnessCost(std::vector<double>& grad){
     Coefs p = poly_traj.getCoefficients();
     Eigen::Matrix<double, 3, 3> costs = p * smooth_cost_Q * p.transpose();
@@ -147,21 +148,34 @@ double PolyTrajOptimizer::calcSmoothnessCost(std::vector<double>& grad){
 }
 
 double PolyTrajOptimizer::calcFRSCost(std::vector<double>& grad){
-
+    std::vector<quadState> flat_states(pred_N, quadState::Zero());
+    std::vector<quadInput> flat_inputs(pred_N, quadInput::Zero());
+    this->getFlatStatesInputes(flat_states, flat_inputs);
+    
 }
-
 
 double PolyTrajOptimizer::calcTerminalCost(std::vector<double>& grad){
-
+    Point end_p = poly_traj.evaluate(pred_T);
+    Polynomial<3> deriv1 = poly_traj.derivative();
+    double pos_cost = (end_p - goal_p_).norm();
+    Point end_v = deriv1.evaluate(pred_T);
+    double ang_cost = 1 - end_v.dot(goal_vdir_) / (end_v.norm()*goal_vdir_.norm());
+    return pos_cost + 1.5*ang_cost;
 }
 
-std::vector<PolyTrajOptimizer::quadState> PolyTrajOptimizer::getFlatStates(){
+void PolyTrajOptimizer::getFlatStatesInputes(std::vector<quadState>& return_states, std::vector<quadInput>& return_inputes){
     Polynomial<3> deriv1 = poly_traj.derivative();
     Polynomial<3> deriv2 = deriv1.derivative();
     Polynomial<3> deriv3 = deriv2.derivative();
-    std::vector<quadState> flat_states;
-
-
-
-    return flat_states;
+    std::fill(return_states.begin(), return_states.end(), quadState::Zero());
+    std::fill(return_inputes.begin(), return_inputes.end(), quadInput::Zero());
+    for(int i=0; i<pred_N; i++){
+        double t_ = i*pred_dt;
+        quadState tmp_state;
+        quadInput tmp_input;
+        quad.differential_flatness(poly_traj.evaluate(t_), deriv1.evaluate(t_), deriv2.evaluate(t_), 
+                                    deriv3.evaluate(t_), tmp_state, tmp_input);
+        return_states[i] = tmp_state;
+        return_inputes[i] = tmp_input;
+    }
 }

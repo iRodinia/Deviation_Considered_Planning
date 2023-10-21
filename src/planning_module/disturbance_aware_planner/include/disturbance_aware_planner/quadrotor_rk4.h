@@ -4,6 +4,8 @@
 #include <vector>
 #include <Eigen/Eigen>
 
+#include "disturbance_aware_planner/attitude_transformation.h"
+
 template <class T, class state, class input>
 state RK4_step(T *sys, const state& x, const input& u, double dt){
     state k1 = sys->f(x, u)*dt;
@@ -33,6 +35,9 @@ public:
     inline matA dfdx(const state& x, const input& u);
     inline matB dfdu(const state& x, const input& u);
     inline state step(const state& x, const input& u, double dt);
+    inline void getDiscreteModel(const state& x, const input& u, const double dt, matA& A, matB& B);
+    inline void differential_flatness(Eigen::Vector3d ref_p, Eigen::Vector3d ref_v, Eigen::Vector3d ref_a, 
+                                        Eigen::Vector3d ref_j, state& tmp_state, input& tmp_input);
 
 private:
     double kf=0.6, km=0.15, arml=0.2, m=0.6, g=9.81;
@@ -71,11 +76,11 @@ inline QuadRotor::state QuadRotor::f(const state& x, const input& u){
     x_dot.segment<3>(7) = 0.5 * (x(6)*Eigen::Matrix<double, 3, 3>::Identity() + q_cross) * x.segment<3>(10);
     x_dot.segment<3>(10) = Jinv * (-x.segment<3>(10).cross(J*x.segment<3>(10)) + M);
     return x_dot;
-};
+}
 
 inline QuadRotor::state QuadRotor::step(const state& x, const input& u, double dt){
 	return RK4_step<QuadRotor, state, input>(this, x, u, dt);
-};
+}
 
 inline QuadRotor::matA QuadRotor::dfdx(const state& x, const input& u){
     double F = u(0) + u(1) + u(2) + u(3);
@@ -99,7 +104,7 @@ inline QuadRotor::matA QuadRotor::dfdx(const state& x, const input& u){
     A.block<3,3>(10,10) = -Jinv * partial_cross_term;
     
     return A;
-};
+}
 
 inline QuadRotor::matB QuadRotor::dfdu(const state& x, const input& u){
     matB B = matB::Zero();
@@ -112,6 +117,47 @@ inline QuadRotor::matB QuadRotor::dfdu(const state& x, const input& u){
     B.block<3,4>(10,0) =  Jinv * dMdu;
 
     return B;
-};
+}
+
+inline void QuadRotor::getDiscreteModel(const state& x, const input& u, const double dt, matA& A, matB& B){
+    A = dt * dfdx(x, u);
+    B = dt * dfdu(x, u);
+}
+
+inline void QuadRotor::differential_flatness(Eigen::Vector3d ref_p, Eigen::Vector3d ref_v, Eigen::Vector3d ref_a, 
+                                                            Eigen::Vector3d ref_j, state& tmp_state, input& tmp_input){
+    tmp_state.segment<3>(0) = ref_p;
+    tmp_state.segment<3>(3) = ref_v;
+    double tmp_vx = ref_v(0);
+    double tmp_vy = ref_v(1);
+    double tmp_yaw;
+    if(tmp_vx == 0 && tmp_vy == 0){
+        tmp_yaw = 0;
+    }
+    else{
+        tmp_yaw = std::atan2(-1.0 * tmp_state(4), tmp_state(3));
+    }
+    Eigen::Vector3d thrust_dir = ref_a + Eigen::Vector3d(0, 0, g);
+
+    Eigen::Vector4d quat;
+    Eigen::Vector3d zb_des, yb_des, xb_des, proj_xb_des;
+    Eigen::Matrix3d tmp_rotmat;
+    proj_xb_des << std::cos(tmp_yaw), std::sin(tmp_yaw), 0.0;
+    zb_des = thrust_dir / thrust_dir.norm();
+    yb_des = zb_des.cross(proj_xb_des) / (zb_des.cross(proj_xb_des)).norm();
+    xb_des = yb_des.cross(zb_des) / ( yb_des.cross(zb_des) ).norm();
+    tmp_rotmat << xb_des(0), yb_des(0), zb_des(0),
+                xb_des(1), yb_des(1), zb_des(1),
+                xb_des(2), yb_des(2), zb_des(2);
+    tmp_state.segment<4>(6) = rot2Quaternion(tmp_rotmat);
+
+    Eigen::Vector3d h_w = 1/thrust_dir.norm() * (ref_j - (zb_des.dot(ref_j)*zb_des));
+    tmp_state(10) = -h_w.dot(yb_des);
+    tmp_state(11) = h_w.dot(xb_des);
+    tmp_state(12) = 0;
+
+    double nominal_f = m*thrust_dir.norm() / 4;
+    tmp_input = nominal_f * Eigen::Vector4d(1, 1, 1, 1);   // enough for system linerization.
+}
 
 #endif

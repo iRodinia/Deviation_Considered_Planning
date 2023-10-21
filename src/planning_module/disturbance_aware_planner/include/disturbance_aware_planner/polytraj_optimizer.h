@@ -103,6 +103,7 @@ private:
     int smoothness_cost_order;   // 3: minimize jerk, 4: minimize snap
     int max_cons_num, cons_point_num, convex_layer_num;
     double cons_dt;
+    double w_smooth, w_frs, w_terminal;
 
     Point init_p_, init_v_, init_a_;
     Point goal_p_, goal_vdir_;
@@ -115,7 +116,7 @@ private:
     nlopt::opt opter;
     bool ready_for_optim;
 
-    std::vector<quadState> getFlatStates();
+    void getFlatStatesInputes(std::vector<quadState>& return_states, std::vector<quadInput>& return_inputes);
 
 public:
     std::shared_ptr<PolyTrajOptimizer> Ptr;
