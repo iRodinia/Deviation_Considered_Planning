@@ -44,6 +44,7 @@ void PolyTrajOptimizer::setParameters(ros::NodeHandle& nh){
     coef_c2 = Coef(0, 0, 0);
     init_rest_coefs = Coefs(poly_order - 2);
     opter = nlopt::opt(nlopt::LN_COBYLA, 100);
+    start_bias = Point(0.0, 0.0, 0.0);
     ready_for_optim = false;
 }
 
@@ -63,6 +64,9 @@ void PolyTrajOptimizer::setStates(const Point init_p, const Point init_v, const 
     ready_for_optim = true;
 }
 
+void PolyTrajOptimizer::setStartBias(const Point init_bias){
+    start_bias = init_bias;
+}
 
 void PolyTrajOptimizer::setCollisionConstraints(const std::vector<sfcCoef>& constraintsA, const std::vector<sfcBound>& constraintsB){
     convex_layer_num = 0;
@@ -151,7 +155,26 @@ double PolyTrajOptimizer::calcFRSCost(std::vector<double>& grad){
     std::vector<quadState> flat_states(pred_N, quadState::Zero());
     std::vector<quadInput> flat_inputs(pred_N, quadInput::Zero());
     this->getFlatStatesInputes(flat_states, flat_inputs);
+    Eigen::Matrix<double, 13, 13> E = Eigen::Matrix<double, 13, 13>::Zero();
+    Eigen::Matrix<double, 17, 17> M = Eigen::Matrix<double, 17, 17>::Zero();
+    Eigen::Matrix<double, 17, 17> F = Eigen::Matrix<double, 17, 17>::Zero();
+    Eigen::Matrix<double, 4, 4> D = Eigen::Matrix<double, 4, 4>::Zero();
+
+    M.block<13,13>(0,0) = E;
+    for(int i=0; i<pred_N; i++){
+        Eigen::Vector3d disturb = getAxisNoise(flat_states[i].segment<3>(0));
+        D(0,0) = disturb(0)*disturb(0);
+        D(1,1) = disturb(1)*disturb(1);
+        D(2,2) = disturb(2)*disturb(2);
+        M.block<4,4>(13,13) = D;
+        F.block<13,13>(0,0) = Eigen::Matrix<double, 13, 13>::Identity() + pred_dt*quad.dfdx(flat_states[i], flat_inputs[i]);
+        F.block<13,4>(0,13) = pred_dt*quad.dfdu(flat_states[i], flat_inputs[i]);
+        F.block<4,4>(13,13) = Eigen::Matrix<double, 4, 4>::Identity();
+        M = F * M * F.transpose();
+    }
+    E = M.block<13,13>(0,0);
     
+
 }
 
 double PolyTrajOptimizer::calcTerminalCost(std::vector<double>& grad){
@@ -178,4 +201,8 @@ void PolyTrajOptimizer::getFlatStatesInputes(std::vector<quadState>& return_stat
         return_states[i] = tmp_state;
         return_inputes[i] = tmp_input;
     }
+}
+
+Eigen::Vector3d PolyTrajOptimizer::getAxisNoise(Point pos){
+    return Eigen::Vector3d(0.05, 0.05, 0.05);
 }

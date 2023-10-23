@@ -135,7 +135,7 @@ inline void QuadRotor::differential_flatness(Eigen::Vector3d ref_p, Eigen::Vecto
         tmp_yaw = 0;
     }
     else{
-        tmp_yaw = std::atan2(-1.0 * tmp_state(4), tmp_state(3));
+        tmp_yaw = std::atan2(-1.0 * tmp_vy, tmp_vx);
     }
     Eigen::Vector3d thrust_dir = ref_a + Eigen::Vector3d(0, 0, g);
 
