@@ -42,9 +42,8 @@ void PolyTrajOptimizer::setParameters(ros::NodeHandle& nh){
     coef_c0 = Coef(0, 0, 0);
     coef_c1 = Coef(0, 0, 0);
     coef_c2 = Coef(0, 0, 0);
-    init_rest_coefs = Coefs(poly_order - 2);
-    opter = nlopt::opt(nlopt::LN_COBYLA, 100);
-    start_bias = Point(0.0, 0.0, 0.0);
+    rest_coefs = Coefs(poly_order - 2);
+    opter = nlopt::opt(nlopt::LN_COBYLA, rest_coefs.size());
     ready_for_optim = false;
 }
 
@@ -59,13 +58,9 @@ void PolyTrajOptimizer::setStates(const Point init_p, const Point init_v, const 
     coef_c0 = init_p;   // fixed
     coef_c1 = init_v;   // fixed
     coef_c2 = 0.5 * init_a;   // fixed
-    init_rest_coefs.block<3,1>(0,0) = 1 / (pred_T*pred_T*pred_T) * (goal_p - 0.5*pred_T*pred_T*init_a - pred_T*init_v - init_p);   // float
+    rest_coefs.block<3,1>(0,0) = 1 / (pred_T*pred_T*pred_T) * (goal_p - 0.5*pred_T*pred_T*init_a - pred_T*init_v - init_p);   // float
 
     ready_for_optim = true;
-}
-
-void PolyTrajOptimizer::setStartBias(const Point init_bias){
-    start_bias = init_bias;
 }
 
 void PolyTrajOptimizer::setCollisionConstraints(const std::vector<sfcCoef>& constraintsA, const std::vector<sfcBound>& constraintsB){
@@ -85,7 +80,45 @@ void PolyTrajOptimizer::setCollisionConstraints(const std::vector<sfcCoef>& cons
 }
 
 bool PolyTrajOptimizer::optimize(){
+    opter.set_min_objective(PolyTrajOptimizer::wrapTotalCost, this);
+    std::vector<double> cons_tolerance(cons_point_num*convex_layer_num, 0.05);
+    opter.add_inequality_mconstraint(PolyTrajOptimizer::wrapTotalConstraints, this, cons_tolerance);
+    opter.set_xtol_rel(1e-2);
 
+    // opter.set_maxeval(1e3);
+    // opter.set_maxtime(0.2);
+
+    std::vector<double> optim_x(rest_coefs.size());
+    for(int i=0; i<poly_order-2; i++){
+        optim_x[i] = rest_coefs(0,i);
+        optim_x[poly_order-2+i] = rest_coefs(1,i);
+        optim_x[2*poly_order-4+i] = rest_coefs(2,i);
+    }
+    double min_f;
+    nlopt::result res = opter.optimize(optim_x, min_f);
+    if(res < 0){
+        ROS_WARN("Unable to solve the optimization problem. Get result code %d.", int(res));
+        return false;
+    }
+
+    for(int i=0; i<poly_order-2; i++){
+        rest_coefs(0,i) = optim_x[i];
+        rest_coefs(1,i) = optim_x[poly_order-2+i];
+        rest_coefs(2,i) = optim_x[2*poly_order-4+i];
+    }
+    return true;
+}
+
+PolyTrajOptimizer::Coefs PolyTrajOptimizer::getTrajectoryCoefficients(){
+    int coef_num = poly_order + 1;
+    Coefs new_coefs(coef_num);
+    new_coefs.block<3,1>(0,0) = coef_c0;
+    new_coefs.block<3,1>(0,1) = coef_c1;
+    new_coefs.block<3,1>(0,2) = coef_c2;
+    for(int i=3; i<coef_num; i++){
+        new_coefs.block<3,1>(0,i) = rest_coefs.block<3,1>(0,i-3);
+    }
+    return new_coefs;
 }
 
 double PolyTrajOptimizer::wrapTotalCost(const std::vector<double>& x, std::vector<double>& grad, void* data){
@@ -155,26 +188,28 @@ double PolyTrajOptimizer::calcFRSCost(std::vector<double>& grad){
     std::vector<quadState> flat_states(pred_N, quadState::Zero());
     std::vector<quadInput> flat_inputs(pred_N, quadInput::Zero());
     this->getFlatStatesInputes(flat_states, flat_inputs);
-    Eigen::Matrix<double, 13, 13> E = Eigen::Matrix<double, 13, 13>::Zero();
+
     Eigen::Matrix<double, 17, 17> M = Eigen::Matrix<double, 17, 17>::Zero();
     Eigen::Matrix<double, 17, 17> F = Eigen::Matrix<double, 17, 17>::Zero();
-    Eigen::Matrix<double, 4, 4> D = Eigen::Matrix<double, 4, 4>::Zero();
-
-    M.block<13,13>(0,0) = E;
+    F.block<4,4>(13,13) = Eigen::Matrix<double, 4, 4>::Identity();
     for(int i=0; i<pred_N; i++){
-        Eigen::Vector3d disturb = getAxisNoise(flat_states[i].segment<3>(0));
-        D(0,0) = disturb(0)*disturb(0);
-        D(1,1) = disturb(1)*disturb(1);
-        D(2,2) = disturb(2)*disturb(2);
-        M.block<4,4>(13,13) = D;
+        Eigen::Vector4d disturb = getMotorNoise(flat_states[i].segment<3>(0));
+        for(int j=0; j<4; j++){
+            disturb(j) = disturb(j) * disturb(j);
+        }
+        M.block<4,4>(13,13) = disturb.asDiagonal();
         F.block<13,13>(0,0) = Eigen::Matrix<double, 13, 13>::Identity() + pred_dt*quad.dfdx(flat_states[i], flat_inputs[i]);
         F.block<13,4>(0,13) = pred_dt*quad.dfdu(flat_states[i], flat_inputs[i]);
-        F.block<4,4>(13,13) = Eigen::Matrix<double, 4, 4>::Identity();
         M = F * M * F.transpose();
     }
-    E = M.block<13,13>(0,0);
-    
+    Eigen::Matrix<double, 3, 3> E_pos = M.block<3,3>(0,0);
+    double determ = std::abs(E_pos.determinant());
+    return 4/3 * M_PI * determ;
 
+    // Plotting the ellipsoid
+	// Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> adjoint_eigen_solver((E_pos + E_pos.transpose()) / 2.);
+	// Eigen::MatrixXd mata = Eigen::MatrixXd::Zero(3, 1);
+	// Eigen::Matrix<double, 3, 3> E_sqrt_pos = adjoint_eigen_solver.eigenvectors() * adjoint_eigen_solver.eigenvalues().cwiseMax(mata).cwiseSqrt().asDiagonal() * adjoint_eigen_solver.eigenvectors().transpose();
 }
 
 double PolyTrajOptimizer::calcTerminalCost(std::vector<double>& grad){
@@ -203,6 +238,6 @@ void PolyTrajOptimizer::getFlatStatesInputes(std::vector<quadState>& return_stat
     }
 }
 
-Eigen::Vector3d PolyTrajOptimizer::getAxisNoise(Point pos){
-    return Eigen::Vector3d(0.05, 0.05, 0.05);
+Eigen::Vector4d PolyTrajOptimizer::getMotorNoise(Point pos){
+    return Eigen::Vector4d(0.05, 0.05, 0.05, 0.05);
 }

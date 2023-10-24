@@ -3,6 +3,7 @@
 #include <cmath>
 
 #include <Eigen/Eigen>
+#include <Eigen/Eigenvalues>
 #include <ros/ros.h>
 #include <nlopt.hpp>
 
@@ -84,10 +85,10 @@ public:
     ~PolyTrajOptimizer() {}
     void setParameters(ros::NodeHandle &nh);
     void setStates(const Point init_p, const Point init_v, const Point init_a, const Point goal_p, const Point goal_vdir);
-    void setStartBias(const Point init_bias);
     void setCollisionConstraints(const std::vector<sfcCoef>& constraintsA, const std::vector<sfcBound>& constraintsB);
 
     bool optimize();
+    Coefs getTrajectoryCoefficients();
     Polynomial<3> poly_traj;
 
 protected:
@@ -108,9 +109,8 @@ private:
 
     Point init_p_, init_v_, init_a_;
     Point goal_p_, goal_vdir_;
-    Point start_bias;
     Coef coef_c0, coef_c1, coef_c2;   // determined by the initial conditions in setStates(*).
-    Coefs init_rest_coefs;
+    Coefs rest_coefs;
     std::vector<sfcCoef> constraintsA_;
     std::vector<sfcBound> constraintsB_;
     Eigen::MatrixXd smooth_cost_Q;
@@ -119,6 +119,7 @@ private:
     bool ready_for_optim;
 
     void getFlatStatesInputes(std::vector<quadState>& return_states, std::vector<quadInput>& return_inputes);
+    Eigen::Vector4d getMotorNoise(Point pos);
 
 public:
     std::shared_ptr<PolyTrajOptimizer> Ptr;
