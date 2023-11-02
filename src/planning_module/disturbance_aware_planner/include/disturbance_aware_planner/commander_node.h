@@ -29,7 +29,7 @@ public:
 
 
 
-
+    int current_ctrl_mode = 0;
     ros::Timer timer1, timer2;
     Eigen::Vector3d current_pos;
     Eigen::Vector3d current_vel;
@@ -60,11 +60,10 @@ private:
     void timer1Cb(const ros::TimerEvent&);
     void timer2Cb(const ros::TimerEvent&);
 
-    double cmd_freq = 10;   // frequency for sending commands
-    double replan_freq = 1;   // frequency for conducting replanning
     Eigen::Matrix3Xd local_pcl;
     Eigen::Vector3d start_pos, goal_pos;
-
+    bool takeoff = false;
+    bool goal_reached = false;
     int at_pos_count = 0;
 
 
