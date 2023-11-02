@@ -1,3 +1,6 @@
+#ifndef DAP_OPTIMIZER
+#define DAP_OPTIMIZER
+
 #include <vector>
 #include <string>
 #include <cmath>
@@ -68,6 +71,44 @@ private:
     Coefs coefficients_;   // [c0, c1, c2, ..., cn]
 };
 
+template<int Dim>
+class ConvexHull{
+    // Ax <= b
+    typedef Eigen::Matrix<double, 1, Dim> rowA;
+    typedef double rowB;
+    typedef Eigen::Matrix<double, Dim, 1> Point;
+public:
+    ConvexHull() {}
+    ConvexHull(const std::vector<rowA> Ain, const std::vector<rowB> Bin){
+        if(Ain.size() != Bin.size()){
+            ROS_WARN("Mismatch convex hull dimensions! Get %d in A and %d in B.", Ain.size(), Bin.size());
+            constraint_num = std::min(Ain.size(), Bin.size());
+        }
+        A.assign(Ain.begin(), Ain.begin()+constraint_num);
+        B.assign(Bin.begin(), bin.begin()+constraint_num);
+    }
+
+    std::vector<double> evaluatePoint(Point x){
+        std::vector<double> result(constraint_num, 0.0);
+        for(int i=0; i<constraint_num; i++){
+            result[i] = A[i]*x - B[i];
+        }
+        return result;
+    }
+
+    void getConstraints(std::vector<rowA>& Aout, std::vector<rowB>& Bout){
+        Aout.resize(constraint_num);
+        Bout.resize(constraint_num);
+        Aout.assign(A.begin(), A.end());
+        Bout.assign(B.begin(), B.end());
+    }
+
+private:
+    int constraint_num = 0;
+    std::vector<rowA> A;
+    std::vector<rowB> B;
+};
+
 
 class PolyTrajOptimizer{
     typedef Eigen::Matrix<double, 3, 1> Coef;
@@ -128,4 +169,6 @@ EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
 };
 
-};
+}
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef _TRANSFORM
+#define _TRANSFORM
+
 #include <vector>
 #include <string>
 #include <cmath>
@@ -72,3 +75,5 @@ Eigen::Vector4d rot2Quaternion(const Eigen::Matrix3d R){
 
 
 };
+
+#endif

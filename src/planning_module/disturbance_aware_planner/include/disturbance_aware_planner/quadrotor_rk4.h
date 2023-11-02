@@ -6,6 +6,8 @@
 
 #include "disturbance_aware_planner/attitude_transformation.h"
 
+using namespace disturbance_aware_planner;
+
 template <class T, class state, class input>
 state RK4_step(T *sys, const state& x, const input& u, double dt){
     state k1 = sys->f(x, u)*dt;
