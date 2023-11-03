@@ -6,6 +6,7 @@ FlightCommander::FlightCommander(ros::NodeHandle* nh): nh_(*nh){
     local_pos_sub = nh_.subscribe<geometry_msgs::PoseStamped>("crazyflie/pose_and_att", 10, &FlightCommander::subPosCb, this);
     local_vel_sub = nh_.subscribe<geometry_msgs::TwistStamped>("crazyflie/vel_and_angrate", 10, &FlightCommander::subVelCb, this);
     flight_mode_sub = nh_.subscribe<std_msgs::Int16>("crazyflie/ctrl_mode", 1, &FlightCommander::subModeCb, this);
+    local_pcl_sub = nh_.subscribe<sensor_msgs::PointCloud2>("crazyflie/local_point_cloud", 5, &FlightCommander::subPclCb, this);
 
     target_pos_pub = nh_.advertise<geometry_msgs::PoseStamped>("crazyflie/pose_and_att_cmd", 10);
     target_vel_pub = nh_.advertise<geometry_msgs::TwistStamped>("crazyflie/vel_and_angrate_cmd", 10);
@@ -19,6 +20,8 @@ FlightCommander::FlightCommander(ros::NodeHandle* nh): nh_(*nh){
     timer1 = nh_.createTimer(ros::Rate(cmd_freq), &FlightCommander::timer1Cb, this);
     timer2 = nh_.createTimer(ros::Rate(replan_freq), &FlightCommander::timer2Cb, this);
 
+    opter_ptr.reset(new PolyTrajOptimizer);
+    opter_ptr->setParameters(nh_);
 }
 
 void FlightCommander::subPosCb(const geometry_msgs::PoseStamped::ConstPtr& msg){
@@ -29,6 +32,23 @@ void FlightCommander::subPosCb(const geometry_msgs::PoseStamped::ConstPtr& msg){
 void FlightCommander::subVelCb(const geometry_msgs::TwistStamped::ConstPtr& msg){
     current_vel = Eigen::Vector3d(msg->twist.linear.x, msg->twist.linear.y, msg->twist.linear.z);
     current_angrate = Eigen::Vector3d(msg->twist.angular.x, msg->twist.angular.y, msg->twist.angular.z);
+}
+
+void FlightCommander::subPclCb(const sensor_msgs::PointCloud2::ConstPtr& msg){
+    pcl::PointCloud<pcl::PointXYZ> cloud_in;
+    pcl::fromROSMsg(*msg, cloud_in);
+    int cloud_size = cloud_in.points.size();
+    if(cloud_size <= 0){
+        local_pcl.resize(3,0);
+        return;
+    }
+    local_pcl.resize(3, cloud_size);
+    for(size_t i=0; i<cloud_size; i++){
+        pcl::PointXYZ pt = cloud_in.points[i];
+        local_pcl(0,i) = pt.x;
+        local_pcl(1,i) = pt.y;
+        local_pcl(2,i) = pt.z;
+    }
 }
 
 void FlightCommander::subModeCb(const std_msgs::Int16::ConstPtr& msg){
@@ -43,12 +63,100 @@ void FlightCommander::timer1Cb(const ros::TimerEvent&){     // call at each comm
     else{
         ROS_INFO_ONCE("Flight commander found quadrotor driver connected!");
     }
-    geometry_msgs::PoseStamped pos_cmd;
-    geometry_msgs::TwistStamped vel_cmd;
-    geometry_msgs::AccelStamped acc_cmd;
-    std_msgs::Int16 mode_cmd;
+    
     if(current_ctrl_mode == 0){
+        if(!cmd_takeoff){
+            std_msgs::Int16 mode_cmd;
+            mode_cmd.data = 1;
+            target_mode_pub.publish(mode_cmd);
+            cmd_takeoff = true;
+        }
+        else{
+            mode_change_count++;
+            if(mode_change_count >= 50){
+                cmd_takeoff = false;
+                mode_change_count = 0;
+            }
+        }
+    }
+    else if(current_ctrl_mode == 1){
+        if(!cmd_offb){
+            std_msgs::Int16 mode_cmd;
+            mode_cmd.data = 2;
+            target_mode_pub.publish(mode_cmd);
+            cmd_offb = true;
+        }
+        else{
+            mode_change_count++;
+            if(mode_change_count >= 10){
+                cmd_offb = false;
+                mode_change_count = 0;
+            }
+        }
+    }
+    else{
+        geometry_msgs::PoseStamped pos_cmd;
+        geometry_msgs::TwistStamped vel_cmd;
+        geometry_msgs::AccelStamped acc_cmd;
+        if(!goal_reached){
+            if(!traj_buffer.initialized){
+                pos_cmd.pose.position.x = start_pos(0);
+                pos_cmd.pose.position.y = start_pos(1);
+                pos_cmd.pose.position.z = start_pos(2);
+                target_pos_pub.publish(pos_cmd);
+            }
+            else{
+                Eigen::VectorXd ref = traj_buffer.getRefCmd_Full();   // [p, v, a, yaw, omega]
+                pos_cmd.pose.position.x = ref(0);
+                pos_cmd.pose.position.y = ref(1);
+                pos_cmd.pose.position.z = ref(2);
+                vel_cmd.twist.linear.x = ref(3);
+                vel_cmd.twist.linear.y = ref(4);
+                vel_cmd.twist.linear.z = ref(5);
+                acc_cmd.accel.linear.x = ref(6);
+                acc_cmd.accel.linear.y = ref(7);
+                acc_cmd.accel.linear.z = ref(8);
+                tf::Quaternion quat;
+                quat.setRPY(0, 0, ref(9));
+                pos_cmd.pose.orientation.w = quat.w();
+                pos_cmd.pose.orientation.x = quat.x();
+                pos_cmd.pose.orientation.y = quat.y();
+                pos_cmd.pose.orientation.z = quat.z();
 
+                vel_cmd.twist.angular.x = 0;
+                vel_cmd.twist.angular.y = 0;
+                vel_cmd.twist.angular.z = 0;
+                target_pos_pub.publish(pos_cmd);
+                target_vel_pub.publish(vel_cmd);
+                target_acc_pub.publish(acc_cmd);
+            }
+        }
+        else{
+            pos_cmd.pose.position.x = goal_pos(0);
+            pos_cmd.pose.position.y = goal_pos(1);
+            pos_cmd.pose.position.z = goal_pos(2);
+            vel_cmd.twist.linear.x = 0;
+            vel_cmd.twist.linear.y = 0;
+            vel_cmd.twist.linear.z = 0;
+            acc_cmd.accel.linear.x = 0;
+            acc_cmd.accel.linear.y = 0;
+            acc_cmd.accel.linear.z = 0;
+            target_pos_pub.publish(pos_cmd);
+            target_vel_pub.publish(vel_cmd);
+            target_acc_pub.publish(acc_cmd);
+        }
+    }
+
+    if((current_pos - goal_pos).norm() <= 0.05){
+        if(at_pos_count >= 50){
+            goal_reached = true;
+            at_pos_count = 100;
+        }
+        at_pos_count++;
+    }
+    else{
+        at_pos_count = 0;
+        goal_reached = false;
     }
 }
 

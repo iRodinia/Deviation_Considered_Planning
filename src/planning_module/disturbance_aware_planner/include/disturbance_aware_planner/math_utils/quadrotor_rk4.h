@@ -4,7 +4,7 @@
 #include <vector>
 #include <Eigen/Eigen>
 
-#include "disturbance_aware_planner/attitude_transformation.h"
+#include "disturbance_aware_planner/math_utils/attitude_transformation.h"
 
 using namespace disturbance_aware_planner;
 

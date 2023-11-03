@@ -59,6 +59,7 @@ public:
     ~ReferenceManager() {};
     void setNewTraj(Eigen::Matrix<double, 3, -1> coefs, double t_horizon, double start_t_bias);
     RefState getRefCmd_Full();
+    bool initialized = false;
 
 private:
     Polynomial3D tmp_traj;

@@ -10,7 +10,7 @@
 #include <ros/ros.h>
 #include <nlopt.hpp>
 
-#include "disturbance_aware_planner/quadrotor_rk4.h"
+#include "disturbance_aware_planner/math_utils/quadrotor_rk4.h"
 
 namespace disturbance_aware_planner{
 
@@ -163,7 +163,7 @@ private:
     Eigen::Vector4d getMotorNoise(Point pos);
 
 public:
-    std::shared_ptr<PolyTrajOptimizer> Ptr;
+    typedef std::shared_ptr<PolyTrajOptimizer> Ptr;
 
 EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
