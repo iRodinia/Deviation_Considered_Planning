@@ -8,7 +8,7 @@
 
 #include "grid_map/grid_map.h"
 
-namespace disturbance_awar_manager{
+namespace disturbance_awar_planner{
 
 class GlobalMapProcessor{
 public:
