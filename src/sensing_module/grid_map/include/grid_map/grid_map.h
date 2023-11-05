@@ -46,6 +46,7 @@ public:
     inline Eigen::Matrix<int, 3, 1> getVoxelDim();
     inline void getMapInflateData(std::vector<signed char>& data);
     inline void getMapInflateData(Eigen::Matrix3Xd& points);
+    inline bool mapInitialized();
 
     typedef std::shared_ptr<GridMap> Ptr;
 
@@ -247,6 +248,10 @@ inline void GridMap::inflatePoint(const Eigen::Vector3i& pt, int step, vector<Ei
             for (int z = -step; z <= step; ++z) {
                 pts[num++] = Eigen::Vector3i(pt(0) + x, pt(1) + y, pt(2) + z);
             }
+}
+
+inline bool GridMap::mapInitialized(){
+    return has_global_map;
 }
 
 #endif

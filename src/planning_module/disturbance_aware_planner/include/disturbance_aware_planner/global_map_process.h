@@ -5,17 +5,20 @@
 #include <ros/ros.h>
 #include <Eigen/Eigen>
 #include <sensor_msgs/PointCloud2.h>
+#include <visualization_msgs/Marker.h>
 
 #include "grid_map/grid_map.h"
 
-namespace disturbance_awar_planner{
+namespace disturbance_aware_planner{
 
 class GlobalMapProcessor{
 public:
     GlobalMapProcessor(ros::NodeHandle& nh);
     ~GlobalMapProcessor() {};
 
-    void getSegmentAndTime(const Eigen::Vector3d cur_pos, std::vector<double>& time_alloc, std::vector<Eigen::MatrixX4d>& polygons);
+    void getReplanInfo(const Eigen::Vector3d cur_pos, std::vector<double>& time_alloc, 
+                        std::vector<Eigen::MatrixX4d>& polygons, Eigen::Vector3d& goal_pos);
+
 
     std::vector<Eigen::Vector3d>* ref_path;
     std::vector<double>* ref_time_alloc;
@@ -25,7 +28,6 @@ public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
 private:
-    ros::Subscriber global_map_sub;
     ros::Publisher globa_ref_path_pub;
     ros::Publisher global_polygons_pub;
 

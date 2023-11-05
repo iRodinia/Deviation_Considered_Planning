@@ -4,7 +4,6 @@
 #include <algorithm>
 #include <Eigen/Eigen>
 #include <ros/ros.h>
-#include <jps_basis/data_utils.h>
 #include <jps_planner/jps_planner.h>
 
 #include "grid_map/grid_map.h"
@@ -22,6 +21,7 @@ public:
 
 private:
     ros::NodeHandle nh_;
+    int planner_type;
     bool plan_succeed;
     std::shared_ptr<VoxelMapUtil> map_util;
     std::unique_ptr<JPSPlanner3D> planner_ptr;

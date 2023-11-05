@@ -2,4 +2,6 @@
 
 using namespace disturbance_aware_planner;
 
-
+GlobalMapProcessor::GlobalMapProcessor(ros::NodeHandle& nh){
+    
+}

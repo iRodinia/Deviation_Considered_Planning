@@ -5,9 +5,9 @@
 #ifndef JPS_PLANNER_BASE_H
 #define JPS_PLANNER_BASE_H
 
-#include <jps_basis/data_type.h>
+#include <jps_planner/jps_utils/jps_basis/data_type.h>
 #include <jps_planner/graph_search.h>
-#include <jps_collision/map_util.h>
+#include <jps_planner/jps_utils/jps_collision/map_util.h>
 
 class GraphSearch;
 /**
