@@ -420,7 +420,7 @@ namespace emvp {
 
 /**
  * @brief embed maximum volume polytope
- * @param bd bounding box with 6 faces
+ * @param bd bounding box with 6 faces, ax+by+cz+d <= 0, marked with [a b c d]
  * @param pc the obstacle points
  * @param a the start point of the line segment seed
  * @param b the end point of the line segment seed

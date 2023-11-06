@@ -45,6 +45,7 @@ public:
     inline Eigen::Vector3d getOrigin();
     inline Eigen::Matrix<int, 3, 1> getVoxelDim();
     inline void getMapInflateData(std::vector<signed char>& data);
+    inline void getMapInflateExtraData(std::vector<signed char>& data);
     inline void getMapInflateData(Eigen::Matrix3Xd& points);
     inline bool mapInitialized();
 
@@ -230,6 +231,10 @@ inline Eigen::Matrix<int, 3, 1> GridMap::getVoxelDim(){
 
 inline void GridMap::getMapInflateData(std::vector<signed char>& data){
     data = occupancy_buffer_inflate_;
+}
+
+inline void GridMap::getMapInflateExtraData(std::vector<signed char>& data){
+    data = occupancy_buffer_inflate_extra_;
 }
 
 inline void GridMap::getMapInflateData(Eigen::Matrix3Xd& points){
