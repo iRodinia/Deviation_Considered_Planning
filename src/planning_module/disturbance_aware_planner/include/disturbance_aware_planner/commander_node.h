@@ -20,6 +20,7 @@
 #include <pcl/filters/voxel_grid.h>
 #include <pcl_conversions/pcl_conversions.h>
 
+#include "disturbance_aware_planner/global_map_process.h"
 #include "disturbance_aware_planner/polytraj_optimizer.h"
 #include "disturbance_aware_planner/reference_manager.h"
 
@@ -56,6 +57,7 @@ private:
     ros::Publisher target_acc_pub;
     ros::Publisher target_mode_pub;
 
+    GlobalMapProcessor::Ptr global_ptr;
     ReferenceManager traj_buffer;
     PolyTrajOptimizer::Ptr opter_ptr;
 

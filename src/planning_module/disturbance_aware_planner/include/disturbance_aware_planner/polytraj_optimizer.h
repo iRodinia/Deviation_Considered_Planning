@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <cmath>
+#include <numeric>
 
 #include <Eigen/Eigen>
 #include <Eigen/Eigenvalues>
@@ -73,7 +74,7 @@ private:
 
 template<int Dim>
 class ConvexHull{
-    // Ax <= b
+    // Ax <= b    Ax - b = 0
     typedef Eigen::Matrix<double, 1, Dim> rowA;
     typedef double rowB;
     typedef Eigen::Matrix<double, Dim, 1> Point;
@@ -86,6 +87,16 @@ public:
         }
         A.assign(Ain.begin(), Ain.begin()+constraint_num);
         B.assign(Bin.begin(), bin.begin()+constraint_num);
+    }
+
+    ConvexHull(const Eigen::MatrixX4d ABin){
+        constraint_num = ABin.rows();
+        A.reserve(constraint_num);
+        B.reserve(constraint_num);
+        for(int i=0; i<constraint_num; i++){
+            A[i] = ABin.block<1,3>(i,0);
+            B[i] = ABin(i,3);
+        }
     }
 
     std::vector<double> evaluatePoint(Point x){
@@ -126,11 +137,12 @@ public:
     ~PolyTrajOptimizer() {}
     void setParameters(ros::NodeHandle &nh);
     void setStates(const Point init_p, const Point init_v, const Point init_a, const Point goal_p, const Point goal_vdir);
-    void setCollisionConstraints(const std::vector<sfcCoef>& constraintsA, const std::vector<sfcBound>& constraintsB);
+    void setCollisionConstraints(const std::vector<Eigen::MatrixX4d>& constraints, const std::vector<double>& time_allocs);
 
     bool optimize();
     Coefs getTrajectoryCoefficients();
     Polynomial<3> poly_traj;
+    std::vector<ConvexHull<3>> constraints_;
 
 protected:
     static double wrapTotalCost(const std::vector<double>& x, std::vector<double>& grad, void* data);
@@ -144,7 +156,7 @@ private:
     double pred_dt, pred_T;
     int poly_order;
     int smoothness_cost_order;   // 3: minimize jerk, 4: minimize snap
-    int max_cons_num, cons_point_num, convex_layer_num;
+    int max_faces_num, constrained_point_num, total_cons_num;
     double cons_dt;
     double w_smooth, w_frs, w_terminal;
 
@@ -152,11 +164,10 @@ private:
     Point goal_p_, goal_vdir_;
     Coef coef_c0, coef_c1, coef_c2;   // determined by the initial conditions in setStates(*).
     Coefs rest_coefs;
-    std::vector<sfcCoef> constraintsA_;
-    std::vector<sfcBound> constraintsB_;
     Eigen::MatrixXd smooth_cost_Q;
     QuadRotor quad;
     nlopt::opt opter;
+    double uav_vel;
     bool ready_for_optim;
 
     void getFlatStatesInputes(std::vector<quadState>& return_states, std::vector<quadInput>& return_inputes);

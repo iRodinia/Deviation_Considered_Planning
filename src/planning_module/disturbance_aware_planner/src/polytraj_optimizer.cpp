@@ -10,10 +10,11 @@ void PolyTrajOptimizer::setParameters(ros::NodeHandle& nh){
     nh.param("Optimization/frs_cost_weight", w_frs, 1.0);
     nh.param("Optimization/terminal_cost_weight", w_terminal, 1.0);
     pred_T = pred_dt * pred_N;
-    nh.param("Optimization/max_constraints_num", max_cons_num, 20);
-    convex_layer_num = 0;
-    cons_point_num = 0;
-    cons_dt = 0;
+    nh.param("Optimization/max_single_convex_hull_faces", max_faces_num, 15);
+    nh.param("Optimization/total_constrained_points_in_SFC", constrained_point_num, 20);
+    constrained_point_num = std::min(constrained_point_num, pred_N);
+    cons_dt = std::max(std::floor(pred_N / constrained_point_num), 1.0) * pred_dt;
+    constraints_.reserve(constrained_point_num);
     nh.param("Optimization/smoothness_cost_order", smoothness_cost_order, 4);
     smooth_cost_Q = Eigen::MatrixXd(poly_order+1, poly_order+1).setZero();
     Eigen::RowVectorXd tmp_vec = Eigen::RowVectorXd::LinSpaced(smoothness_cost_order, 0.0, smoothness_cost_order-1.0);
@@ -37,6 +38,7 @@ void PolyTrajOptimizer::setParameters(ros::NodeHandle& nh){
     nh.param("Model/arm_length", arm_len, 0.0397);
     nh.param("Model/k_force", kf, 3.16e-10);
     nh.param("Model/k_moment", km, 7.94e-12);
+    nh.param("Model/nominal_vel", uav_vel, 1.2);
     quad.setParams(9.8066, mass, Inertia, arm_len, kf, km);
 
     coef_c0 = Coef(0, 0, 0);
@@ -63,25 +65,41 @@ void PolyTrajOptimizer::setStates(const Point init_p, const Point init_v, const 
     ready_for_optim = true;
 }
 
-void PolyTrajOptimizer::setCollisionConstraints(const std::vector<sfcCoef>& constraintsA, const std::vector<sfcBound>& constraintsB){
-    convex_layer_num = 0;
-    if(constraintsA.size() < constraintsB.size()){
-        convex_layer_num = constraintsA.size();
+void PolyTrajOptimizer::setCollisionConstraints(const std::vector<Eigen::MatrixX4d>& constraints, const std::vector<double>& time_allocs){
+    if(constraints.size() != time_allocs.size()){
+        ROS_WARN("Incompatible constraints number. Get %d convex hulls and %d time allocations.", constraints.size(), time_allocs.size());
+        ros::shutdown();
     }
-    else{
-        convex_layer_num = constraintsB.size();
+    int constraints_num = constraints.size();
+    std::vector<double> time_splits;
+    std::partial_sum(time_allocs.begin(), time_allocs.end(), time_splits);
+    if(time_splits[constraints_num-1] <= pred_T){
+        time_splits[constraints_num-1] = pred_T + pred_dt;
     }
-    constraintsA_.resize(convex_layer_num);
-    constraintsB_.resize(convex_layer_num);
-    constraintsA_ = std::vector<sfcCoef>(constraintsA.begin(), constraintsA.begin()+convex_layer_num);
-    constraintsB_ = std::vector<sfcBound>(constraintsB.begin(), constraintsB.begin()+convex_layer_num);
-    cons_point_num = std::max(int(max_cons_num/convex_layer_num), 1);
-    cons_dt = pred_T / (cons_point_num+1);
+    total_cons_num = 0;
+    double t_sum = cons_dt;
+    int seg_num = 0;
+    int faces = constraints[seg_num].rows();
+    for(int i=0; i<constrained_point_num; i++){
+        while(t_sum >= time_splits[seg_num]){
+            seg_num++;
+            faces = constraints[seg_num].rows();
+        }
+        if(faces > max_faces_num){
+            constraints_[i] = ConvexHull<3>(constraints[seg_num].topRows(max_faces_num));
+            total_cons_num += max_faces_num;
+        }
+        else{
+            constraints_[i] = ConvexHull<3>(constraints[seg_num]);
+            total_cons_num += faces;
+        }
+        t_sum += cons_dt;
+    }
 }
 
 bool PolyTrajOptimizer::optimize(){
     opter.set_min_objective(PolyTrajOptimizer::wrapTotalCost, this);
-    std::vector<double> cons_tolerance(cons_point_num*convex_layer_num, 0.05);
+    std::vector<double> cons_tolerance(total_cons_num, 0.05);
     opter.add_inequality_mconstraint(PolyTrajOptimizer::wrapTotalConstraints, this, cons_tolerance);
     opter.set_xtol_rel(1e-2);
 
@@ -142,11 +160,10 @@ double PolyTrajOptimizer::wrapTotalCost(const std::vector<double>& x, std::vecto
 
 void PolyTrajOptimizer::wrapTotalConstraints(unsigned m, double *result, unsigned n, const double* x, double* grad, void* f_data){
     PolyTrajOptimizer* optimizer = reinterpret_cast<PolyTrajOptimizer*>(f_data);
-    int mid_point_num = optimizer->cons_point_num;
-    int convex_num = optimizer->convex_layer_num;
-    if(m != mid_point_num*convex_num){
-        ROS_WARN("In polynomial optimization, expect %d linear constraints (%d points and %d inequalities for each point), \
-                    but get %d in constraints c(x)<=0.", mid_point_num*convex_num, mid_point_num, convex_num, m);
+    int mid_point_num = optimizer->constrained_point_num;
+    int cons_num = optimizer->total_cons_num;
+    if(m != cons_num){
+        ROS_WARN("In polynomial optimization, expect %d linear constraints, but get %d in constraints c(x)<=0.", cons_num, m);
         ros::shutdown();
         exit(-1);
     }
@@ -168,12 +185,13 @@ void PolyTrajOptimizer::wrapTotalConstraints(unsigned m, double *result, unsigne
         new_coefs(2,i) = x[2*coef_num+i-9];
     }
     optimizer->poly_traj.setCoefficients(new_coefs);
+    int cons_idx = 0;
     for(int i=1; i<=mid_point_num; i++){
         Point eval_point = optimizer->poly_traj.evaluate(i*mid_dt);
-        for(int k=0; k<convex_num; k++){
-            sfcCoef sfc_coef = optimizer->constraintsA_[k];
-            sfcBound bound = optimizer->constraintsB_[k];
-            result[convex_num*(i-1)+k] = sfc_coef*eval_point - bound;
+        std::vector<double> eval_cons = optimizer->constraints_[i-1].evaluatePoint(eval_point);
+        for(int j=0; j<eval_cons.size(); j++){
+            result[cons_idx] = eval_cons[j];
+            cons_idx++;
         }
     }
 }

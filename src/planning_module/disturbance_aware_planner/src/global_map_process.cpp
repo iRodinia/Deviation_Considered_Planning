@@ -11,8 +11,8 @@ GlobalMapProcessor::GlobalMapProcessor(ros::NodeHandle& nh){
     ros::Duration(0.5).sleep();
     double vis_freq, pred_dt;
     int pred_N;
+    nh.param("Model/nominal_vel", uav_vel, 1.2);
     nh.param("global_map_process/visualization_frequency", vis_freq, 2.5);
-    nh.param("global_map_process/uav_nominal_velocity", uav_vel, 1.2);
     nh.param("Optimization/predict_num", pred_N, 100);
     nh.param("Optimization/predict_dt", pred_dt, 0.02);
     pred_T = pred_N * pred_dt;
@@ -163,6 +163,7 @@ void GlobalMapProcessor::getReplanInfo(const Eigen::Vector3d cur_pos, std::vecto
     }
     if(pred_T >= time_remain){
         goal_pos = ref_path[seg_num];
+        time_alloc[seg_num - min_seg - 1] += pred_T - time_remain;
     }
     else{
         double goal_t = pred_T;

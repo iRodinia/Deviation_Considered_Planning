@@ -20,6 +20,8 @@ FlightCommander::FlightCommander(ros::NodeHandle* nh): nh_(*nh){
     timer1 = nh_.createTimer(ros::Rate(cmd_freq), &FlightCommander::timer1Cb, this);
     timer2 = nh_.createTimer(ros::Rate(replan_freq), &FlightCommander::timer2Cb, this);
 
+    global_ptr.reset(new GlobalMapProcessor(nh_));
+
     opter_ptr.reset(new PolyTrajOptimizer);
     opter_ptr->setParameters(nh_);
 }
@@ -161,7 +163,10 @@ void FlightCommander::timer1Cb(const ros::TimerEvent&){     // call at each comm
 }
 
 void FlightCommander::timer2Cb(const ros::TimerEvent&){     // call at each replanning iteration
-
+    if(!global_ptr->isProcessDone()){
+        return;
+    }
+    
 }
 
 int main(int argc, char **argv)
