@@ -2,7 +2,7 @@
 
 using namespace disturbance_aware_planner;
 
-void PolyTrajOptimizer::setParameters(ros::NodeHandle& nh){
+void PolyTrajOptimizer::initParameters(ros::NodeHandle& nh){
     nh.param("Optimization/poly_order", poly_order, 4);
     nh.param("Optimization/predict_num", pred_N, 100);
     nh.param("Optimization/predict_dt", pred_dt, 0.02);

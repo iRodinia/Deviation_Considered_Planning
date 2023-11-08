@@ -17,13 +17,18 @@ FlightCommander::FlightCommander(ros::NodeHandle* nh): nh_(*nh){
     double replan_freq;   // frequency for conducting replanning
     nh_.param("Commander/cmd_frequency", cmd_freq, 10.0);
     nh_.param("Commander/replan_frequency", replan_freq, 1.0);
+    int pred_N;
+    double pred_dt;
+    nh_.param("Optimization/predict_num", pred_N, 100);
+    nh_.param("Optimization/predict_dt", pred_dt, 0.02);
+    replan_t_hori = pred_N * pred_dt;
     timer1 = nh_.createTimer(ros::Rate(cmd_freq), &FlightCommander::timer1Cb, this);
     timer2 = nh_.createTimer(ros::Rate(replan_freq), &FlightCommander::timer2Cb, this);
 
     global_ptr.reset(new GlobalMapProcessor(nh_));
 
     opter_ptr.reset(new PolyTrajOptimizer);
-    opter_ptr->setParameters(nh_);
+    opter_ptr->initParameters(nh_);
 }
 
 void FlightCommander::subPosCb(const geometry_msgs::PoseStamped::ConstPtr& msg){
@@ -163,10 +168,28 @@ void FlightCommander::timer1Cb(const ros::TimerEvent&){     // call at each comm
 }
 
 void FlightCommander::timer2Cb(const ros::TimerEvent&){     // call at each replanning iteration
-    if(!global_ptr->isProcessDone()){
+    if(!global_ptr->isProcessDone() || current_ctrl_mode != 2){
         return;
     }
-    
+    ros::Time t_start = ros::Time::now();
+
+    vector<double> tmp_times;
+    vector<Eigen::MatrixX4d> tmp_sfcs;
+    Eigen::Vector3d tmp_target_p, tmp_target_vdir;
+    global_ptr->getReplanInfo(current_pos, tmp_times, tmp_sfcs, tmp_target_p, tmp_target_vdir);
+    opter_ptr->setStates(current_pos, current_vel, current_acc, tmp_target_p, tmp_target_vdir);
+    opter_ptr->setCollisionConstraints(tmp_sfcs, tmp_times);
+    if(opter_ptr->optimize()){
+        ros::Time t_finish = ros::Time::now();
+        replan_dur = t_finish - t_start;
+        ROS_INFO("Replan iteration takes %f seconds.", replan_dur.toSec());
+        Eigen::Matrix<double, 3, -1> poly_coefs = opter_ptr->getTrajectoryCoefficients();
+        traj_buffer.setNewTraj(poly_coefs, replan_t_hori, replan_dur.toSec());
+    }
+    else{
+        ROS_INFO("Replanning failed.");
+        return;
+    }
 }
 
 int main(int argc, char **argv)

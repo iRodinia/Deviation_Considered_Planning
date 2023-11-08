@@ -20,7 +20,7 @@ public:
     ~GlobalMapProcessor() {};
 
     void getReplanInfo(const Eigen::Vector3d cur_pos, std::vector<double>& time_alloc, 
-                        std::vector<Eigen::MatrixX4d>& polygons, Eigen::Vector3d& goal_pos);
+                        std::vector<Eigen::MatrixX4d>& polygons, Eigen::Vector3d& goal_pos, Eigen::Vector3d& goal_vel_dir);
     inline bool isProcessDone();
 
     std::vector<Eigen::Vector3d> ref_path;

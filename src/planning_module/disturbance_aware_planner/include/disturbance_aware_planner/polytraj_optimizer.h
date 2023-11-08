@@ -135,7 +135,7 @@ class PolyTrajOptimizer{
 public:
     PolyTrajOptimizer() {}
     ~PolyTrajOptimizer() {}
-    void setParameters(ros::NodeHandle &nh);
+    void initParameters(ros::NodeHandle &nh);
     void setStates(const Point init_p, const Point init_v, const Point init_a, const Point goal_p, const Point goal_vdir);
     void setCollisionConstraints(const std::vector<Eigen::MatrixX4d>& constraints, const std::vector<double>& time_allocs);
 

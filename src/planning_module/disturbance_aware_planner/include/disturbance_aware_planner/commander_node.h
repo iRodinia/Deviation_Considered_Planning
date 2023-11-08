@@ -76,6 +76,8 @@ private:
     bool cmd_offb = false;
     int mode_change_count = 0;
     int at_pos_count = 0;
+    double replan_t_hori;
+    ros::Duration replan_dur = ros::Duration(0.0);
 };
 
 }
