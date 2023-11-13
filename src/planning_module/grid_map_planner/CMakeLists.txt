@@ -1,12 +1,10 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.5)
 project(grid_map_planner)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
-set(CMAKE_BUILD_TYPE "Release")
-ADD_COMPILE_OPTIONS(-std=c++11 )
-ADD_COMPILE_OPTIONS(-std=c++14 )
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wall -g")
+add_compile_options(-std=c++11 )
+add_compile_options(-std=c++14 )
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -14,6 +12,8 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wall -g")
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
+  pcl_ros
+  pcl_conversions
   std_msgs
   grid_map
 )
@@ -21,8 +21,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 find_package(Eigen3 REQUIRED)
-find_package(OpenCV REQUIRED)
-find_package(PCL REQUIRED)
+find_package(Boost REQUIRED)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -126,7 +125,6 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIR}
-  ${OpenCV_INCLUDE_DIRS}
   ${PCL_INCLUDE_DIRS}
 )
 
@@ -134,9 +132,10 @@ include_directories(
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/grid_map_planner.cpp
 # )
-add_library(grid_plan_lib
+add_library(${PROJECT_NAME}
   src/jps_planner/graph_search.cpp
   src/jps_planner/jps_planner.cpp
+  src/dyn_a_star_planner/dyn_a_star.cpp
   src/planner_interface.cpp
 )
 
@@ -164,7 +163,7 @@ add_library(grid_plan_lib
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
-target_link_libraries(grid_plan_lib
+target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
 )
 

@@ -12,16 +12,16 @@ try:
     from catkin.environment_cache import generate_environment_script
 except ImportError:
     # search for catkin package in all workspaces and prepend to path
-    for workspace in '/home/czhang/catkin_ws_overlay/devel;/opt/ros/noetic;/home/czhang/Documents/catkin_ws_make/devel;/home/czhang/Documents/catkin_ws_build/devel;/home/czhang/Documents/deviation_considered_planner/devel'.split(';'):
+    for workspace in '/home/cz_linux/Documents/Deviation_Considered_Planning/devel;/home/cz_linux/catkin_overlay_ws/devel;/opt/ros/noetic;/home/cz_linux/Documents/catkin_ws_build/devel;/home/cz_linux/Documents/catkin_ws_make/devel;/home/cz_linux/Documents/ego-planner-swarm/devel;/home/cz_linux/Documents/crazyswarm/ros_ws/devel'.split(';'):
         python_path = os.path.join(workspace, 'lib/python3/dist-packages')
         if os.path.isdir(os.path.join(python_path, 'catkin')):
             sys.path.insert(0, python_path)
             break
     from catkin.environment_cache import generate_environment_script
 
-code = generate_environment_script('/home/czhang/Documents/deviation_considered_planner/devel/.private/grid_map_planner/env.sh')
+code = generate_environment_script('/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/grid_map_planner/env.sh')
 
-output_filename = '/home/czhang/Documents/deviation_considered_planner/build/grid_map_planner/catkin_generated/setup_cached.sh'
+output_filename = '/home/cz_linux/Documents/Deviation_Considered_Planning/build/grid_map_planner/catkin_generated/setup_cached.sh'
 with open(output_filename, 'w') as f:
     # print('Generate script for cached setup "%s"' % output_filename)
     f.write('\n'.join(code))

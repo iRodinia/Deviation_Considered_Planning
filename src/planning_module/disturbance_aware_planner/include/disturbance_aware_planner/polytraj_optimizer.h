@@ -29,9 +29,9 @@ public:
         }
         else{
             order_ = coefficients.size() - 1;
-            coefficients_ = Coefs(order_+1)::Zero();
+            coefficients_ = Coefs::Zero(3, order_+1);
             for(int i=0; i<=order_; i++){
-                coefficients_.block<3,1>(0,i) = coefficients[i];
+                coefficients_.col(i) = coefficients[i];
             }
         }
     }
@@ -54,7 +54,7 @@ public:
     Value evaluate(double x) const {
         Value result = Value::Zero();
         for (size_t i = 0; i <= order_; ++i) {
-            result += coefficients_.block<3,1>(0,i) * std::pow(x, i);
+            result += coefficients_.col(i) * std::pow(x, i);
         }
         return result;
     }
@@ -62,7 +62,7 @@ public:
     Polynomial derivative() const {
         std::vector<Coef> derivative_coefficients;
         for (size_t i = 1; i <= order_; ++i) {
-            derivative_coefficients.push_back(i * coefficients_.block<3,1>(0,i));
+            derivative_coefficients.push_back(i * coefficients_.col(i));
         }
         return Polynomial(derivative_coefficients);
     }
@@ -86,7 +86,7 @@ public:
             constraint_num = std::min(Ain.size(), Bin.size());
         }
         A.assign(Ain.begin(), Ain.begin()+constraint_num);
-        B.assign(Bin.begin(), bin.begin()+constraint_num);
+        B.assign(Bin.begin(), Bin.begin()+constraint_num);
     }
 
     ConvexHull(const Eigen::MatrixX4d ABin){

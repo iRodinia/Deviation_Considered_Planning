@@ -1,4 +1,4 @@
-Symlinking /home/czhang/Documents/deviation_considered_planner/devel/share/grid_map/cmake/grid_mapConfig.cmake
-Symlinking /home/czhang/Documents/deviation_considered_planner/devel/share/grid_map/cmake/grid_mapConfig-version.cmake
-Symlinking /home/czhang/Documents/deviation_considered_planner/devel/lib/libgrid_map.so
-Symlinking /home/czhang/Documents/deviation_considered_planner/devel/lib/pkgconfig/grid_map.pc
+Symlinking /home/cz_linux/Documents/Deviation_Considered_Planning/devel/share/grid_map/cmake/grid_mapConfig.cmake
+Symlinking /home/cz_linux/Documents/Deviation_Considered_Planning/devel/share/grid_map/cmake/grid_mapConfig-version.cmake
+Symlinking /home/cz_linux/Documents/Deviation_Considered_Planning/devel/lib/libgrid_map.so
+Symlinking /home/cz_linux/Documents/Deviation_Considered_Planning/devel/lib/pkgconfig/grid_map.pc

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(global_map_gen)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
@@ -109,7 +109,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-#  LIBRARIES mockamap
+  LIBRARIES ${PROJECT_NAME}
   CATKIN_DEPENDS roscpp pcl_ros pcl_conversions
 #  DEPENDS system_lib
 )

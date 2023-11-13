@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(grid_map)
 
 set(CMAKE_BUILD_TYPE "Release")
@@ -14,15 +14,16 @@ find_package(catkin REQUIRED COMPONENTS
     std_msgs
     visualization_msgs
     cv_bridge
-    message_filters
+    pcl_ros
+    pcl_conversions
 )
 
 find_package(Eigen3 REQUIRED)
-find_package(PCL REQUIRED)
+find_package(Boost REQUIRED)
 
 catkin_package(
     INCLUDE_DIRS include
-    LIBRARIES grid_map
+    LIBRARIES ${PROJECT_NAME}
     CATKIN_DEPENDS roscpp std_msgs
 #  DEPENDS system_lib
 )
@@ -38,11 +39,10 @@ include_directories(
 
 link_directories(${PCL_LIBRARY_DIRS})
 
-add_library(grid_map
-    src/grid_map.cpp 
-    src/raycast.cpp
+add_library(${PROJECT_NAME}
+    src/grid_map.cpp
 )
-target_link_libraries(grid_map
+target_link_libraries(${PROJECT_NAME}
     ${catkin_LIBRARIES} 
     ${PCL_LIBRARIES}
 )  

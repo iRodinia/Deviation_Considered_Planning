@@ -7,7 +7,7 @@
 # new environment variables
 
 # modified environment variables
-export CMAKE_PREFIX_PATH="/home/czhang/Documents/deviation_considered_planner/devel/.private/grid_map_planner:$CMAKE_PREFIX_PATH"
-export PWD='/home/czhang/Documents/deviation_considered_planner/build/grid_map_planner'
-export ROSLISP_PACKAGE_DIRECTORIES="/home/czhang/Documents/deviation_considered_planner/devel/.private/grid_map_planner/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
-export ROS_PACKAGE_PATH="/home/czhang/Documents/deviation_considered_planner/src/planning_module/grid_map_planner:$ROS_PACKAGE_PATH"
+export CMAKE_PREFIX_PATH="/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/grid_map_planner:$CMAKE_PREFIX_PATH"
+export PWD='/home/cz_linux/Documents/Deviation_Considered_Planning/build/grid_map_planner'
+export ROSLISP_PACKAGE_DIRECTORIES="/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/grid_map_planner/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
+export ROS_PACKAGE_PATH="/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/grid_map_planner:$ROS_PACKAGE_PATH"

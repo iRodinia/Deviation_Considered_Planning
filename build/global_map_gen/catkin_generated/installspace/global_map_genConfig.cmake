@@ -67,14 +67,14 @@ set(global_map_gen_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(global_map_gen_SOURCE_PREFIX /home/czhang/Documents/deviation_considered_planner/src/sensing_module/global_map_generator)
-  set(global_map_gen_DEVEL_PREFIX /home/czhang/Documents/deviation_considered_planner/devel/.private/global_map_gen)
+  set(global_map_gen_SOURCE_PREFIX /home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/global_map_generator)
+  set(global_map_gen_DEVEL_PREFIX /home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/global_map_gen)
   set(global_map_gen_INSTALL_PREFIX "")
   set(global_map_gen_PREFIX ${global_map_gen_DEVEL_PREFIX})
 else()
   set(global_map_gen_SOURCE_PREFIX "")
   set(global_map_gen_DEVEL_PREFIX "")
-  set(global_map_gen_INSTALL_PREFIX /home/czhang/Documents/deviation_considered_planner/install)
+  set(global_map_gen_INSTALL_PREFIX /home/cz_linux/Documents/Deviation_Considered_Planning/install)
   set(global_map_gen_PREFIX ${global_map_gen_INSTALL_PREFIX})
 endif()
 
@@ -116,7 +116,7 @@ if(NOT "include " STREQUAL " ")
   endforeach()
 endif()
 
-set(libraries "")
+set(libraries "global_map_gen")
 foreach(library ${libraries})
   # keep build configuration keywords, target names and absolute libraries as-is
   if("${library}" MATCHES "^(debug|optimized|general)$")
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/czhang/Documents/deviation_considered_planner/install/lib;/home/czhang/catkin_ws_overlay/devel/lib;/opt/ros/noetic/lib;/home/czhang/Documents/catkin_ws_make/devel/lib;/home/czhang/Documents/catkin_ws_build/devel/lib;/home/czhang/Documents/deviation_considered_planner/devel/lib)
+    foreach(path /home/cz_linux/Documents/Deviation_Considered_Planning/install/lib;/home/cz_linux/Documents/Deviation_Considered_Planning/devel/lib;/home/cz_linux/catkin_overlay_ws/devel/lib;/opt/ros/noetic/lib;/home/cz_linux/Documents/catkin_ws_build/devel/lib;/home/cz_linux/Documents/catkin_ws_make/devel/lib;/home/cz_linux/Documents/ego-planner-swarm/devel/lib;/home/cz_linux/Documents/crazyswarm/ros_ws/devel/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

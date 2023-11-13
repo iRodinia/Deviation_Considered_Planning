@@ -1,4 +1,4 @@
-prefix=/home/czhang/Documents/deviation_considered_planner/install
+prefix=/home/cz_linux/Documents/Deviation_Considered_Planning/install
 
 Name: catkin_tools_prebuild
 Description: Description of catkin_tools_prebuild

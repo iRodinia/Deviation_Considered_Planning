@@ -44,7 +44,7 @@ void PolyTrajOptimizer::initParameters(ros::NodeHandle& nh){
     coef_c0 = Coef(0, 0, 0);
     coef_c1 = Coef(0, 0, 0);
     coef_c2 = Coef(0, 0, 0);
-    rest_coefs = Coefs(poly_order - 2);
+    rest_coefs = Coefs(3, poly_order - 2);
     opter = nlopt::opt(nlopt::LN_COBYLA, rest_coefs.size());
     ready_for_optim = false;
 }
@@ -67,12 +67,12 @@ void PolyTrajOptimizer::setStates(const Point init_p, const Point init_v, const 
 
 void PolyTrajOptimizer::setCollisionConstraints(const std::vector<Eigen::MatrixX4d>& constraints, const std::vector<double>& time_allocs){
     if(constraints.size() != time_allocs.size()){
-        ROS_WARN("Incompatible constraints number. Get %d convex hulls and %d time allocations.", constraints.size(), time_allocs.size());
+        ROS_WARN("Incompatible constraints number. Get %ld convex hulls and %ld time allocations.", constraints.size(), time_allocs.size());
         ros::shutdown();
     }
     int constraints_num = constraints.size();
     std::vector<double> time_splits;
-    std::partial_sum(time_allocs.begin(), time_allocs.end(), time_splits);
+    std::partial_sum(time_allocs.cbegin(), time_allocs.cend(), time_splits.begin());
     if(time_splits[constraints_num-1] <= pred_T){
         time_splits[constraints_num-1] = pred_T + pred_dt;
     }
@@ -129,7 +129,7 @@ bool PolyTrajOptimizer::optimize(){
 
 PolyTrajOptimizer::Coefs PolyTrajOptimizer::getTrajectoryCoefficients(){
     int coef_num = poly_order + 1;
-    Coefs new_coefs(coef_num);
+    Coefs new_coefs(3, coef_num);
     new_coefs.block<3,1>(0,0) = coef_c0;
     new_coefs.block<3,1>(0,1) = coef_c1;
     new_coefs.block<3,1>(0,2) = coef_c2;
@@ -142,7 +142,7 @@ PolyTrajOptimizer::Coefs PolyTrajOptimizer::getTrajectoryCoefficients(){
 double PolyTrajOptimizer::wrapTotalCost(const std::vector<double>& x, std::vector<double>& grad, void* data){
     PolyTrajOptimizer* optimizer = reinterpret_cast<PolyTrajOptimizer*>(data);
     int coef_num = optimizer->poly_order + 1;
-    Coefs new_coefs(coef_num);
+    Coefs new_coefs(3, coef_num);
     new_coefs.block<3,1>(0,0) = optimizer->coef_c0;
     new_coefs.block<3,1>(0,1) = optimizer->coef_c1;
     new_coefs.block<3,1>(0,2) = optimizer->coef_c2;
@@ -175,7 +175,7 @@ void PolyTrajOptimizer::wrapTotalConstraints(unsigned m, double *result, unsigne
         ros::shutdown();
         exit(-1);
     }
-    Coefs new_coefs(coef_num);
+    Coefs new_coefs(3, coef_num);
     new_coefs.block<3,1>(0,0) = optimizer->coef_c0;
     new_coefs.block<3,1>(0,1) = optimizer->coef_c1;
     new_coefs.block<3,1>(0,2) = optimizer->coef_c2;

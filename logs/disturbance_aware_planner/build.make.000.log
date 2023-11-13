@@ -1,0 +1,108 @@
+[  0%] Built target sensor_msgs_generate_messages_py
+[  0%] Built target sensor_msgs_generate_messages_nodejs
+[  0%] Built target sensor_msgs_generate_messages_lisp
+[  0%] Built target topic_tools_generate_messages_eus
+[  0%] Built target std_srvs_generate_messages_cpp
+[  0%] Built target std_srvs_generate_messages_py
+[  0%] Built target std_srvs_generate_messages_lisp
+[  0%] Built target std_srvs_generate_messages_nodejs
+[  0%] Built target std_srvs_generate_messages_eus
+[  0%] Built target topic_tools_generate_messages_cpp
+[  0%] Built target topic_tools_generate_messages_nodejs
+[  0%] Built target tf_generate_messages_cpp
+[  0%] Built target topic_tools_generate_messages_lisp
+[  0%] Built target tf_generate_messages_eus
+[  0%] Built target tf_generate_messages_lisp
+[  0%] Built target topic_tools_generate_messages_py
+[  0%] Built target tf_generate_messages_nodejs
+[  0%] Built target tf_generate_messages_py
+[  0%] Built target actionlib_generate_messages_cpp
+[  0%] Built target actionlib_generate_messages_eus
+[  0%] Built target actionlib_generate_messages_lisp
+[  0%] Built target actionlib_generate_messages_nodejs
+[  0%] Built target std_msgs_generate_messages_cpp
+[  0%] Built target std_msgs_generate_messages_eus
+[  0%] Built target std_msgs_generate_messages_nodejs
+[  0%] Built target std_msgs_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_py
+[  0%] Built target pcl_ros_gencfg
+[  0%] Built target dynamic_reconfigure_generate_messages_cpp
+[  0%] Built target dynamic_reconfigure_generate_messages_eus
+[  0%] Built target roscpp_generate_messages_eus
+[  0%] Built target dynamic_reconfigure_generate_messages_lisp
+[  0%] Built target roscpp_generate_messages_lisp
+[  0%] Built target roscpp_generate_messages_cpp
+[  0%] Built target dynamic_reconfigure_generate_messages_nodejs
+[  0%] Built target dynamic_reconfigure_gencfg
+[  0%] Built target dynamic_reconfigure_generate_messages_py
+[  0%] Built target geometry_msgs_generate_messages_cpp
+[  0%] Built target geometry_msgs_generate_messages_eus
+[  0%] Built target geometry_msgs_generate_messages_nodejs
+[  0%] Built target geometry_msgs_generate_messages_lisp
+[  0%] Built target geometry_msgs_generate_messages_py
+[  0%] Built target roscpp_generate_messages_nodejs
+[  0%] Built target rosgraph_msgs_generate_messages_cpp
+[  0%] Built target roscpp_generate_messages_py
+[  0%] Built target rosgraph_msgs_generate_messages_eus
+[  0%] Built target rosgraph_msgs_generate_messages_nodejs
+[  0%] Built target rosgraph_msgs_generate_messages_lisp
+[  0%] Built target actionlib_generate_messages_py
+[  0%] Built target actionlib_msgs_generate_messages_cpp
+[  0%] Built target rosgraph_msgs_generate_messages_py
+[  0%] Built target actionlib_msgs_generate_messages_eus
+[  0%] Built target actionlib_msgs_generate_messages_lisp
+[  0%] Built target actionlib_msgs_generate_messages_nodejs
+[  0%] Built target tf2_msgs_generate_messages_cpp
+[  0%] Built target actionlib_msgs_generate_messages_py
+[  0%] Built target tf2_msgs_generate_messages_eus
+[  0%] Built target tf2_msgs_generate_messages_lisp
+[  0%] Built target tf2_msgs_generate_messages_nodejs
+[  0%] Built target tf2_msgs_generate_messages_py
+[  0%] Built target visualization_msgs_generate_messages_eus
+[  0%] Built target visualization_msgs_generate_messages_cpp
+[  0%] Built target visualization_msgs_generate_messages_nodejs
+[  0%] Built target visualization_msgs_generate_messages_lisp
+[  0%] Built target nodelet_generate_messages_eus
+[  0%] Built target nodelet_generate_messages_lisp
+[  0%] Built target bond_generate_messages_cpp
+[  0%] Built target nodelet_generate_messages_nodejs
+[  0%] Built target visualization_msgs_generate_messages_py
+[  0%] Built target nodelet_generate_messages_py
+[  0%] Built target bond_generate_messages_lisp
+[  0%] Built target bond_generate_messages_eus
+[  0%] Built target nodelet_generate_messages_cpp
+[  0%] Built target nodelet_topic_tools_gencfg
+[  0%] Built target bond_generate_messages_nodejs
+[  0%] Built target pcl_msgs_generate_messages_lisp
+[  0%] Built target pcl_msgs_generate_messages_eus
+[  0%] Built target bond_generate_messages_py
+[  0%] Built target sensor_msgs_generate_messages_eus
+[  0%] Built target sensor_msgs_generate_messages_cpp
+[  0%] Built target pcl_msgs_generate_messages_cpp
+[  0%] Built target pcl_msgs_generate_messages_py
+[  0%] Built target pcl_msgs_generate_messages_nodejs
+[ 40%] [32mBuilding CXX object CMakeFiles/dap_node.dir/src/polytraj_optimizer.cpp.o[0m
+[ 40%] [32mBuilding CXX object CMakeFiles/dap_node.dir/src/commander_node.cpp.o[0m
+[ 60%] [32mBuilding CXX object CMakeFiles/dap_node.dir/src/reference_manager.cpp.o[0m
+[ 80%] [32mBuilding CXX object CMakeFiles/dap_node.dir/src/global_map_process.cpp.o[0m
+[100%] [32m[1mLinking CXX executable /home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/disturbance_aware_planner/lib/disturbance_aware_planner/dap_node[0m
+/usr/bin/ld: CMakeFiles/dap_node.dir/src/global_map_process.cpp.o: in function `geo_utils::FromPointsToPlane(Eigen::Matrix<double, 3, 1, 0, 3, 1> const&, Eigen::Matrix<double, 3, 1, 0, 3, 1> const&, Eigen::Matrix<double, 3, 1, 0, 3, 1> const&, Eigen::Matrix<double, 4, 1, 0, 4, 1>&)':
+global_map_process.cpp:(.text+0x1f): multiple definition of `geo_utils::FromPointsToPlane(Eigen::Matrix<double, 3, 1, 0, 3, 1> const&, Eigen::Matrix<double, 3, 1, 0, 3, 1> const&, Eigen::Matrix<double, 3, 1, 0, 3, 1> const&, Eigen::Matrix<double, 4, 1, 0, 4, 1>&)'; CMakeFiles/dap_node.dir/src/commander_node.cpp.o:commander_node.cpp:(.text+0x1f): first defined here
+/usr/bin/ld: CMakeFiles/dap_node.dir/src/global_map_process.cpp.o: in function `geo_utils::GetFovCheckPlane(Eigen::Matrix<double, 3, 3, 0, 3, 3>, Eigen::Matrix<double, 3, 1, 0, 3, 1>, Eigen::Matrix<double, -1, 4, 0, -1, 4>&, std::vector<Eigen::Matrix<double, 3, 3, 0, 3, 3>, std::allocator<Eigen::Matrix<double, 3, 3, 0, 3, 3> > >&)':
+global_map_process.cpp:(.text+0x409): multiple definition of `geo_utils::GetFovCheckPlane(Eigen::Matrix<double, 3, 3, 0, 3, 3>, Eigen::Matrix<double, 3, 1, 0, 3, 1>, Eigen::Matrix<double, -1, 4, 0, -1, 4>&, std::vector<Eigen::Matrix<double, 3, 3, 0, 3, 3>, std::allocator<Eigen::Matrix<double, 3, 3, 0, 3, 3> > >&)'; CMakeFiles/dap_node.dir/src/commander_node.cpp.o:commander_node.cpp:(.text+0x409): first defined here
+/usr/bin/ld: CMakeFiles/dap_node.dir/src/global_map_process.cpp.o: in function `geo_utils::GetFovPlanes(Eigen::Matrix<double, 3, 3, 0, 3, 3>, Eigen::Matrix<double, 3, 1, 0, 3, 1>, Eigen::Matrix<double, -1, 4, 0, -1, 4>&, std::vector<Eigen::Matrix<double, 3, 3, 0, 3, 3>, std::allocator<Eigen::Matrix<double, 3, 3, 0, 3, 3> > >&)':
+global_map_process.cpp:(.text+0xc51): multiple definition of `geo_utils::GetFovPlanes(Eigen::Matrix<double, 3, 3, 0, 3, 3>, Eigen::Matrix<double, 3, 1, 0, 3, 1>, Eigen::Matrix<double, -1, 4, 0, -1, 4>&, std::vector<Eigen::Matrix<double, 3, 3, 0, 3, 3>, std::allocator<Eigen::Matrix<double, 3, 3, 0, 3, 3> > >&)'; CMakeFiles/dap_node.dir/src/commander_node.cpp.o:commander_node.cpp:(.text+0xc51): first defined here
+/usr/bin/ld: CMakeFiles/dap_node.dir/src/global_map_process.cpp.o: in function `geo_utils::findInteriorDist(Eigen::Matrix<double, -1, 4, 0, -1, 4> const&, Eigen::Matrix<double, 3, 1, 0, 3, 1>&)':
+global_map_process.cpp:(.text+0x1a4d): multiple definition of `geo_utils::findInteriorDist(Eigen::Matrix<double, -1, 4, 0, -1, 4> const&, Eigen::Matrix<double, 3, 1, 0, 3, 1>&)'; CMakeFiles/dap_node.dir/src/commander_node.cpp.o:commander_node.cpp:(.text+0x1a4d): first defined here
+/usr/bin/ld: CMakeFiles/dap_node.dir/src/global_map_process.cpp.o: in function `emvp::emvp(Eigen::Matrix<double, -1, 4, 0, -1, 4> const&, Eigen::Matrix<double, 3, -1, 0, 3, -1> const&, Eigen::Matrix<double, 3, 1, 0, 3, 1> const&, Eigen::Matrix<double, 3, 1, 0, 3, 1> const&, Polytope&, double, bool, int)':
+global_map_process.cpp:(.text+0x1e28): multiple definition of `emvp::emvp(Eigen::Matrix<double, -1, 4, 0, -1, 4> const&, Eigen::Matrix<double, 3, -1, 0, 3, -1> const&, Eigen::Matrix<double, 3, 1, 0, 3, 1> const&, Eigen::Matrix<double, 3, 1, 0, 3, 1> const&, Polytope&, double, bool, int)'; CMakeFiles/dap_node.dir/src/commander_node.cpp.o:commander_node.cpp:(.text+0x1e28): first defined here
+/usr/bin/ld: CMakeFiles/dap_node.dir/src/polytraj_optimizer.cpp.o: in function `disturbance_aware_planner::quat2RotMatrix(Eigen::Matrix<double, 4, 1, 0, 4, 1>)':
+polytraj_optimizer.cpp:(.text+0x1f): multiple definition of `disturbance_aware_planner::quat2RotMatrix(Eigen::Matrix<double, 4, 1, 0, 4, 1>)'; CMakeFiles/dap_node.dir/src/commander_node.cpp.o:commander_node.cpp:(.text+0x3745): first defined here
+/usr/bin/ld: CMakeFiles/dap_node.dir/src/polytraj_optimizer.cpp.o: in function `disturbance_aware_planner::acc2RotMatrix(Eigen::Matrix<double, 3, 1, 0, 3, 1>, double)':
+polytraj_optimizer.cpp:(.text+0x8fb): multiple definition of `disturbance_aware_planner::acc2RotMatrix(Eigen::Matrix<double, 3, 1, 0, 3, 1>, double)'; CMakeFiles/dap_node.dir/src/commander_node.cpp.o:commander_node.cpp:(.text+0x4021): first defined here
+/usr/bin/ld: CMakeFiles/dap_node.dir/src/polytraj_optimizer.cpp.o: in function `disturbance_aware_planner::rot2Quaternion(Eigen::Matrix<double, 3, 3, 0, 3, 3>)':
+polytraj_optimizer.cpp:(.text+0xd4e): multiple definition of `disturbance_aware_planner::rot2Quaternion(Eigen::Matrix<double, 3, 3, 0, 3, 3>)'; CMakeFiles/dap_node.dir/src/commander_node.cpp.o:commander_node.cpp:(.text+0x4474): first defined here
+collect2: error: ld returned 1 exit status
+make[2]: *** [CMakeFiles/dap_node.dir/build.make:265：/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/disturbance_aware_planner/lib/disturbance_aware_planner/dap_node] 错误 1
+make[1]: *** [CMakeFiles/Makefile2:2591：CMakeFiles/dap_node.dir/all] 错误 2
+make: *** [Makefile:146：all] 错误 2

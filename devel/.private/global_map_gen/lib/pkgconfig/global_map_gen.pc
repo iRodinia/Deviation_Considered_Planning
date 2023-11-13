@@ -1,8 +1,8 @@
-prefix=/home/czhang/Documents/deviation_considered_planner/devel/.private/global_map_gen
+prefix=/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/global_map_gen
 
 Name: global_map_gen
 Description: Description of global_map_gen
 Version: 0.1.0
-Cflags: -I/home/czhang/Documents/deviation_considered_planner/src/sensing_module/global_map_generator/include
-Libs: -L${prefix}/lib 
+Cflags: -I/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/global_map_generator/include
+Libs: -L${prefix}/lib -lglobal_map_gen
 Requires: roscpp pcl_ros pcl_conversions

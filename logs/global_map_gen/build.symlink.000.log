@@ -1,5 +1,5 @@
-Symlinking /home/czhang/Documents/deviation_considered_planner/devel/share/global_map_gen/cmake/global_map_genConfig.cmake
-Symlinking /home/czhang/Documents/deviation_considered_planner/devel/share/global_map_gen/cmake/global_map_genConfig-version.cmake
-Symlinking /home/czhang/Documents/deviation_considered_planner/devel/lib/libmap_util.so
-Symlinking /home/czhang/Documents/deviation_considered_planner/devel/lib/pkgconfig/global_map_gen.pc
-Symlinking /home/czhang/Documents/deviation_considered_planner/devel/lib/global_map_gen/global_map_node
+Symlinking /home/cz_linux/Documents/Deviation_Considered_Planning/devel/share/global_map_gen/cmake/global_map_genConfig.cmake
+Symlinking /home/cz_linux/Documents/Deviation_Considered_Planning/devel/share/global_map_gen/cmake/global_map_genConfig-version.cmake
+Symlinking /home/cz_linux/Documents/Deviation_Considered_Planning/devel/lib/libmap_util.so
+Symlinking /home/cz_linux/Documents/Deviation_Considered_Planning/devel/lib/global_map_gen/global_map_node
+Symlinking /home/cz_linux/Documents/Deviation_Considered_Planning/devel/lib/pkgconfig/global_map_gen.pc

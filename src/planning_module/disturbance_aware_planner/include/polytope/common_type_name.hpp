@@ -1,6 +1,7 @@
 #ifndef _UTILS_COMMON_TYPE_NAME_
 #define _UTILS_COMMON_TYPE_NAME_
 
+#define FMT_HEADER_ONLY
 #include "Eigen/Dense"
 #include "iostream"
 #include "vector"

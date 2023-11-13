@@ -4,5 +4,5 @@ PROJECT_PKG_CONFIG_INCLUDE_DIRS = "${prefix}/include".split(';') if "${prefix}/i
 PROJECT_CATKIN_DEPENDS = "roscpp;rospy;std_msgs;grid_map".replace(';', ' ')
 PKG_CONFIG_LIBRARIES_WITH_PREFIX = "-lgrid_map_planner".split(';') if "-lgrid_map_planner" != "" else []
 PROJECT_NAME = "grid_map_planner"
-PROJECT_SPACE_DIR = "/home/czhang/Documents/deviation_considered_planner/install"
+PROJECT_SPACE_DIR = "/home/cz_linux/Documents/Deviation_Considered_Planning/install"
 PROJECT_VERSION = "0.0.0"

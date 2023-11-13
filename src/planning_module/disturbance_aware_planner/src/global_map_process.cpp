@@ -58,7 +58,7 @@ void GlobalMapProcessor::planPolygons(){
     }
     Eigen::Vector3d map_origion, map_size;
     map_ptr->getRegion(map_origion, map_size);
-    Eigen::MatrixX4d map_bnd_consts(6);   // map boundary constraints (6 faces)
+    Eigen::MatrixX4d map_bnd_consts(6, 4);   // map boundary constraints (6 faces)
     map_bnd_consts.row(0) = Eigen::RowVector4d(-1, 0, 0, map_origion(0));
     map_bnd_consts.row(1) = Eigen::RowVector4d(0, -1, 0, map_origion(1));
     map_bnd_consts.row(2) = Eigen::RowVector4d(0, 0, -1, map_origion(2));

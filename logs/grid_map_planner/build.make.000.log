@@ -1,6 +1,6 @@
-[35m[1mScanning dependencies of target grid_plan_lib[0m
-[ 25%] [32mBuilding CXX object CMakeFiles/grid_plan_lib.dir/src/jps_planner/graph_search.cpp.o[0m
-[ 50%] [32mBuilding CXX object CMakeFiles/grid_plan_lib.dir/src/jps_planner/jps_planner.cpp.o[0m
-[ 75%] [32mBuilding CXX object CMakeFiles/grid_plan_lib.dir/src/planner_interface.cpp.o[0m
-[100%] [32m[1mLinking CXX shared library /home/czhang/Documents/deviation_considered_planner/devel/.private/grid_map_planner/lib/libgrid_plan_lib.so[0m
-[100%] Built target grid_plan_lib
+[ 60%] [32mBuilding CXX object CMakeFiles/grid_map_planner.dir/src/jps_planner/graph_search.cpp.o[0m
+[ 60%] [32mBuilding CXX object CMakeFiles/grid_map_planner.dir/src/jps_planner/jps_planner.cpp.o[0m
+[ 60%] [32mBuilding CXX object CMakeFiles/grid_map_planner.dir/src/dyn_a_star_planner/dyn_a_star.cpp.o[0m
+[ 80%] [32mBuilding CXX object CMakeFiles/grid_map_planner.dir/src/planner_interface.cpp.o[0m
+[100%] [32m[1mLinking CXX shared library /home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/grid_map_planner/lib/libgrid_map_planner.so[0m
+[100%] Built target grid_map_planner

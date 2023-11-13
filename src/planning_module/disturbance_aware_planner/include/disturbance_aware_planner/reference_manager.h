@@ -32,15 +32,15 @@ public:
     Value evaluate(double x) const {
         Value result = Value::Zero();
         for (size_t i = 0; i <= order_; ++i) {
-            result += coefficients_.block<3,1>(0,i) * std::pow(x, i);
+            result += coefficients_.col(i) * std::pow(x, i);
         }
         return result;
     }
 
     Polynomial3D derivative() const {
-        Coefs derivative_coefficients(order_);
+        Coefs derivative_coefficients(3, order_);
         for (size_t i = 1; i <= order_; ++i) {
-            derivative_coefficients.block<3,1>(0,i-1) = i * coefficients_.block<3,1>(0,i);
+            derivative_coefficients.col(i-1) = i * coefficients_.col(i);
         }
         return Polynomial3D(derivative_coefficients);
     }
