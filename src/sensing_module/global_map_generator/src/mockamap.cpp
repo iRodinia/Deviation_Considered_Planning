@@ -59,9 +59,8 @@ void optimizeMap(mocka::Maps::BasicInfo& in)
 
 int main(int argc, char** argv)
 {
-    ros::init(argc, argv, "mockamap");
+    ros::init(argc, argv, "global_map");
     ros::NodeHandle nh;
-    ros::NodeHandle nh_private("~");
 
     int seed;
     int sizeX;
@@ -72,13 +71,13 @@ int main(int argc, char** argv)
     int type;
     std::string _map_pub_topic = std::string("/global_map");
 
-    nh_private.param("seed", seed, 94);
-    nh_private.param("update_freq", update_freq, 1.0);
-    nh_private.param("resolution", scale, 0.38);
-    nh_private.param("x_length", sizeX, 100);
-    nh_private.param("y_length", sizeY, 100);
-    nh_private.param("z_length", sizeZ, 10);
-    nh_private.param("map_type", type, 1);  // 1: perlin3D, 2: randomMap, 3: maze2D, 4: maze3D
+    nh.param("seed", seed, 94);
+    nh.param("update_freq", update_freq, 1.0);
+    nh.param("resolution", scale, 0.38);
+    nh.param("x_length", sizeX, 100);
+    nh.param("y_length", sizeY, 100);
+    nh.param("z_length", sizeZ, 10);
+    nh.param("map_type", type, 1);  // 1: perlin3D, 2: randomMap, 3: maze2D, 4: maze3D
 
     ros::Publisher pcl_pub = nh.advertise<sensor_msgs::PointCloud2>(_map_pub_topic, 1);
     pcl::PointCloud<pcl::PointXYZ> cloud;
@@ -90,7 +89,7 @@ int main(int argc, char** argv)
     sizeZ = sizeZ * scale;
 
     mocka::Maps::BasicInfo info;
-    info.nh_private = &nh_private;
+    info.nh_private = &nh;
     info.sizeX      = sizeX;
     info.sizeY      = sizeY;
     info.sizeZ      = sizeZ;

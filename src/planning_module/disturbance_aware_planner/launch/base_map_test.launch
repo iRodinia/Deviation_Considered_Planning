@@ -12,7 +12,7 @@
     <arg name="uav_local_sensing_map_topic"              default="/crazyflie/local_map"/>
     <arg name="uav_local_sensing_inflated_map_topic"     default="/crazyflie/local_map_inflated"/>
     
-    <node name="global_map" pkg="global_map_gen" type="global_map_bode" output="screen">
+    <node name="global_map_node" pkg="global_map_gen" type="global_map_node" output="screen">
         <param name="seed"                type="int"            value="94"/>
         <param name="update_freq"         type="double"         value="1.0"/>
         <param name="resolution"          type="double"         value="0.05"/>
@@ -38,11 +38,6 @@
         <param name="visualization_frequency"         value="10.0"/>
         <param name="local_sensing_range_xy"          value="1.2"/>
         <param name="local_sensing_range_z"           value="0.8"/>
-
-        <remap from="cloud_in"                        to="$(arg global_map_topic)"/>
-        <remap from="uav_pose_in"                     to="$(arg uav_pose_topic)"/>
-        <remap from="local_map"                       to="$(arg uav_local_sensing_map_topic)"/>
-        <remap from="local_map_inflate"               to="$(arg uav_local_sensing_inflated_map_topic)"/>
     </group>
 
     <group ns="Model">
@@ -74,14 +69,21 @@
 
     <group ns="global_map_process">
         <param name="visualization_frequency"         value="3.0" />
-
-        <remap from="global_reference_path"           to="$(arg global_ref_path_topic)"/>
-        <remap from="global_polygons"                 to="$(arg global_ref_sfc_topic)"/>
     </group>
 
     <group ns="Commander">
         <param name="cmd_frequency"                   value="15.0" />
         <param name="replan_frequency"                value="1.0" />
+    </group>
+
+    <node name="dap_planner" pkg="disturbance_aware_planner" type="dap_node" output="screen">
+        <remap from="/grid_map/cloud_in"                        to="$(arg global_map_topic)"/>
+        <remap from="/grid_map/uav_pose_in"                     to="$(arg uav_pose_topic)"/>
+        <remap from="/grid_map/local_map"                       to="$(arg uav_local_sensing_map_topic)"/>
+        <remap from="/grid_map/local_map_inflate"               to="$(arg uav_local_sensing_inflated_map_topic)"/>
+
+        <remap from="/global_map_process/global_reference_path"           to="$(arg global_ref_path_topic)"/>
+        <remap from="/global_map_process/global_polygons"                 to="$(arg global_ref_sfc_topic)"/>
 
         <remap from="crazyflie/pose_and_att"          to="$(arg uav_pose_topic)"/>
         <remap from="crazyflie/vel_and_angrate"       to="$(arg uav_vel_topic)"/>
@@ -91,9 +93,7 @@
         <remap from="crazyflie/vel_and_angrate_cmd"   to="$(arg uav_vel_cmd_topic)"/>
         <remap from="crazyflie/acc_cmd"               to="$(arg uav_acc_cmd_topic)"/>
         <remap from="crazyflie/mode_cmd"              to="$(arg uav_ctrl_mode_cmd_topic)"/>
-
-        <node name="dap_planner" pkg="disturbance_aware_planner" type="dap_node" output="screen" />
-    </group>
+    </node>
 
     <!--  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find gridmap_establish)/rviz_config/rviz.rviz" required="true" /> -->
 

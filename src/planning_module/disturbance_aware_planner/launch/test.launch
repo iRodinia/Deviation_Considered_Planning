@@ -1,0 +1,27 @@
+<launch>
+    <arg name="global_map_topic"              		     default="/global_map"/>
+    <arg name="global_ref_path_topic"              		 default="/global/ref_path"/>
+    <arg name="global_ref_sfc_topic"              		 default="/global/ref_sfc"/>
+    <arg name="uav_pose_topic"              		     default="/crazyflie/state_pose"/>
+    <arg name="uav_vel_topic"              		         default="/crazyflie/state_vel"/>
+    <arg name="uav_ctrl_mode_topic"              		 default="/crazyflie/state_ctrl_mode"/>
+    <arg name="uav_pose_cmd_topic"              		 default="/crazyflie/cmd_pose"/>
+    <arg name="uav_vel_cmd_topic"              		     default="/crazyflie/cmd_vel"/>
+    <arg name="uav_acc_cmd_topic"              		     default="/crazyflie/cmd_acc"/>
+    <arg name="uav_ctrl_mode_cmd_topic"              	 default="/crazyflie/cmd_ctrl_mode"/>
+    <arg name="uav_local_sensing_map_topic"              default="/crazyflie/local_map"/>
+    <arg name="uav_local_sensing_inflated_map_topic"     default="/crazyflie/local_map_inflated"/>
+    
+    <node name="global_map_node" pkg="global_map_gen" type="global_map_node" output="screen">
+        <param name="seed"                type="int"            value="94"/>
+        <param name="update_freq"         type="double"         value="1.0"/>
+        <param name="resolution"          type="double"         value="0.05"/>
+        <param name="x_length"            type="int"            value="100"/>
+        <param name="y_length"            type="int"            value="100"/>
+        <param name="z_length"            type="int"            value="50"/>
+        <param name="map_type"            type="int"            value="1"/>
+
+        <remap from="/global_map"         to="$(arg global_map_topic)"/>
+    </node>
+
+</launch>
