@@ -62,12 +62,19 @@ void GridMap::reset()
 
 void GridMap::cloudCallback(const sensor_msgs::PointCloud2::ConstPtr &msg)
 {
+    /*Test only!*/
+    std::cout << "Callback fcn called!" << std::endl;
+
     if(has_global_map)
         return;
     pcl::PointCloud<pcl::PointXYZ> latest_cloud;
     pcl::fromROSMsg(*msg, latest_cloud);
     if (latest_cloud.points.size() == 0)
         return;
+
+    /*Test only!*/
+    std::cout << "Received pcl of size " << latest_cloud.points.size() << std::endl;
+
     cloud = latest_cloud;
 
     int inf_step = ceil(radius_inflation_ / resolution_);

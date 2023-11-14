@@ -5,10 +5,6 @@ using namespace disturbance_aware_planner;
 GlobalMapProcessor::GlobalMapProcessor(ros::NodeHandle& nh){
     path_planner_ptr.reset(new GridMapPlanner(&nh));
     map_ptr = path_planner_ptr->getGridMap();
-    while(!map_ptr->mapInitialized()){
-        ros::Duration(0.5).sleep();
-    }
-    ros::Duration(0.5).sleep();
     double vis_freq, pred_dt;
     int pred_N;
     nh.param("Model/nominal_vel", uav_vel, 1.2);
@@ -22,7 +18,7 @@ GlobalMapProcessor::GlobalMapProcessor(ros::NodeHandle& nh){
 }
 
 void GlobalMapProcessor::planRefPath(const Eigen::Vector3d& start_p, const Eigen::Vector3d& end_p){
-    if(path_generated){
+    if(!map_ptr->mapInitialized() || path_generated){
         return;
     }
     if(path_planner_ptr->planPath(start_p, end_p)){
@@ -48,7 +44,7 @@ void GlobalMapProcessor::planRefPath(const Eigen::Vector3d& start_p, const Eigen
 }
 
 void GlobalMapProcessor::planPolygons(){
-    if(sfcs_generated){
+    if(!map_ptr->mapInitialized() || sfcs_generated){
         return;
     }
     if(!path_generated){

@@ -5,11 +5,6 @@ GridMapPlanner::GridMapPlanner(ros::NodeHandle* nodehandle):nh_(*nodehandle)
     nh_.param("grid_map_planner/planner_type", planner_type, 1);   // 0: A-star, 1: JPS, 2: Dynamic-A-star
     plan_succeed = false;
     map_ptr.reset(new GridMap(nh_));
-    while(!map_ptr->mapInitialized()){
-        init_count++;
-        ROS_INFO("Grid map planner waiting for map initialization... (round %d)", init_count);
-        ros::Duration(0.5).sleep();
-    }
     if(planner_type == 0 || planner_type == 1){
         jps_planner_ptr = std::unique_ptr<JPSPlanner3D>(new JPSPlanner3D(true));
         jps_map_util = std::make_shared<VoxelMapUtil>();
