@@ -70,7 +70,7 @@ int main(int argc, char** argv)
     double scale;
     double update_freq;
     int type;
-    std::string _map_pub_topic;
+    std::string _map_pub_topic = std::string("/global_map");
 
     nh_private.param("seed", seed, 94);
     nh_private.param("update_freq", update_freq, 1.0);
@@ -78,8 +78,7 @@ int main(int argc, char** argv)
     nh_private.param("x_length", sizeX, 100);
     nh_private.param("y_length", sizeY, 100);
     nh_private.param("z_length", sizeZ, 10);
-    nh_private.param("type", type, 1);  // 1: perlin3D, 2: randomMap, 3: maze2D, 4: maze3D
-    nh_private.param("global_map_topic", _map_pub_topic, std::string("/global_map"));
+    nh_private.param("map_type", type, 1);  // 1: perlin3D, 2: randomMap, 3: maze2D, 4: maze3D
 
     ros::Publisher pcl_pub = nh.advertise<sensor_msgs::PointCloud2>(_map_pub_topic, 1);
     pcl::PointCloud<pcl::PointXYZ> cloud;

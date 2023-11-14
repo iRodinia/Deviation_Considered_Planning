@@ -1,0 +1,100 @@
+<launch>
+    <arg name="global_map_topic"              		     default="/global_map"/>
+    <arg name="global_ref_path_topic"              		 default="/global/ref_path"/>
+    <arg name="global_ref_sfc_topic"              		 default="/global/ref_sfc"/>
+    <arg name="uav_pose_topic"              		     default="/crazyflie/state_pose"/>
+    <arg name="uav_vel_topic"              		         default="/crazyflie/state_vel"/>
+    <arg name="uav_ctrl_mode_topic"              		 default="/crazyflie/state_ctrl_mode"/>
+    <arg name="uav_pose_cmd_topic"              		 default="/crazyflie/cmd_pose"/>
+    <arg name="uav_vel_cmd_topic"              		     default="/crazyflie/cmd_vel"/>
+    <arg name="uav_acc_cmd_topic"              		     default="/crazyflie/cmd_acc"/>
+    <arg name="uav_ctrl_mode_cmd_topic"              	 default="/crazyflie/cmd_ctrl_mode"/>
+    <arg name="uav_local_sensing_map_topic"              default="/crazyflie/local_map"/>
+    <arg name="uav_local_sensing_inflated_map_topic"     default="/crazyflie/local_map_inflated"/>
+    
+    <node name="global_map" pkg="global_map_gen" type="global_map_bode" output="screen">
+        <param name="seed"                type="int"            value="94"/>
+        <param name="update_freq"         type="double"         value="1.0"/>
+        <param name="resolution"          type="double"         value="0.05"/>
+        <param name="x_length"            type="int"            value="100"/>
+        <param name="y_length"            type="int"            value="100"/>
+        <param name="z_length"            type="int"            value="50"/>
+        <param name="map_type"            type="int"            value="1"/>
+
+        <remap from="/global_map"         to="$(arg global_map_topic)"/>
+    </node>
+
+    <group ns="grid_map">
+        <param name="resolution"                      value="0.05" /> 
+        <param name="map_size_x"                      value="5.0" /> 
+        <param name="map_size_y"                      value="5.0" /> 
+        <param name="map_size_z"                      value="2.5" />
+        <param name="uav_radius_inflation"            value="0.1" />
+        <param name="extra_inflation"                 value="0.05" />
+        <param name="visualization_truncate_height"   value="2.0"/>
+        <param name="virtual_ceil_height"             value="2.2"/>
+        <param name="ground_height"                   value="-0.01"/>
+        <param name="world_frame_name"                value="/world"/>
+        <param name="visualization_frequency"         value="10.0"/>
+        <param name="local_sensing_range_xy"          value="1.2"/>
+        <param name="local_sensing_range_z"           value="0.8"/>
+
+        <remap from="cloud_in"                        to="$(arg global_map_topic)"/>
+        <remap from="uav_pose_in"                     to="$(arg uav_pose_topic)"/>
+        <remap from="local_map"                       to="$(arg uav_local_sensing_map_topic)"/>
+        <remap from="local_map_inflate"               to="$(arg uav_local_sensing_inflated_map_topic)"/>
+    </group>
+
+    <group ns="Model">
+        <param name="mass"                            value="0.035" />
+        <param name="inertia_xx"                      value="1.4e-5" />
+        <param name="inertia_yy"                      value="1.4e-5" />
+        <param name="inertia_zz"                      value="2.17e-5" />
+        <param name="arm_length"                      value="0.0397" />
+        <param name="k_force"                         value="3.16e-10" />
+        <param name="k_moment"                        value="7.94e-12" />
+        <param name="nominal_vel"                     value="1.2" />
+    </group>
+
+    <group ns="grid_map_planner">
+        <param name="planner_type"                    value="1" /> 
+    </group>
+
+    <group ns="Optimization">
+        <param name="poly_order"                      value="5" />
+        <param name="predict_num"                     value="100" />
+        <param name="predict_dt"                      value="0.02" />
+        <param name="smoothness_cost_weight"          value="1.0" />
+        <param name="frs_cost_weight"                 value="1.0" />
+        <param name="terminal_cost_weight"            value="1.0" />
+        <param name="max_single_convex_hull_faces"    value="15" />
+        <param name="total_constrained_points_in_SFC" value="20" />
+        <param name="smoothness_cost_order"           value="4" />
+    </group>
+
+    <group ns="global_map_process">
+        <param name="visualization_frequency"         value="3.0" />
+
+        <remap from="global_reference_path"           to="$(arg global_ref_path_topic)"/>
+        <remap from="global_polygons"                 to="$(arg global_ref_sfc_topic)"/>
+    </group>
+
+    <group ns="Commander">
+        <param name="cmd_frequency"                   value="15.0" />
+        <param name="replan_frequency"                value="1.0" />
+
+        <remap from="crazyflie/pose_and_att"          to="$(arg uav_pose_topic)"/>
+        <remap from="crazyflie/vel_and_angrate"       to="$(arg uav_vel_topic)"/>
+        <remap from="crazyflie/ctrl_mode"             to="$(arg uav_ctrl_mode_topic)"/>
+        <remap from="crazyflie/local_point_cloud"     to="$(arg uav_local_sensing_inflated_map_topic)"/>
+        <remap from="crazyflie/pose_and_att_cmd"      to="$(arg uav_pose_cmd_topic)"/>
+        <remap from="crazyflie/vel_and_angrate_cmd"   to="$(arg uav_vel_cmd_topic)"/>
+        <remap from="crazyflie/acc_cmd"               to="$(arg uav_acc_cmd_topic)"/>
+        <remap from="crazyflie/mode_cmd"              to="$(arg uav_ctrl_mode_cmd_topic)"/>
+
+        <node name="dap_planner" pkg="disturbance_aware_planner" type="dap_node" output="screen" />
+    </group>
+
+    <!--  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find gridmap_establish)/rviz_config/rviz.rviz" required="true" /> -->
+
+</launch>
