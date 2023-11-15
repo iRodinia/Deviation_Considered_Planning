@@ -21,7 +21,8 @@ public:
 
     void getReplanInfo(const Eigen::Vector3d cur_pos, std::vector<double>& time_alloc, 
                         std::vector<Eigen::MatrixX4d>& polygons, Eigen::Vector3d& goal_pos, Eigen::Vector3d& goal_vel_dir);
-    inline bool isProcessDone();
+    inline bool isPathGenerated();
+    inline bool isSFCGenerated();
 
     std::vector<Eigen::Vector3d> ref_path;
     std::vector<double> ref_time_alloc;
@@ -34,10 +35,11 @@ public:
 private:
     ros::Publisher global_ref_path_pub;
     ros::Publisher global_polygons_pub;
-    ros::Timer visTimer;
+    ros::Timer planTimer, visTimer;
 
     GridMap::Ptr map_ptr;
     GridMapPlanner::Ptr path_planner_ptr;
+    Eigen::Vector3d start_pos, goal_pos;
     double uav_vel;
     double pred_T;
     bool path_generated = false;
@@ -45,10 +47,15 @@ private:
 
     void planRefPath(const Eigen::Vector3d& start_p, const Eigen::Vector3d& end_p);
     void planPolygons();
+    void globalPlanCb(const ros::TimerEvent& /*event*/);
     void visualizationCb(const ros::TimerEvent& /*event*/);
 };
 
-inline bool GlobalMapProcessor::isProcessDone(){
+inline bool GlobalMapProcessor::isPathGenerated(){
+    return path_generated;
+}
+
+inline bool GlobalMapProcessor::isSFCGenerated(){
     return sfcs_generated;
 }
 

@@ -15,6 +15,13 @@ FlightCommander::FlightCommander(ros::NodeHandle* nh): nh_(*nh){
 
     double cmd_freq;   // frequency for sending commands
     double replan_freq;   // frequency for conducting replanning
+    nh_.param("Task/start_pos_x", start_pos(0), 0.0);
+    nh_.param("Task/start_pos_y", start_pos(1), 0.0);
+    nh_.param("Task/hover_height", start_pos(2), 1.0);
+    nh_.param("Task/goal_pos_x", goal_pos(0), 1.0);
+    nh_.param("Task/goal_pos_y", goal_pos(1), 1.0);
+    nh_.param("Task/goal_pos_z", goal_pos(2), 1.0);
+    nh_.param("Task/land_after_complete", land_after_complete, false);
     nh_.param("Commander/cmd_frequency", cmd_freq, 10.0);
     nh_.param("Commander/replan_frequency", replan_freq, 1.0);
     int pred_N;
@@ -168,7 +175,11 @@ void FlightCommander::timer1Cb(const ros::TimerEvent&){     // call at each comm
 }
 
 void FlightCommander::timer2Cb(const ros::TimerEvent&){     // call at each replanning iteration
-    if(!global_ptr->isProcessDone() || current_ctrl_mode != 2){
+    if(!global_ptr->isSFCGenerated() || !global_ptr->isPathGenerated()){
+        return;
+    }
+    if(current_ctrl_mode != 2){
+        ROS_INFO("Replanning process waiting for offboard control mode.");
         return;
     }
     ros::Time t_start = ros::Time::now();

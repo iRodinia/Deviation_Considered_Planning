@@ -5,16 +5,23 @@ using namespace disturbance_aware_planner;
 GlobalMapProcessor::GlobalMapProcessor(ros::NodeHandle& nh){
     path_planner_ptr.reset(new GridMapPlanner(&nh));
     map_ptr = path_planner_ptr->getGridMap();
-    double vis_freq, pred_dt;
+    double plan_freq, vis_freq, pred_dt;
     int pred_N;
-    nh.param("Model/nominal_vel", uav_vel, 1.2);
+    nh.param("Task/start_pos_x", start_pos(0), 0.0);
+    nh.param("Task/start_pos_y", start_pos(1), 0.0);
+    nh.param("Task/hover_height", start_pos(2), 1.0);
+    nh.param("Task/goal_pos_x", goal_pos(0), 1.0);
+    nh.param("Task/goal_pos_y", goal_pos(1), 1.0);
+    nh.param("Task/goal_pos_z", goal_pos(2), 1.0);
+    nh.param("global_map_process/plan_path_sfc_frequency", plan_freq, 2.0);
     nh.param("global_map_process/visualization_frequency", vis_freq, 2.5);
     nh.param("Optimization/predict_num", pred_N, 100);
     nh.param("Optimization/predict_dt", pred_dt, 0.02);
     pred_T = pred_N * pred_dt;
     global_ref_path_pub = nh.advertise<visualization_msgs::Marker>("global_reference_path", 10);
     global_polygons_pub = nh.advertise<visualization_msgs::MarkerArray>("global_polygons", 10);
-    visTimer = nh.createTimer(ros::Duration(1/vis_freq), &GlobalMapProcessor::visualizationCb, this);
+    planTimer = nh.createTimer(ros::Rate(plan_freq), &GlobalMapProcessor::globalPlanCb, this);
+    visTimer = nh.createTimer(ros::Rate(vis_freq), &GlobalMapProcessor::visualizationCb, this);
 }
 
 void GlobalMapProcessor::planRefPath(const Eigen::Vector3d& start_p, const Eigen::Vector3d& end_p){
@@ -78,6 +85,15 @@ void GlobalMapProcessor::planPolygons(){
     }
     sfcs_generated = tmp_flag;
 };
+
+void GlobalMapProcessor::globalPlanCb(const ros::TimerEvent& /*event*/){
+    if(!path_generated){
+        planRefPath(start_pos, goal_pos);
+    }
+    if(!sfcs_generated){
+        planPolygons();
+    }
+}
 
 void GlobalMapProcessor::visualizationCb(const ros::TimerEvent& /*event*/){
     if(path_generated){

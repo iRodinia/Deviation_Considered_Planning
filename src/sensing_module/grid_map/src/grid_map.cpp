@@ -62,9 +62,6 @@ void GridMap::reset()
 
 void GridMap::cloudCallback(const sensor_msgs::PointCloud2::ConstPtr &msg)
 {
-    /*Test only!*/
-    std::cout << "Callback fcn called!" << std::endl;
-
     if(has_global_map)
         return;
     pcl::PointCloud<pcl::PointXYZ> latest_cloud;

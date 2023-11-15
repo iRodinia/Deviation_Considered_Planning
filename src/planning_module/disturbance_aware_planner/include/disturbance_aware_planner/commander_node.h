@@ -34,7 +34,6 @@ public:
 
 
     int current_ctrl_mode = 0;
-    ros::Timer timer1, timer2;
     Eigen::Vector3d current_pos;
     Eigen::Vector3d current_vel;
     Eigen::Vector3d current_acc;
@@ -56,6 +55,7 @@ private:
     ros::Publisher target_vel_pub;   // include vel and angrate
     ros::Publisher target_acc_pub;
     ros::Publisher target_mode_pub;
+    ros::Timer timer1, timer2;
 
     GlobalMapProcessor::Ptr global_ptr;
     ReferenceManager traj_buffer;
@@ -74,6 +74,7 @@ private:
     bool goal_reached = false;
     bool cmd_takeoff = false;
     bool cmd_offb = false;
+    bool land_after_complete = false;
     int mode_change_count = 0;
     int at_pos_count = 0;
     double replan_t_hori;

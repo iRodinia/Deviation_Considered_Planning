@@ -34,7 +34,7 @@
         <param name="visualization_truncate_height"   value="2.0"/>
         <param name="virtual_ceil_height"             value="2.2"/>
         <param name="ground_height"                   value="-0.01"/>
-        <param name="world_frame_name"                value="/world"/>
+        <param name="world_frame_name"                value="world"/>
         <param name="visualization_frequency"         value="10.0"/>
         <param name="local_sensing_range_xy"          value="1.2"/>
         <param name="local_sensing_range_z"           value="0.8"/>
@@ -49,6 +49,16 @@
         <param name="k_force"                         value="3.16e-10" />
         <param name="k_moment"                        value="7.94e-12" />
         <param name="nominal_vel"                     value="1.2" />
+    </group>
+
+    <group ns="Task">
+        <param name="start_pos_x"                     value="-1.1" />
+        <param name="start_pos_y"                     value="1.5" />
+        <param name="hover_height"                    value="1.4" />
+        <param name="goal_pos_x"                      value="1.7" />
+        <param name="goal_pos_y"                      value="-0.6" />
+        <param name="goal_pos_z"                      value="1.27" />
+        <param name="land_after_complete"             value="false" />
     </group>
 
     <group ns="grid_map_planner">
@@ -68,6 +78,7 @@
     </group>
 
     <group ns="global_map_process">
+        <param name="plan_path_sfc_frequency"         value="1.5" />
         <param name="visualization_frequency"         value="3.0" />
     </group>
 
