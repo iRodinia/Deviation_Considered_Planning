@@ -8,11 +8,14 @@ GridMapPlanner::GridMapPlanner(ros::NodeHandle* nodehandle):nh_(*nodehandle)
     if(planner_type == 0 || planner_type == 1){
         jps_planner_ptr = std::unique_ptr<JPSPlanner3D>(new JPSPlanner3D(true));
         jps_map_util = std::make_shared<VoxelMapUtil>();
+        jps_planner_ptr->setMapUtil(jps_map_util);
         std::vector<signed char> map_data;
         double res = map_ptr->getResolution();
         Eigen::Vector3d orig = map_ptr->getOrigin();
-        Eigen::Matrix<int, 3, 1> voxel_dim = map_ptr->getVoxelDim();
+        Eigen::Vector3i voxel_dim = map_ptr->getVoxelDim();
         map_ptr->getMapInflateExtraData(map_data);
+        ROS_INFO("JPS used map info: origin (%f,%f,%f), voxel_dim (%d,%d,%d), map_data_size (%ld), resolution (%f)", 
+                    orig(0), orig(1), orig(2), voxel_dim(0), voxel_dim(1), voxel_dim(2), map_data.size(), res);
         jps_map_util->setMap(orig, voxel_dim, map_data, res);
     }
     else{
@@ -32,12 +35,15 @@ bool GridMapPlanner::planPath(Eigen::Vector3d start, Eigen::Vector3d end){
     if(!map_ptr->mapInitialized()){
         return false;
     }
+    ROS_INFO("Begin path planning using planner of type %d.", planner_type);
     if(planner_type == 0){
         jps_planner_ptr->updateMap();
+        ROS_INFO("Map update done.");
         plan_succeed = jps_planner_ptr->plan(start, end, 1, false);
     }
     else if(planner_type == 1){
         jps_planner_ptr->updateMap();
+        ROS_INFO("Map update done.");
         plan_succeed = jps_planner_ptr->plan(start, end, 1, true);
     }
     else{

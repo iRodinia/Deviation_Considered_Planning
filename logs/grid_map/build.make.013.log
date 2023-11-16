@@ -1,3 +1,0 @@
-[ 50%] [32mBuilding CXX object CMakeFiles/grid_map.dir/src/grid_map.cpp.o[0m
-[100%] [32m[1mLinking CXX shared library /home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/grid_map/lib/libgrid_map.so[0m
-[100%] Built target grid_map

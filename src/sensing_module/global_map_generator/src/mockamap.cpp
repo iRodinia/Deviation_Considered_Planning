@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <iostream>
 #include <vector>
+#include <string>
 
 #include <pcl/kdtree/kdtree_flann.h>
 #include <pcl/point_cloud.h>
@@ -66,27 +67,39 @@ int main(int argc, char** argv)
     int sizeX;
     int sizeY;
     int sizeZ;
-    double scale;
+    double resolution;
     double update_freq;
     int type;
     std::string _map_pub_topic = std::string("/global_map");
 
-    nh.param("seed", seed, 94);
-    nh.param("update_freq", update_freq, 1.0);
-    nh.param("resolution", scale, 0.38);
-    nh.param("x_length", sizeX, 100);
-    nh.param("y_length", sizeY, 100);
-    nh.param("z_length", sizeZ, 10);
-    nh.param("map_type", type, 1);  // 1: perlin3D, 2: randomMap, 3: maze2D, 4: maze3D
+    nh.param("/global_map/seed", seed, 94);
+    nh.param("/global_map/update_freq", update_freq, 1.0);
+    nh.param("/global_map/resolution", resolution, 0.05);
+    nh.param("/global_map/x_length", sizeX, 100);
+    nh.param("/global_map/y_length", sizeY, 100);
+    nh.param("/global_map/z_length", sizeZ, 10);
+    nh.param("/global_map/map_type", type, 1);  // 1: perlin3D, 2: randomMap, 3: maze2D, 4: maze3D
+
+    std::string map_type;
+    if(type == 1){
+        map_type = "perlin3D";
+    }
+    else if(type == 2){
+        map_type = "randomMap";
+    }
+    else if(type == 3){
+        map_type = "maze2D";
+    }
+    else{
+        map_type = "maze3D";
+    }
+    ROS_INFO("Generate global map with parameters: seed (%d), resolution (%f), voxel_dim (%d,%d,%d), map_type (%s)", 
+                seed, resolution, sizeX, sizeY, sizeZ, map_type.c_str());
 
     ros::Publisher pcl_pub = nh.advertise<sensor_msgs::PointCloud2>(_map_pub_topic, 1);
     pcl::PointCloud<pcl::PointXYZ> cloud;
     sensor_msgs::PointCloud2 output;
-
-    scale = 1 / scale;
-    sizeX = sizeX * scale;
-    sizeY = sizeY * scale;
-    sizeZ = sizeZ * scale;
+    double scale = 1 / resolution;
 
     mocka::Maps::BasicInfo info;
     info.nh_private = &nh;

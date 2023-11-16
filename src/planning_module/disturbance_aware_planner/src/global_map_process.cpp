@@ -25,7 +25,7 @@ GlobalMapProcessor::GlobalMapProcessor(ros::NodeHandle& nh){
 }
 
 void GlobalMapProcessor::planRefPath(const Eigen::Vector3d& start_p, const Eigen::Vector3d& end_p){
-    if(!map_ptr->mapInitialized() || path_generated){
+    if(path_generated){
         return;
     }
     if(path_planner_ptr->planPath(start_p, end_p)){
@@ -51,11 +51,11 @@ void GlobalMapProcessor::planRefPath(const Eigen::Vector3d& start_p, const Eigen
 }
 
 void GlobalMapProcessor::planPolygons(){
-    if(!map_ptr->mapInitialized() || sfcs_generated){
+    if(sfcs_generated){
         return;
     }
     if(!path_generated){
-        ROS_INFO("Try to generate SFCs before path generated!");
+        ROS_INFO("Try to generate SFCs before path generated. Not allowed!");
         sfcs_generated = false;
         return;
     }
@@ -88,10 +88,14 @@ void GlobalMapProcessor::planPolygons(){
 
 void GlobalMapProcessor::globalPlanCb(const ros::TimerEvent& /*event*/){
     if(!path_generated){
+        ROS_INFO("Try to plan global path from (%f, %f, %f) to (%f, %f, %f)", start_pos(0), start_pos(1), start_pos(2), goal_pos(0), goal_pos(1), goal_pos(2));
         planRefPath(start_pos, goal_pos);
+        ROS_INFO("Finish one path plan iteration. Current status: %s", path_generated ? "true" : "false");
     }
     if(!sfcs_generated){
+        ROS_INFO("Try to plan global sfc.");
         planPolygons();
+        ROS_INFO("Finish one sfc plan iteration. Current status: %s", sfcs_generated ? "true" : "false");
     }
 }
 
@@ -100,7 +104,7 @@ void GlobalMapProcessor::visualizationCb(const ros::TimerEvent& /*event*/){
         visualization_msgs::Marker line_strips;
         line_strips.type = visualization_msgs::Marker::LINE_STRIP;
         line_strips.id = 0;
-        line_strips.scale.x = 0.1;
+        line_strips.scale.x = 0.03;
         line_strips.color.r = 1.0;
         geometry_msgs::Point p;
         for(int i=0; i<=seg_num; i++){

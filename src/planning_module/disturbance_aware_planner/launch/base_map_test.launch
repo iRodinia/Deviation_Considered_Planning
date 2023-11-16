@@ -12,15 +12,17 @@
     <arg name="uav_local_sensing_map_topic"              default="/crazyflie/local_map"/>
     <arg name="uav_local_sensing_inflated_map_topic"     default="/crazyflie/local_map_inflated"/>
     
-    <node name="global_map_node" pkg="global_map_gen" type="global_map_node" output="screen">
+    <group ns="global_map">
         <param name="seed"                type="int"            value="94"/>
         <param name="update_freq"         type="double"         value="1.0"/>
         <param name="resolution"          type="double"         value="0.05"/>
         <param name="x_length"            type="int"            value="100"/>
         <param name="y_length"            type="int"            value="100"/>
         <param name="z_length"            type="int"            value="50"/>
-        <param name="map_type"            type="int"            value="1"/>
+        <param name="map_type"            type="int"            value="2"/>
+    </group>
 
+    <node name="global_map_node" pkg="global_map_gen" type="global_map_node" output="screen">
         <remap from="/global_map"         to="$(arg global_map_topic)"/>
     </node>
 
@@ -106,6 +108,6 @@
         <remap from="crazyflie/mode_cmd"              to="$(arg uav_ctrl_mode_cmd_topic)"/>
     </node>
 
-    <!--  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find gridmap_establish)/rviz_config/rviz.rviz" required="true" /> -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find disturbance_aware_planner)/rviz_config/global_plan_test.rviz" required="true" />
 
 </launch>

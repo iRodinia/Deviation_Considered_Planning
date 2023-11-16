@@ -68,10 +68,8 @@ void GridMap::cloudCallback(const sensor_msgs::PointCloud2::ConstPtr &msg)
     pcl::fromROSMsg(*msg, latest_cloud);
     if (latest_cloud.points.size() == 0)
         return;
-
-    /*Test only!*/
-    std::cout << "Received pcl of size " << latest_cloud.points.size() << std::endl;
-
+        
+    ROS_INFO("Grid map received point cloud of size %ld.", latest_cloud.points.size());
     cloud = latest_cloud;
 
     int inf_step = ceil(radius_inflation_ / resolution_);

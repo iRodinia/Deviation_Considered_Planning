@@ -14,6 +14,7 @@ void ReferenceManager::setNewTraj(Eigen::Matrix<double, 3, -1> coefs, double t_h
     traj_time_len = std::max(t_horizon, 0.0);
     traj_start_time = ros::Time::now() - ros::Duration(start_t_bias);
     initialized = true;
+    ROS_INFO("Reference manager received new trajectory!");
 }
 
 ReferenceManager::RefState ReferenceManager::getRefCmd_Full(){
