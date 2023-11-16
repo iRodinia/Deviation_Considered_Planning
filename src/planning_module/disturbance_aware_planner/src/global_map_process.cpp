@@ -30,6 +30,13 @@ void GlobalMapProcessor::planRefPath(const Eigen::Vector3d& start_p, const Eigen
     }
     if(path_planner_ptr->planPath(start_p, end_p)){
         ref_path = path_planner_ptr->getPath();
+
+        /*Test Only!*/
+        std::cout << "Reference path generated:" << std::endl;
+        for(int i=0; i<ref_path.size(); i++){
+            std::cout << "[" << ref_path[i].transpose() << "]" << std::endl;
+        }
+
         seg_num = ref_path.size() - 1;
         ref_time_alloc.reserve(seg_num);
         ref_polygons.reserve(seg_num);

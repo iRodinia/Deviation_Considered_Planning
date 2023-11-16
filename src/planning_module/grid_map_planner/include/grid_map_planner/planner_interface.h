@@ -34,6 +34,11 @@ private:
     /* used for Dynamic A-star planning */
     std::unique_ptr<AStar> astar_planner_ptr;
     double step_size;
+
+    ros::Publisher debug_pub;
+    ros::Timer debug_timer;
+
+    void timerCb(const ros::TimerEvent&);
 };
 
 #endif

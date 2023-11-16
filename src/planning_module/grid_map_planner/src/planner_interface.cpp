@@ -17,6 +17,7 @@ GridMapPlanner::GridMapPlanner(ros::NodeHandle* nodehandle):nh_(*nodehandle)
                     orig(0), orig(1), orig(2), voxel_dim(0), voxel_dim(1), voxel_dim(2), map_data.size(), res);
         jps_map_util->setMap(orig, voxel_dim, map_data, res);
         jps_planner_ptr->setMapUtil(jps_map_util);
+        jps_planner_ptr->updateMap();
     }
     else{
         astar_planner_ptr = std::unique_ptr<AStar>(new AStar);
@@ -25,6 +26,9 @@ GridMapPlanner::GridMapPlanner(ros::NodeHandle* nodehandle):nh_(*nodehandle)
     }
     
     ROS_INFO("Grid Map Planner Initialized.");
+
+    debug_pub = nh_.advertise<sensor_msgs::PointCloud2>("debug/path_planner_pcl", 10);
+    debug_timer = nh_.createTimer(ros::Rate(1.0), &GridMapPlanner::timerCb, this);
 }
 
 GridMap::Ptr GridMapPlanner::getGridMap(){
@@ -65,3 +69,19 @@ std::vector<Eigen::Vector3d> GridMapPlanner::getPath(){
         return astar_planner_ptr->getPath();
     }
 }
+
+
+/*Test Only!*/
+void GridMapPlanner::timerCb(const ros::TimerEvent&){
+    auto vec_pcl = jps_map_util->getCloud();
+    pcl::PointCloud<pcl::PointXYZ> debug_raw_cloud;
+    for(int i=0; i<vec_pcl.size(); i++){
+        debug_raw_cloud.push_back(pcl::PointXYZ(vec_pcl[i](0), vec_pcl[i](1), vec_pcl[i](2)));
+    }
+    sensor_msgs::PointCloud2 debug_msg;
+    pcl::toROSMsg(debug_raw_cloud, debug_msg);
+    debug_msg.header.frame_id = "world";
+    debug_pub.publish(debug_msg);
+}
+
+    
