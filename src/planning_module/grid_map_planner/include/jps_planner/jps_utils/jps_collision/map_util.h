@@ -29,8 +29,8 @@ namespace JPS {
       Vecf<Dim> getOrigin() { return origin_d_; }
       ///Get index of a cell
       int getIndex(const Veci<Dim>& pn) {
-          return Dim == 2 ? pn(0) + dim_(0) * pn(1) :
-                            pn(0) + dim_(0) * pn(1) + dim_(0) * dim_(1) * pn(2);
+          return Dim == 2 ? pn(0) * dim_(1) + pn(1) :
+                            pn(0) * dim_(1) * dim_(2) + pn(1) * dim_(2) + pn(2);
       }
 
       ///Check if the given cell is outside of the map in i-the dimension

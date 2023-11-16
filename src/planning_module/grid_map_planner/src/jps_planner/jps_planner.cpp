@@ -147,7 +147,7 @@ void JPSPlanner<Dim>::updateMap() {
         for( int x = 0; x < dim(0); ++x) {
           Veci<Dim> pn;
           pn << x, y, z;
-          cmap_[x+y*dim(0)+z*dim(0)*dim(1)] = map_util_->isOccupied(pn) ? 1:0;
+          cmap_[x*dim(1)*dim(2)+y*dim(2)+z] = map_util_->isOccupied(pn) ? 1:0;
         }
       }
     }
@@ -156,7 +156,7 @@ void JPSPlanner<Dim>::updateMap() {
     cmap_.resize(dim(0)*dim(1));
       for( int y = 0; y < dim(1); ++y)
         for( int x = 0; x < dim(0); ++x)
-          cmap_[x+y*dim(0)] = map_util_->isOccupied(Veci<Dim>(x,y)) ? 1:0;
+          cmap_[x*dim(1)+y] = map_util_->isOccupied(Veci<Dim>(x,y)) ? 1:0;
   }
 }
 

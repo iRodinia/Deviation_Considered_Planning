@@ -1,4 +1,2 @@
 [ 60%] Built target map_util
-[ 80%] [32mBuilding CXX object CMakeFiles/global_map_node.dir/src/mockamap.cpp.o[0m
-[100%] [32m[1mLinking CXX executable /home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/global_map_gen/lib/global_map_gen/global_map_node[0m
 [100%] Built target global_map_node
