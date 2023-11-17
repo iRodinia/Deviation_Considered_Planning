@@ -28,9 +28,9 @@
 
     <group ns="grid_map">
         <param name="resolution"                      value="0.05" /> 
-        <param name="map_size_x"                      value="5.0" /> 
-        <param name="map_size_y"                      value="5.0" /> 
-        <param name="map_size_z"                      value="2.5" />
+        <param name="map_size_x"                      value="5.1" /> 
+        <param name="map_size_y"                      value="5.1" /> 
+        <param name="map_size_z"                      value="3.0" />
         <param name="uav_radius_inflation"            value="0.1" />
         <param name="extra_inflation"                 value="0.05" />
         <param name="visualization_truncate_height"   value="2.0"/>
@@ -55,10 +55,10 @@
 
     <group ns="Task">
         <param name="start_pos_x"                     value="-2.1" />
-        <param name="start_pos_y"                     value="-1.5" />
+        <param name="start_pos_y"                     value="0.0" />
         <param name="hover_height"                    value="1.4" />
-        <param name="goal_pos_x"                      value="0.9" />
-        <param name="goal_pos_y"                      value="2.1" />
+        <param name="goal_pos_x"                      value="-2.0" />
+        <param name="goal_pos_y"                      value="-1.0" />
         <param name="goal_pos_z"                      value="1.27" />
         <param name="land_after_complete"             value="false" />
     </group>
