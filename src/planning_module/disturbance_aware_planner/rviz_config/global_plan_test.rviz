@@ -6,10 +6,6 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
-        - /PointCloud21
-        - /PointCloud22
-        - /MarkerArray1
-        - /Axes1
       Splitter Ratio: 0.5
     Tree Height: 719
   - Class: rviz/Selection
@@ -119,6 +115,21 @@ Visualization Manager:
         Polygon_1 edge: true
         Polygon_1 mesh: true
         Polygon_1 vertex: true
+        Polygon_2 edge: true
+        Polygon_2 mesh: true
+        Polygon_2 vertex: true
+        Polygon_3 edge: true
+        Polygon_3 mesh: true
+        Polygon_3 vertex: true
+        Polygon_4 edge: true
+        Polygon_4 mesh: true
+        Polygon_4 vertex: true
+        Polygon_5 edge: true
+        Polygon_5 mesh: true
+        Polygon_5 vertex: true
+        Polygon_6 edge: true
+        Polygon_6 mesh: true
+        Polygon_6 vertex: true
         ellp: true
         line_segment: true
         line_segmentline: true
@@ -132,6 +143,14 @@ Visualization Manager:
       Radius: 0.10000000149011612
       Reference Frame: <Fixed Frame>
       Show Trail: false
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /global_reference_path
+      Name: Marker
+      Namespaces:
+        "": true
+      Queue Size: 100
       Value: true
   Enabled: true
   Global Options:
@@ -161,7 +180,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 12.322572708129883
+      Distance: 6.226110458374023
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -177,9 +196,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.309796690940857
+      Pitch: 0.40979766845703125
       Target Frame: <Fixed Frame>
-      Yaw: 4.703554630279541
+      Yaw: 1.2203960418701172
     Saved: ~
 Window Geometry:
   Displays:

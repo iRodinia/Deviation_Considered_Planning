@@ -128,7 +128,10 @@ void GlobalMapProcessor::visualizationCb(const ros::TimerEvent& /*event*/){
     if(sfcs_generated){
         for(int j=0; j<seg_num; j++){
             string _ns = "Polygon_" + to_string(j+1);
-            ref_polygons[j].Visualize(global_polygons_pub, _ns);
+            if(j == 0){
+                ref_polygons[j].Visualize(global_polygons_pub, _ns, true);
+            }
+            ref_polygons[j].Visualize(global_polygons_pub, _ns, false);
         }
     }
 }
