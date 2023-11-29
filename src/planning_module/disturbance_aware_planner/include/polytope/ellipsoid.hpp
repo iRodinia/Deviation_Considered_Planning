@@ -229,7 +229,7 @@ class Ellipsoid {
 	mkr.scale.y = r_.y() * 2;
 	mkr.scale.z = r_.z() * 2;
 	mkr.color = color;
-	mkr.color.a = 0.3;
+	mkr.color.a = 0.2;
 	visualization_msgs::MarkerArray mkr_arr;
 	mkr_arr.markers.push_back(mkr);
 	pub.publish(mkr_arr);

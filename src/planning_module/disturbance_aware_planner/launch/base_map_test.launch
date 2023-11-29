@@ -55,10 +55,10 @@
 
     <group ns="Task">
         <param name="start_pos_x"                     value="-2.1" />
-        <param name="start_pos_y"                     value="0.0" />
+        <param name="start_pos_y"                     value="-1.9" />
         <param name="hover_height"                    value="1.4" />
-        <param name="goal_pos_x"                      value="-2.0" />
-        <param name="goal_pos_y"                      value="-1.0" />
+        <param name="goal_pos_x"                      value="0.4" />
+        <param name="goal_pos_y"                      value="1.9" />
         <param name="goal_pos_z"                      value="1.27" />
         <param name="land_after_complete"             value="false" />
     </group>

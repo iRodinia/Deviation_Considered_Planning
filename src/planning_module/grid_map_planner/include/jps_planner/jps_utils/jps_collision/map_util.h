@@ -131,10 +131,10 @@ namespace JPS {
       }
 
       ///Check if the ray from p1 to p2 is occluded
-      bool isBlocked(const Vecf<Dim>& p1, const Vecf<Dim>& p2, int8_t val = 100) {
+      bool isBlocked(const Vecf<Dim>& p1, const Vecf<Dim>& p2) {
         vec_Veci<Dim> pns = rayTrace(p1, p2);
         for (const auto &pn : pns) {
-          if (map_[getIndex(pn)] >= val)
+          if (map_[getIndex(pn)] > val_free)
             return true;
         }
         return false;
@@ -285,7 +285,7 @@ namespace JPS {
       ///Dimension, int type
       Veci<Dim> dim_;
       ///Assume occupied cell has value 100
-      int8_t val_occ = 100;
+      int8_t val_occ = 1;
       ///Assume free cell has value 0
       int8_t val_free = 0;
       ///Assume unknown cell has value -1

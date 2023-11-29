@@ -32,14 +32,14 @@ void GlobalMapProcessor::planRefPath(const Eigen::Vector3d& start_p, const Eigen
         ref_path = path_planner_ptr->getPath();
 
         /*Test Only!*/
-        std::cout << "Reference path generated:" << std::endl;
+        std::cout << "Reference path generated with size: " << ref_path.size() << std::endl;
         for(int i=0; i<ref_path.size(); i++){
             std::cout << "[" << ref_path[i].transpose() << "]" << std::endl;
         }
 
         seg_num = ref_path.size() - 1;
-        ref_time_alloc.reserve(seg_num);
-        ref_polygons.reserve(seg_num);
+        ref_time_alloc.resize(seg_num);
+        ref_polygons.resize(seg_num);
         for(int i=0; i<seg_num; i++){
             double seg_len = (ref_path[i+1]-ref_path[i]).norm();
             ref_time_alloc[i] = seg_len / uav_vel;
@@ -109,10 +109,13 @@ void GlobalMapProcessor::globalPlanCb(const ros::TimerEvent& /*event*/){
 void GlobalMapProcessor::visualizationCb(const ros::TimerEvent& /*event*/){
     if(path_generated){
         visualization_msgs::Marker line_strips;
+        line_strips.header.frame_id = "world";
         line_strips.type = visualization_msgs::Marker::LINE_STRIP;
         line_strips.id = 0;
         line_strips.scale.x = 0.03;
+        line_strips.pose.orientation.w = 1.0;
         line_strips.color.r = 1.0;
+        line_strips.color.a = 1.0;
         geometry_msgs::Point p;
         for(int i=0; i<=seg_num; i++){
             p.x = ref_path[i](0);
@@ -171,13 +174,13 @@ void GlobalMapProcessor::getReplanInfo(const Eigen::Vector3d cur_pos, std::vecto
             min_seg++;
         }
     }
-    time_alloc.reserve(seg_num - min_seg);
+    time_alloc.resize(seg_num - min_seg);
     double seg_ratio = (cur_pos-ref_path[min_seg+1]).norm() / (ref_path[min_seg]-ref_path[min_seg+1]).norm();
     time_alloc[0] = seg_ratio * ref_time_alloc[min_seg];
     for(int j=min_seg+1; j<seg_num; j++){
         time_alloc[j-min_seg] = ref_time_alloc[j];
     }
-    polygons.reserve(seg_num - min_seg);
+    polygons.resize(seg_num - min_seg);
     for(int k=min_seg; k<seg_num; k++){
         polygons[k] = ref_polygons[k].GetPlanes();
     }

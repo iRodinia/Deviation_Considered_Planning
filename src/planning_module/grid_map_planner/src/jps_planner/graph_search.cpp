@@ -39,11 +39,11 @@ GraphSearch::GraphSearch(const char* cMap, int xDim, int yDim, int zDim, double 
 
 
 inline int GraphSearch::coordToId(int x, int y) const {
-  return x + y*xDim_;
+  return x*yDim_ + y;
 }
 
 inline int GraphSearch::coordToId(int x, int y, int z) const {
-  return x + y*xDim_ + z*xDim_*yDim_;
+  return x*yDim_*zDim_ + y*zDim_ + z;
 }
 
 inline bool GraphSearch::isFree(int x, int y) const {

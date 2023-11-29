@@ -1,6 +1,0 @@
-/usr/bin/ld: /home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/disturbance_aware_planner/lib/disturbance_aware_planner/dap_node: hidden symbol `_ZN3fmt3v106detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS1_12vformat_argsIS4_E4typeENS1_10locale_refE' in /usr/local/lib/libfmt.a(format.cc.o) is referenced by DSO
-/usr/bin/ld: 最后的链结失败: bad value
-collect2: error: ld returned 1 exit status
-make[2]: *** [CMakeFiles/dap_node.dir/build.make:220：/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/disturbance_aware_planner/lib/disturbance_aware_planner/dap_node] 错误 1
-make[1]: *** [CMakeFiles/Makefile2:2841：CMakeFiles/dap_node.dir/all] 错误 2
-make: *** [Makefile:146：all] 错误 2

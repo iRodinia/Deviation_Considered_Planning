@@ -150,7 +150,7 @@ public:
                    Color surf_color = Color::SteelBlue(),
                    Color edge_color = Color::Black(),
                    Color vertex_color = Color::Red(),
-                   double alpha = 0.3) {
+                   double alpha = 0.1) {
         // Due to the fact that H-representation cannot be directly visualized
         // We first conduct vertex enumeration of them, then apply quickhull
         // to obtain triangle meshs of polyhedra
@@ -201,10 +201,10 @@ public:
             vertexMarker.type = visualization_msgs::Marker::SPHERE_LIST;
             vertexMarker.ns = ns + " vertex";
             vertexMarker.color = vertex_color;
-            vertexMarker.color.a = 1.0;
-            vertexMarker.scale.x = 0.2;
-            vertexMarker.scale.y = 0.2;
-            vertexMarker.scale.z = 0.2;
+            vertexMarker.color.a = 0.8;
+            vertexMarker.scale.x = 0.05;
+            vertexMarker.scale.y = 0.05;
+            vertexMarker.scale.z = 0.05;
         
             geometry_msgs::Point point;
             for(int i = 0 ; i < vPoly.cols() ; i++){
@@ -248,8 +248,8 @@ public:
             edgeMarker.type = visualization_msgs::Marker::LINE_LIST;
             edgeMarker.ns = ns + " edge";
             edgeMarker.color = edge_color;
-            edgeMarker.color.a = 1.00;
-            edgeMarker.scale.x = 0.05;
+            edgeMarker.color.a = 0.8;
+            edgeMarker.scale.x = 0.02;
         }
 
         if (!flag) {
