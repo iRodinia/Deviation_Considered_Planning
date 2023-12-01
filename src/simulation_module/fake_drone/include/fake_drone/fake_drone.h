@@ -1,0 +1,54 @@
+#ifndef FAKE_DRONE
+#define FAKE_DRONE
+
+#include <vector>
+#include <string>
+#include <cmath>
+#include <Eigen/Eigen>
+#include <Eigen/Eigenvalues>
+
+#include <ros/ros.h>
+#include <std_msgs/Int16.h>
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2_ros/transform_broadcaster.h>
+#include <geometry_msgs/Twist.h>
+#include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/TwistStamped.h>
+#include <geometry_msgs/AccelStamped.h>
+
+class FakeDrone{
+public:
+    FakeDrone(ros::NodeHandle* node);
+    ~FakeDrone() {};
+
+    int current_uav_mode = 0;
+    Eigen::Vector3d current_pos;
+    Eigen::Vector3d current_vel;
+    Eigen::Vector3d current_acc;
+    Eigen::Vector4d current_att;
+    Eigen::Vector3d current_angrate;
+
+private:
+    ros::NodeHandle nh_;
+    double T;
+    ros::Publisher uav_pos_pub;   // include pos and att
+    ros::Publisher uav_vel_pub;   // include vel and angrate
+    ros::Publisher flight_mode_pub;   // 0: land, 1: takeoff, 2: offb_ctrl
+    ros::Subscriber target_pos_sub;   // include pos and att
+    ros::Subscriber target_vel_sub;   // include vel and angrate
+    ros::Subscriber target_acc_sub;
+    ros::Subscriber target_mode_sub;
+    ros::Timer timer1;
+
+    tf2_ros::TransformBroadcaster tf_br;
+
+    void subPosCb(const geometry_msgs::PoseStamped::ConstPtr& msg);
+    void subVelCb(const geometry_msgs::TwistStamped::ConstPtr& msg);
+    void subAccCb(const geometry_msgs::AccelStamped::ConstPtr& msg);
+    void subModeCb(const std_msgs::Int16::ConstPtr& msg);
+    void timer1Cb(const ros::TimerEvent&);
+};
+
+
+
+#endif

@@ -32,7 +32,7 @@
         <param name="map_size_y"                      value="5.1" /> 
         <param name="map_size_z"                      value="3.0" />
         <param name="uav_radius_inflation"            value="0.1" />
-        <param name="extra_inflation"                 value="0.05" />
+        <param name="extra_inflation"                 value="0.15" />
         <param name="visualization_truncate_height"   value="2.0"/>
         <param name="virtual_ceil_height"             value="2.2"/>
         <param name="ground_height"                   value="-0.01"/>

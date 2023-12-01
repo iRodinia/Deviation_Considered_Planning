@@ -112,27 +112,7 @@ Visualization Manager:
       Marker Topic: /global_polygons
       Name: MarkerArray
       Namespaces:
-        Polygon_1 edge: true
-        Polygon_1 mesh: true
-        Polygon_1 vertex: true
-        Polygon_2 edge: true
-        Polygon_2 mesh: true
-        Polygon_2 vertex: true
-        Polygon_3 edge: true
-        Polygon_3 mesh: true
-        Polygon_3 vertex: true
-        Polygon_4 edge: true
-        Polygon_4 mesh: true
-        Polygon_4 vertex: true
-        Polygon_5 edge: true
-        Polygon_5 mesh: true
-        Polygon_5 vertex: true
-        Polygon_6 edge: true
-        Polygon_6 mesh: true
-        Polygon_6 vertex: true
-        ellp: true
-        line_segment: true
-        line_segmentline: true
+        {}
       Queue Size: 100
       Value: true
     - Alpha: 1
@@ -149,7 +129,7 @@ Visualization Manager:
       Marker Topic: /global_reference_path
       Name: Marker
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
   Enabled: true
@@ -180,7 +160,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 6.226110458374023
+      Distance: 15.415619850158691
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -196,9 +176,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.40979766845703125
+      Pitch: 0.9497971534729004
       Target Frame: <Fixed Frame>
-      Yaw: 1.2203960418701172
+      Yaw: 1.2603960037231445
     Saved: ~
 Window Geometry:
   Displays:
