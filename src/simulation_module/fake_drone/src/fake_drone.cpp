@@ -6,9 +6,8 @@
 #include <nav_msgs/Odometry.h>
 #include "fake_drone/fake_drone.h"
 
-/*Fake Drone is described as a 1st-order damp process*/
+/*Fake Drone is described as a odom-to-state transform process*/
 FakeDrone::FakeDrone(ros::NodeHandle* node): nh_(*node){
-	nh_.param("/fake_drone/damp_time", T, 0.0);
 	nh_.param("/fake_drone/place_x", current_pos(0), 0.0);
 	nh_.param("/fake_drone/place_y", current_pos(1), 0.0);
 	nh_.param("/fake_drone/place_z", current_pos(2), 0.05);
@@ -20,7 +19,6 @@ FakeDrone::FakeDrone(ros::NodeHandle* node): nh_(*node){
 	quat.setRPY(0, 0, place_yaw);
 	current_att = Eigen::Vector4d(quat.w(), quat.x(), quat.y(), quat.z());
 	current_uav_mode = 0;
-	double sim_freq = 30.0;
 	nh_.param("/fake_drone/frequency", sim_freq, 30.0);
 
 	uav_pos_pub = nh_.advertise<geometry_msgs::PoseStamped>("/uav/pos", 10);
@@ -36,7 +34,7 @@ FakeDrone::FakeDrone(ros::NodeHandle* node): nh_(*node){
 }
 
 void FakeDrone::subPosCb(const geometry_msgs::PoseStamped::ConstPtr& msg){
-	if(current_uav_mode == 2){
+	if(current_uav_mode == 1 || current_uav_mode == 2){
 		current_pos(0) = msg->pose.position.x;
 		current_pos(1) = msg->pose.position.y;
 		current_pos(2) = msg->pose.position.z;
@@ -45,9 +43,7 @@ void FakeDrone::subPosCb(const geometry_msgs::PoseStamped::ConstPtr& msg){
 		current_att(2) = msg->pose.orientation.y;
 		current_att(3) = msg->pose.orientation.z;
 	}
-	else{
 
-	}
 }
 
 void FakeDrone::subVelCb(const geometry_msgs::TwistStamped::ConstPtr& msg){
@@ -60,7 +56,12 @@ void FakeDrone::subVelCb(const geometry_msgs::TwistStamped::ConstPtr& msg){
 		current_angrate(2) = msg->twist.angular.z;
 	}
 	else{
-
+		current_vel(0) = 0;
+		current_vel(1) = 0;
+		current_vel(2) = 0;
+		current_angrate(0) = 0;
+		current_angrate(1) = 0;
+		current_angrate(2) = 0;
 	}
 }
 
@@ -71,7 +72,9 @@ void FakeDrone::subAccCb(const geometry_msgs::AccelStamped::ConstPtr& msg){
 		current_acc(2) = msg->accel.linear.z;
 	}
 	else{
-
+		current_acc(0) = 0;
+		current_acc(1) = 0;
+		current_acc(2) = 0;
 	}
 }
 

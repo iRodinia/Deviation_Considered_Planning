@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 2.8.3)
-project(poscmd_2_odom)
+cmake_minimum_required(VERSION 3.5)
+project(fake_drone)
 
 set(CMAKE_BUILD_TYPE "Release")
 #set(CMAKE_CXX_FLAGS "-std=c++11")
@@ -9,20 +9,25 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wall -g")
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
-  rospy
-  nav_msgs
-  quadrotor_msgs
+  std_msgs
+  geometry_msgs
+  tf2_ros
 )
 find_package(Eigen3 REQUIRED)
 
-catkin_package()
+catkin_package(
+  INCLUDE_DIRS include
+  LIBRARIES ${PROJECT_NAME}
+  CATKIN_DEPENDS roscpp std_msgs geometry_msgs tf2_ros
+)
 
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIR}
 )
 
-add_executable (poscmd_2_odom src/poscmd_2_odom.cpp )
-target_link_libraries(poscmd_2_odom
-  ${catkin_LIBRARIES})
+add_executable (fake_drone_node src/fake_drone.cpp)
+target_link_libraries(fake_drone_node
+  ${catkin_LIBRARIES}
+)

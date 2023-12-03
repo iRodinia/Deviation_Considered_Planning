@@ -30,7 +30,7 @@ public:
 
 private:
     ros::NodeHandle nh_;
-    double T;
+    double sim_freq;
     ros::Publisher uav_pos_pub;   // include pos and att
     ros::Publisher uav_vel_pub;   // include vel and angrate
     ros::Publisher flight_mode_pub;   // 0: land, 1: takeoff, 2: offb_ctrl

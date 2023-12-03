@@ -1,0 +1,1 @@
+/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/so3_quadrotor_simulator/lib/pkgconfig/so3_quadrotor_simulator.pc
