@@ -1,0 +1,135 @@
+[  0%] Built target nodelet_generate_messages_nodejs
+[  0%] Built target nodelet_generate_messages_lisp
+[  0%] Built target nodelet_generate_messages_eus
+[  0%] Built target bond_generate_messages_eus
+[  0%] Built target nodelet_generate_messages_py
+[  0%] Built target bond_generate_messages_cpp
+[  0%] Built target bond_generate_messages_lisp
+[  0%] Built target bond_generate_messages_nodejs
+[  0%] Built target nodelet_topic_tools_gencfg
+[  0%] Built target pcl_msgs_generate_messages_cpp
+[  0%] Built target pcl_msgs_generate_messages_eus
+[  0%] Built target pcl_msgs_generate_messages_lisp
+[  0%] Built target bond_generate_messages_py
+[  0%] Built target pcl_msgs_generate_messages_nodejs
+[  0%] Built target sensor_msgs_generate_messages_cpp
+[  0%] Built target pcl_msgs_generate_messages_py
+[  0%] Built target sensor_msgs_generate_messages_eus
+[  0%] Built target sensor_msgs_generate_messages_lisp
+[  0%] Built target sensor_msgs_generate_messages_nodejs
+[  0%] Built target std_srvs_generate_messages_cpp
+[  0%] Built target std_srvs_generate_messages_nodejs
+[  0%] Built target std_srvs_generate_messages_lisp
+[  0%] Built target sensor_msgs_generate_messages_py
+[  0%] Built target topic_tools_generate_messages_cpp
+[  0%] Built target std_srvs_generate_messages_py
+[  0%] Built target roscpp_generate_messages_lisp
+[  0%] Built target std_srvs_generate_messages_eus
+[  0%] Built target roscpp_generate_messages_py
+[  0%] Built target rosgraph_msgs_generate_messages_lisp
+[  0%] Built target rosgraph_msgs_generate_messages_eus
+[  0%] Built target roscpp_generate_messages_nodejs
+[  0%] Built target rosgraph_msgs_generate_messages_cpp
+[  0%] Built target rosgraph_msgs_generate_messages_py
+[  0%] Built target rosgraph_msgs_generate_messages_nodejs
+[  0%] Built target roscpp_generate_messages_eus
+[  0%] Built target topic_tools_generate_messages_eus
+[  0%] Built target roscpp_generate_messages_cpp
+[  0%] Built target topic_tools_generate_messages_nodejs
+[  0%] Built target topic_tools_generate_messages_py
+[  0%] Built target tf_generate_messages_cpp
+[  0%] Built target tf_generate_messages_eus
+[  0%] Built target tf_generate_messages_lisp
+[  0%] Built target tf_generate_messages_nodejs
+[  0%] Built target actionlib_generate_messages_eus
+[  0%] Built target tf_generate_messages_py
+[  0%] Built target actionlib_generate_messages_lisp
+[  0%] Built target actionlib_generate_messages_cpp
+[  0%] Built target topic_tools_generate_messages_lisp
+[  0%] Built target actionlib_generate_messages_nodejs
+[  0%] Built target actionlib_generate_messages_py
+[  0%] Built target actionlib_msgs_generate_messages_cpp
+[  0%] Built target actionlib_msgs_generate_messages_lisp
+[  0%] Built target actionlib_msgs_generate_messages_eus
+[  0%] Built target actionlib_msgs_generate_messages_nodejs
+[  0%] Built target actionlib_msgs_generate_messages_py
+[  0%] Built target tf2_msgs_generate_messages_lisp
+[  0%] Built target tf2_msgs_generate_messages_cpp
+[  0%] Built target visualization_msgs_generate_messages_cpp
+[  0%] Built target tf2_msgs_generate_messages_py
+[  0%] Built target tf2_msgs_generate_messages_eus
+[  0%] Built target tf2_msgs_generate_messages_nodejs
+[  0%] Built target visualization_msgs_generate_messages_eus
+[  0%] Built target visualization_msgs_generate_messages_nodejs
+[  0%] Built target visualization_msgs_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_cpp
+[  0%] Built target std_msgs_generate_messages_lisp
+[  0%] Built target visualization_msgs_generate_messages_py
+[  0%] Built target std_msgs_generate_messages_eus
+[  0%] Built target std_msgs_generate_messages_py
+[  0%] Built target dynamic_reconfigure_generate_messages_lisp
+[  0%] Built target pcl_ros_gencfg
+[  0%] Built target std_msgs_generate_messages_nodejs
+[  0%] Built target dynamic_reconfigure_generate_messages_cpp
+[  0%] Built target dynamic_reconfigure_generate_messages_eus
+[  0%] Built target dynamic_reconfigure_gencfg
+[  0%] Built target dynamic_reconfigure_generate_messages_nodejs
+[  0%] Built target dynamic_reconfigure_generate_messages_py
+[  0%] Built target geometry_msgs_generate_messages_cpp
+[  0%] Built target geometry_msgs_generate_messages_lisp
+[  0%] Built target geometry_msgs_generate_messages_eus
+[  0%] Built target geometry_msgs_generate_messages_nodejs
+[  0%] Built target nodelet_generate_messages_cpp
+[  0%] Built target geometry_msgs_generate_messages_py
+[ 50%] Built target dap_reference_manager
+[ 50%] Built target dap_polytraj_optimizer
+[ 62%] [32mBuilding CXX object CMakeFiles/dap_global_map_process.dir/src/global_map_process.cpp.o[0m
+In file included from [01m[K/opt/ros/noetic/include/ros/ros.h:40[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/include/disturbance_aware_planner/global_map_process.h:6[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/src/global_map_process.cpp:1[m[K:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/src/global_map_process.cpp:[m[K In member function ‘[01m[Kvoid disturbance_aware_planner::GlobalMapProcessor::planRefPath(const Vector3d&, const Vector3d&)[m[K’:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/src/global_map_process.cpp:39:18:[m[K [01;35m[Kwarning: [m[Kformat ‘[01m[K%d[m[K’ expects argument of type ‘[01m[Kint[m[K’, but argument 8 has type ‘[01m[Kstd::vector<Eigen::Matrix<double, 3, 1> >::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K-Wformat=[m[K]
+   39 |         ROS_INFO([01;35m[K"Global reference path generated with size: %d"[m[K, [32m[Kref_path.size()[m[K);
+      |                  [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K  [32m[K~~~~~~~~~~~~~~~[m[K
+      |                                                                                [32m[K|[m[K
+      |                                                                                [32m[Kstd::vector<Eigen::Matrix<double, 3, 1> >::size_type {aka long unsigned int}[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/src/global_map_process.cpp:39:63:[m[K [01;36m[Knote: [m[Kformat string is defined here
+   39 |         ROS_INFO("Global reference path generated with size: [01;36m[K%d[m[K", ref_path.size());
+      |                                                              [01;36m[K~^[m[K
+      |                                                               [01;36m[K|[m[K
+      |                                                               [01;36m[Kint[m[K
+      |                                                              [32m[K%ld[m[K
+[ 75%] [32m[1mLinking CXX shared library /home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/disturbance_aware_planner/lib/libdap_global_map_process.so[0m
+[ 75%] Built target dap_global_map_process
+[ 87%] [32mBuilding CXX object CMakeFiles/dap_node.dir/src/commander_node.cpp.o[0m
+In file included from [01m[K/opt/ros/noetic/include/ros/ros.h:40[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/include/disturbance_aware_planner/commander_node.h:10[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/src/commander_node.cpp:1[m[K:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/src/commander_node.cpp:[m[K In member function ‘[01m[Kvoid disturbance_aware_planner::FlightCommander::timer2Cb(const ros::TimerEvent&)[m[K’:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/src/commander_node.cpp:192:14:[m[K [01;35m[Kwarning: [m[Kformat ‘[01m[K%d[m[K’ expects argument of type ‘[01m[Kint[m[K’, but argument 8 has type ‘[01m[Kstd::vector<double>::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K-Wformat=[m[K]
+  192 |     ROS_INFO([01;35m[K"Get %d time allocs and %d sfcs."[m[K, [32m[Ktmp_times.size()[m[K, tmp_sfcs.size());
+      |              [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K  [32m[K~~~~~~~~~~~~~~~~[m[K
+      |                                                               [32m[K|[m[K
+      |                                                               [32m[Kstd::vector<double>::size_type {aka long unsigned int}[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/src/commander_node.cpp:192:20:[m[K [01;36m[Knote: [m[Kformat string is defined here
+  192 |     ROS_INFO("Get [01;36m[K%d[m[K time allocs and %d sfcs.", tmp_times.size(), tmp_sfcs.size());
+      |                   [01;36m[K~^[m[K
+      |                    [01;36m[K|[m[K
+      |                    [01;36m[Kint[m[K
+      |                   [32m[K%ld[m[K
+In file included from [01m[K/opt/ros/noetic/include/ros/ros.h:40[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/include/disturbance_aware_planner/commander_node.h:10[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/src/commander_node.cpp:1[m[K:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/src/commander_node.cpp:192:14:[m[K [01;35m[Kwarning: [m[Kformat ‘[01m[K%d[m[K’ expects argument of type ‘[01m[Kint[m[K’, but argument 9 has type ‘[01m[Kstd::vector<Eigen::Matrix<double, -1, 4> >::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K-Wformat=[m[K]
+  192 |     ROS_INFO([01;35m[K"Get %d time allocs and %d sfcs."[m[K, tmp_times.size(), [32m[Ktmp_sfcs.size()[m[K);
+      |              [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K                    [32m[K~~~~~~~~~~~~~~~[m[K
+      |                                                                                [32m[K|[m[K
+      |                                                                                [32m[Kstd::vector<Eigen::Matrix<double, -1, 4> >::size_type {aka long unsigned int}[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/src/commander_node.cpp:192:39:[m[K [01;36m[Knote: [m[Kformat string is defined here
+  192 |     ROS_INFO("Get %d time allocs and [01;36m[K%d[m[K sfcs.", tmp_times.size(), tmp_sfcs.size());
+      |                                      [01;36m[K~^[m[K
+      |                                       [01;36m[K|[m[K
+      |                                       [01;36m[Kint[m[K
+      |                                      [32m[K%ld[m[K
+[100%] [32m[1mLinking CXX executable /home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/disturbance_aware_planner/lib/disturbance_aware_planner/dap_node[0m
+[100%] Built target dap_node

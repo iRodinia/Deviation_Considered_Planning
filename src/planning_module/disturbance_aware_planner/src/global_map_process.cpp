@@ -13,11 +13,9 @@ GlobalMapProcessor::GlobalMapProcessor(ros::NodeHandle& nh){
     nh.param("Task/goal_pos_x", goal_pos(0), 1.0);
     nh.param("Task/goal_pos_y", goal_pos(1), 1.0);
     nh.param("Task/goal_pos_z", goal_pos(2), 1.0);
+    nh.param("Model/nominal_vel", uav_vel, 1.2);
     nh.param("global_map_process/plan_path_sfc_frequency", plan_freq, 2.0);
     nh.param("global_map_process/visualization_frequency", vis_freq, 2.5);
-    nh.param("Optimization/predict_num", pred_N, 100);
-    nh.param("Optimization/predict_dt", pred_dt, 0.02);
-    pred_T = pred_N * pred_dt;
     global_ref_path_pub = nh.advertise<visualization_msgs::Marker>("global_reference_path", 10);
     global_polygons_pub = nh.advertise<visualization_msgs::MarkerArray>("global_polygons", 10);
     planTimer = nh.createTimer(ros::Rate(plan_freq), &GlobalMapProcessor::globalPlanCb, this);
@@ -32,11 +30,11 @@ void GlobalMapProcessor::planRefPath(const Eigen::Vector3d& start_p, const Eigen
         ref_path = path_planner_ptr->getPath();
 
         /*Test Only!*/
-        std::cout << "Reference path generated with size: " << ref_path.size() << std::endl;
-        for(int i=0; i<ref_path.size(); i++){
-            std::cout << "[" << ref_path[i].transpose() << "]" << std::endl;
-        }
-
+        // std::cout << "Reference path generated with size: " << ref_path.size() << std::endl;
+        // for(int i=0; i<ref_path.size(); i++){
+        //     std::cout << "[" << ref_path[i].transpose() << "]" << std::endl;
+        // }
+        ROS_INFO("Global reference path generated with size: %ld", ref_path.size());
         seg_num = ref_path.size() - 1;
         ref_time_alloc.resize(seg_num);
         ref_polygons.resize(seg_num);
@@ -157,7 +155,7 @@ double point2LineDist(const Eigen::Vector3d p, const Eigen::Vector3d l1, const E
     }
 }
 
-void GlobalMapProcessor::getReplanInfo(const Eigen::Vector3d cur_pos, std::vector<double>& time_alloc, 
+void GlobalMapProcessor::getReplanInfo(const Eigen::Vector3d cur_pos, double pred_T, std::vector<double>& time_alloc, 
                                     std::vector<Eigen::MatrixX4d>& polygons, Eigen::Vector3d& goal_pos,
                                     Eigen::Vector3d& goal_vel_dir){
     if(!sfcs_generated){
@@ -177,44 +175,46 @@ void GlobalMapProcessor::getReplanInfo(const Eigen::Vector3d cur_pos, std::vecto
             min_seg++;
         }
     }
-    time_alloc.resize(seg_num - min_seg);
+    ROS_INFO("uav current pos: (%f, %f, %f)", cur_pos(0), cur_pos(1), cur_pos(2));
+    ROS_INFO("nearest point on ref path[%d]: (%f, %f, %f)", min_seg, near_pt(0), near_pt(1), near_pt(2));
+    if(time_alloc.size() > 0) time_alloc.resize(0);
+
+    double time_remain = pred_T;
+    int seg_idx = min_seg;
     double seg_ratio = (cur_pos-ref_path[min_seg+1]).norm() / (ref_path[min_seg]-ref_path[min_seg+1]).norm();
-    time_alloc[0] = seg_ratio * ref_time_alloc[min_seg];
-    for(int j=min_seg+1; j<seg_num; j++){
-        time_alloc[j-min_seg] = ref_time_alloc[j];
-    }
-    polygons.resize(seg_num - min_seg);
-    for(int k=min_seg; k<seg_num; k++){
-        polygons[k] = ref_polygons[k].GetPlanes();
-    }
-    double time_remain = 0;
-    for(auto _t : time_alloc){
-        time_remain += _t;
-    }
-    if(pred_T >= time_remain){
-        goal_pos = ref_path[seg_num];
-        if(seg_num <= 1){
-            goal_vel_dir = Eigen::Vector3d(1, 0, 0);
-        }
-        else{
-            goal_vel_dir = (ref_path[seg_num] - ref_path[seg_num-1]).normalized();
-        }
-        time_alloc[seg_num - min_seg - 1] += pred_T - time_remain;
+    double seg_time_remain = seg_ratio * ref_time_alloc[min_seg];
+    if(seg_time_remain > time_remain){
+        time_alloc.push_back(time_remain);
+        goal_pos = cur_pos + (ref_path[min_seg+1]-cur_pos)*pred_T/seg_time_remain;
+        goal_vel_dir = (goal_pos - cur_pos).normalized();
     }
     else{
-        double goal_t = pred_T;
-        int c = 0;
-        while(goal_t > time_alloc[c]){
-            goal_t -= time_alloc[c];
-            c++;
-        }
-        if(c == 0){
-            goal_pos = near_pt + (goal_t / time_alloc[0]) * (ref_path[min_seg+1] - near_pt);
-            goal_vel_dir = (ref_path[min_seg+1] - near_pt).normalized();
+        time_alloc.push_back(seg_time_remain);
+    }
+    time_remain -= seg_time_remain;
+    seg_idx++;
+    while(time_remain > 0 && seg_idx < seg_num){
+        seg_time_remain = ref_time_alloc[seg_idx];
+        if(seg_time_remain > time_remain){
+            time_alloc.push_back(time_remain);
+            goal_pos = ref_path[seg_idx] + (ref_path[seg_idx+1]-ref_path[seg_idx])*time_remain/seg_time_remain;
+            goal_vel_dir = (ref_path[seg_idx+1]-ref_path[seg_idx]).normalized();
         }
         else{
-            goal_pos = ref_path[min_seg+c] + (goal_t / time_alloc[c]) * (ref_path[min_seg+c+1] - ref_path[min_seg+c]);
-            goal_vel_dir = (ref_path[min_seg+c+1] - ref_path[min_seg+c]).normalized();
+            time_alloc.push_back(seg_time_remain);
         }
+        time_remain -= seg_time_remain;
+        seg_idx++;
+    }
+    if(time_remain >= 0 && seg_idx == seg_num){
+        *(time_alloc.end()-1) += time_remain;
+        goal_pos = ref_path[seg_num+1];
+        goal_vel_dir = (ref_path[seg_num+1]-ref_path[seg_num]).normalized();
+        time_remain = 0;
+    }
+
+    polygons.resize(time_alloc.size());
+    for(int i=0; i<time_alloc.size(); i++){
+        polygons[i] = ref_polygons[min_seg+i].GetPlanes();
     }
 }

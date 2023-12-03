@@ -38,12 +38,15 @@ void FakeDrone::subPosCb(const geometry_msgs::PoseStamped::ConstPtr& msg){
 		current_pos(0) = msg->pose.position.x;
 		current_pos(1) = msg->pose.position.y;
 		current_pos(2) = msg->pose.position.z;
-		current_att(0) = msg->pose.orientation.w;
-		current_att(1) = msg->pose.orientation.x;
-		current_att(2) = msg->pose.orientation.y;
-		current_att(3) = msg->pose.orientation.z;
+		Eigen::Vector4d temp_quat;
+		temp_quat(0) = msg->pose.orientation.w;
+		temp_quat(1) = msg->pose.orientation.x;
+		temp_quat(2) = msg->pose.orientation.y;
+		temp_quat(3) = msg->pose.orientation.z;
+		if(temp_quat.norm() > 0){
+			current_att = temp_quat;
+		}
 	}
-
 }
 
 void FakeDrone::subVelCb(const geometry_msgs::TwistStamped::ConstPtr& msg){
@@ -80,6 +83,9 @@ void FakeDrone::subAccCb(const geometry_msgs::AccelStamped::ConstPtr& msg){
 
 void FakeDrone::subModeCb(const std_msgs::Int16::ConstPtr& msg){
 	current_uav_mode = msg->data;
+	std_msgs::Int16 _mode;
+	_mode.data = current_uav_mode;
+	flight_mode_pub.publish(_mode);
 }
 
 void FakeDrone::timer1Cb(const ros::TimerEvent&){

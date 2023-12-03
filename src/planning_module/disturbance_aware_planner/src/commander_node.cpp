@@ -187,7 +187,15 @@ void FlightCommander::timer2Cb(const ros::TimerEvent&){     // call at each repl
     vector<double> tmp_times;
     vector<Eigen::MatrixX4d> tmp_sfcs;
     Eigen::Vector3d tmp_target_p, tmp_target_vdir;
-    global_ptr->getReplanInfo(current_pos, tmp_times, tmp_sfcs, tmp_target_p, tmp_target_vdir);
+    ROS_INFO("=========== Replanning info ===========");
+    global_ptr->getReplanInfo(current_pos, opter_ptr->getPredTimeHorizon(), tmp_times, tmp_sfcs, tmp_target_p, tmp_target_vdir);
+    ROS_INFO("Get %ld time allocs and %ld sfcs.", tmp_times.size(), tmp_sfcs.size());
+    for(int i=0; i<tmp_times.size(); i++){
+        ROS_INFO("Time alloc[%d]: %f ; sfc[%d] size: %ld", i, tmp_times[i], i, tmp_sfcs[i].rows());
+    }
+    ROS_INFO("Local target position: (%f, %f, %f)", tmp_target_p(0), tmp_target_p(1), tmp_target_p(2));
+    ROS_INFO("Local velocity direction: (%f, %f, %f)", tmp_target_vdir(0), tmp_target_vdir(1), tmp_target_vdir(2));
+    ROS_INFO("=======================================");
     opter_ptr->setStates(current_pos, current_vel, current_acc, tmp_target_p, tmp_target_vdir);
     opter_ptr->setCollisionConstraints(tmp_sfcs, tmp_times);
     if(opter_ptr->optimize()){

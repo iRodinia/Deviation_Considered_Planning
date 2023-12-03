@@ -19,7 +19,7 @@ public:
     GlobalMapProcessor(ros::NodeHandle& nh);
     ~GlobalMapProcessor() {};
 
-    void getReplanInfo(const Eigen::Vector3d cur_pos, std::vector<double>& time_alloc, 
+    void getReplanInfo(const Eigen::Vector3d cur_pos, double pred_T, std::vector<double>& time_alloc, 
                         std::vector<Eigen::MatrixX4d>& polygons, Eigen::Vector3d& goal_pos, Eigen::Vector3d& goal_vel_dir);
     inline bool isPathGenerated();
     inline bool isSFCGenerated();
@@ -41,7 +41,6 @@ private:
     GridMapPlanner::Ptr path_planner_ptr;
     Eigen::Vector3d start_pos, goal_pos;
     double uav_vel;
-    double pred_T;
     bool path_generated = false;
     bool sfcs_generated = false;
 

@@ -239,7 +239,7 @@ bool JPSPlanner<Dim>::plan(const Vecf<Dim> &start, const Vecf<Dim> &goal, decima
   std::reverse(std::begin(raw_path_), std::end(raw_path_));
 
   /*Test Only!*/
-  std::cout << "raw path size: " << raw_path_.size() << std::endl;
+  // std::cout << "raw path size: " << raw_path_.size() << std::endl;
 
 
   // Simplify the raw path
@@ -252,7 +252,7 @@ bool JPSPlanner<Dim>::plan(const Vecf<Dim> &start, const Vecf<Dim> &goal, decima
   path_ = removeLinePts(path_);
 
   // /*Test Only!*/
-  std::cout << "removePts path size: " << path_.size() << std::endl;
+  // std::cout << "removePts path size: " << path_.size() << std::endl;
 
   return true;
 }

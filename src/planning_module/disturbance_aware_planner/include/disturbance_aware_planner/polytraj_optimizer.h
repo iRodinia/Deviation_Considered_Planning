@@ -140,6 +140,7 @@ public:
     void setCollisionConstraints(const std::vector<Eigen::MatrixX4d>& constraints, const std::vector<double>& time_allocs);
 
     bool optimize();
+    double getPredTimeHorizon();
     Coefs getTrajectoryCoefficients();
     Polynomial<3> poly_traj;
     std::vector<ConvexHull<3>> constraints_;

@@ -127,6 +127,10 @@ bool PolyTrajOptimizer::optimize(){
     return true;
 }
 
+double PolyTrajOptimizer::getPredTimeHorizon(){
+    return pred_T;
+}
+
 PolyTrajOptimizer::Coefs PolyTrajOptimizer::getTrajectoryCoefficients(){
     int coef_num = poly_order + 1;
     Coefs new_coefs(3, coef_num);
