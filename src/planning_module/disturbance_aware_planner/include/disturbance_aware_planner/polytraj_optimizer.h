@@ -161,6 +161,7 @@ public:
     int max_faces_num, constrained_point_num, total_cons_num;
     double cons_dt;
     double w_smooth, w_frs, w_terminal;
+    double smooth_cost_save, frs_cost_save, terminal_cost_save;
 
     Point init_p_, init_v_, init_a_;
     Point goal_p_, goal_vdir_;

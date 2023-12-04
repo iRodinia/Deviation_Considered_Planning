@@ -127,7 +127,6 @@ Visualization Manager:
         Polygon_5 edge: true
         Polygon_5 mesh: true
         Polygon_5 vertex: true
-        ellp: true
         line_segment: true
         line_segmentline: true
       Queue Size: 100
@@ -152,9 +151,9 @@ Visualization Manager:
     - Alpha: 1
       Class: rviz/Axes
       Enabled: true
-      Length: 0.5
+      Length: 0.20000000298023224
       Name: Axes
-      Radius: 0.10000000149011612
+      Radius: 0.07999999821186066
       Reference Frame: drone
       Show Trail: false
       Value: true
@@ -186,7 +185,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 9.303829193115234
+      Distance: 14.639756202697754
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -202,9 +201,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.38479772210121155
+      Pitch: 0.7597974538803101
       Target Frame: <Fixed Frame>
-      Yaw: 3.905412435531616
+      Yaw: 4.270420551300049
     Saved: ~
 Window Geometry:
   Displays:

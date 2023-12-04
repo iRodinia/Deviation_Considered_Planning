@@ -7,7 +7,7 @@ void PolyTrajOptimizer::initParameters(ros::NodeHandle& nh){
     nh.param("Optimization/predict_num", pred_N, 100);
     nh.param("Optimization/predict_dt", pred_dt, 0.02);
     nh.param("Optimization/smoothness_cost_weight", w_smooth, 1.0);
-    nh.param("Optimization/frs_cost_weight", w_frs, 1.0);
+    nh.param("Optimization/frs_cost_weight", w_frs, 1e-6);
     nh.param("Optimization/terminal_cost_weight", w_terminal, 1.0);
     pred_T = pred_dt * pred_N;
     nh.param("Optimization/max_single_convex_hull_faces", max_faces_num, 20);
@@ -89,7 +89,7 @@ void PolyTrajOptimizer::setCollisionConstraints(const std::vector<Eigen::MatrixX
             total_cons_num += max_faces_num;
         }
         else{
-            constraints_[i] = ConvexHull<3>(constraints[seg_idx]);
+            constraints_[i-1] = ConvexHull<3>(constraints[seg_idx]);
             total_cons_num += constraints[seg_idx].rows();
         }
     }
@@ -102,10 +102,7 @@ bool PolyTrajOptimizer::optimize(){
     std::vector<double> cons_tolerance(total_cons_num, 0.05);
     opter.add_inequality_mconstraint(PolyTrajOptimizer::wrapTotalConstraints, this, cons_tolerance);
 
-    /*Test Only!*/
-    std::cout << "constraint num: " << total_cons_num << std::endl;
-
-    opter.set_xtol_rel(1e-2);
+    opter.set_xtol_rel(1e-1);
     // opter.set_maxeval(1e3);
     // opter.set_maxtime(0.25);
 
@@ -163,9 +160,12 @@ double PolyTrajOptimizer::wrapTotalCost(const std::vector<double>& x, std::vecto
     }
 
     optimizer->poly_traj.setCoefficients(new_coefs);
-    double smoothness_cost = optimizer->calcSmoothnessCost(grad);
-    double frs_cost = optimizer->calcFRSCost(grad);
-    double terminal_cost = optimizer->calcTerminalCost(grad);
+    optimizer->smooth_cost_save = optimizer->calcSmoothnessCost(grad);
+    double smoothness_cost = optimizer->w_smooth * optimizer->smooth_cost_save;
+    optimizer->frs_cost_save = optimizer->calcFRSCost(grad);
+    double frs_cost = optimizer->w_frs * optimizer->frs_cost_save;
+    optimizer->terminal_cost_save = optimizer->calcTerminalCost(grad);
+    double terminal_cost = optimizer->w_terminal * optimizer->terminal_cost_save;
 
     return smoothness_cost + frs_cost + terminal_cost;
 }
@@ -234,7 +234,8 @@ double PolyTrajOptimizer::calcFRSCost(std::vector<double>& grad){
     }
     Eigen::Matrix<double, 3, 3> E_pos = M.block<3,3>(0,0);
     double determ = std::abs(E_pos.determinant());
-    return 4/3 * M_PI * determ;
+    // return 4/3 * M_PI * determ;
+    return determ;
 
     // Plotting the ellipsoid
 	// Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> adjoint_eigen_solver((E_pos + E_pos.transpose()) / 2.);
@@ -269,5 +270,5 @@ void PolyTrajOptimizer::getFlatStatesInputes(std::vector<quadState>& return_stat
 }
 
 Eigen::Vector4d PolyTrajOptimizer::getMotorNoise(Point pos){
-    return Eigen::Vector4d(0.05, 0.05, 0.05, 0.05);
+    return Eigen::Vector4d(0.02, 0.02, 0.02, 0.02) * pred_dt;
 }

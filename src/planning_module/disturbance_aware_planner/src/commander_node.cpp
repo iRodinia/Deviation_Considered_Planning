@@ -3,10 +3,9 @@
 using namespace disturbance_aware_planner;
 
 FlightCommander::FlightCommander(ros::NodeHandle* nh): nh_(*nh){
-    local_pos_sub = nh_.subscribe<geometry_msgs::PoseStamped>("crazyflie/pose_and_att", 10, &FlightCommander::subPosCb, this);
-    local_vel_sub = nh_.subscribe<geometry_msgs::TwistStamped>("crazyflie/vel_and_angrate", 10, &FlightCommander::subVelCb, this);
+    local_pos_sub = nh_.subscribe<geometry_msgs::PoseStamped>("crazyflie/pose_and_att", 2, &FlightCommander::subPosCb, this);
+    local_vel_sub = nh_.subscribe<geometry_msgs::TwistStamped>("crazyflie/vel_and_angrate", 2, &FlightCommander::subVelCb, this);
     flight_mode_sub = nh_.subscribe<std_msgs::Int16>("crazyflie/ctrl_mode", 1, &FlightCommander::subModeCb, this);
-    local_pcl_sub = nh_.subscribe<sensor_msgs::PointCloud2>("crazyflie/local_point_cloud", 5, &FlightCommander::subPclCb, this);
 
     target_pos_pub = nh_.advertise<geometry_msgs::PoseStamped>("crazyflie/pose_and_att_cmd", 10);
     target_vel_pub = nh_.advertise<geometry_msgs::TwistStamped>("crazyflie/vel_and_angrate_cmd", 10);
@@ -46,23 +45,6 @@ void FlightCommander::subPosCb(const geometry_msgs::PoseStamped::ConstPtr& msg){
 void FlightCommander::subVelCb(const geometry_msgs::TwistStamped::ConstPtr& msg){
     current_vel = Eigen::Vector3d(msg->twist.linear.x, msg->twist.linear.y, msg->twist.linear.z);
     current_angrate = Eigen::Vector3d(msg->twist.angular.x, msg->twist.angular.y, msg->twist.angular.z);
-}
-
-void FlightCommander::subPclCb(const sensor_msgs::PointCloud2::ConstPtr& msg){
-    pcl::PointCloud<pcl::PointXYZ> cloud_in;
-    pcl::fromROSMsg(*msg, cloud_in);
-    int cloud_size = cloud_in.points.size();
-    if(cloud_size <= 0){
-        local_pcl.resize(3,0);
-        return;
-    }
-    local_pcl.resize(3, cloud_size);
-    for(size_t i=0; i<cloud_size; i++){
-        pcl::PointXYZ pt = cloud_in.points[i];
-        local_pcl(0,i) = pt.x;
-        local_pcl(1,i) = pt.y;
-        local_pcl(2,i) = pt.z;
-    }
 }
 
 void FlightCommander::subModeCb(const std_msgs::Int16::ConstPtr& msg){
@@ -189,13 +171,11 @@ void FlightCommander::timer2Cb(const ros::TimerEvent&){     // call at each repl
     Eigen::Vector3d tmp_target_p, tmp_target_vdir;
     ROS_INFO("=========== Replanning info ===========");
     global_ptr->getReplanInfo(current_pos, opter_ptr->getPredTimeHorizon(), tmp_times, tmp_sfcs, tmp_target_p, tmp_target_vdir);
-    ROS_INFO("Get %ld time allocs and %ld sfcs.", tmp_times.size(), tmp_sfcs.size());
     for(int i=0; i<tmp_times.size(); i++){
         ROS_INFO("Time alloc[%d]: %f ; sfc[%d] size: %ld", i, tmp_times[i], i, tmp_sfcs[i].rows());
     }
     ROS_INFO("Local target position: (%f, %f, %f)", tmp_target_p(0), tmp_target_p(1), tmp_target_p(2));
     ROS_INFO("Local velocity direction: (%f, %f, %f)", tmp_target_vdir(0), tmp_target_vdir(1), tmp_target_vdir(2));
-    ROS_INFO("=======================================");
     opter_ptr->setStates(current_pos, current_vel, current_acc, tmp_target_p, tmp_target_vdir);
     opter_ptr->setCollisionConstraints(tmp_sfcs, tmp_times);
 
@@ -203,18 +183,10 @@ void FlightCommander::timer2Cb(const ros::TimerEvent&){     // call at each repl
         ros::Time t_finish = ros::Time::now();
         replan_dur = t_finish - t_start;
         ROS_INFO("Replan iteration takes %f seconds.", replan_dur.toSec());
+        ROS_INFO("smooth cost: %f; frs cost: %f; terminal cost: %f.", 
+                    opter_ptr->smooth_cost_save, opter_ptr->frs_cost_save, opter_ptr->terminal_cost_save);
+        ROS_INFO("=======================================");
         auto poly_coefs = opter_ptr->getTrajectoryCoefficients();
-
-        /*Test Only!*/
-        std::cout << "polynomial coefficients:" << std::endl;
-        for(int i=0; i<3; i++){
-            for(int j=0; j<poly_coefs.cols(); j++){
-                std::cout << poly_coefs(i,j) << " ";
-            }
-            std::cout << std::endl;
-        }
-
-
         traj_buffer.setNewTraj(poly_coefs, replan_t_hori, replan_dur.toSec());
     }
     else{

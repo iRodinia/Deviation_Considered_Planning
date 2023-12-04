@@ -50,7 +50,6 @@ private:
     ros::Subscriber local_pos_sub;   // include pos and att
     ros::Subscriber local_vel_sub;   // include vel and angrate
     ros::Subscriber flight_mode_sub;   // 0: land, 1: takeoff, 2: offb_ctrl
-    ros::Subscriber local_pcl_sub;
     ros::Publisher target_pos_pub;   // include pos and att
     ros::Publisher target_vel_pub;   // include vel and angrate
     ros::Publisher target_acc_pub;
@@ -64,11 +63,9 @@ private:
     void subPosCb(const geometry_msgs::PoseStamped::ConstPtr& msg);
     void subVelCb(const geometry_msgs::TwistStamped::ConstPtr& msg);
     void subModeCb(const std_msgs::Int16::ConstPtr& msg);
-    void subPclCb(const sensor_msgs::PointCloud2::ConstPtr& msg);
     void timer1Cb(const ros::TimerEvent&);
     void timer2Cb(const ros::TimerEvent&);
 
-    Eigen::Matrix3Xd local_pcl;
     Eigen::Vector3d start_pos, goal_pos;
     bool takeoff = false;
     bool goal_reached = false;

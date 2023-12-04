@@ -1,0 +1,8 @@
+prefix=/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/reference_governor
+
+Name: reference_governor
+Description: Description of reference_governor
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
