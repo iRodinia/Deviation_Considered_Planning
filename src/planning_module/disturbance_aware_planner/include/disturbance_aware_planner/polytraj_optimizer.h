@@ -74,7 +74,7 @@ private:
 
 template<int Dim>
 class ConvexHull{
-    // Ax <= b    Ax - b = 0
+    // Ax <= b    Ax - b <= 0
     typedef Eigen::Matrix<double, 1, Dim> rowA;
     typedef double rowB;
     typedef Eigen::Matrix<double, Dim, 1> Point;
@@ -85,17 +85,20 @@ public:
             ROS_WARN("Mismatch convex hull dimensions! Get %d in A and %d in B.", Ain.size(), Bin.size());
             constraint_num = std::min(Ain.size(), Bin.size());
         }
+        else{
+            constraint_num = Ain.size();
+        }
         A.assign(Ain.begin(), Ain.begin()+constraint_num);
         B.assign(Bin.begin(), Bin.begin()+constraint_num);
     }
 
     ConvexHull(const Eigen::MatrixX4d ABin){
         constraint_num = ABin.rows();
-        A.reserve(constraint_num);
-        B.reserve(constraint_num);
+        A.resize(constraint_num);
+        B.resize(constraint_num);
         for(int i=0; i<constraint_num; i++){
             A[i] = ABin.block<1,3>(i,0);
-            B[i] = ABin(i,3);
+            B[i] = -ABin(i,3);
         }
     }
 
@@ -145,14 +148,12 @@ public:
     Polynomial<3> poly_traj;
     std::vector<ConvexHull<3>> constraints_;
 
-protected:
     static double wrapTotalCost(const std::vector<double>& x, std::vector<double>& grad, void* data);
     double calcSmoothnessCost(std::vector<double>& grad);
     double calcFRSCost(std::vector<double>& grad);
     double calcTerminalCost(std::vector<double>& grad);
     static void wrapTotalConstraints(unsigned m, double *result, unsigned n, const double* x, double* grad, void* f_data);
 
-private:
     int pred_N;
     double pred_dt, pred_T;
     int poly_order;

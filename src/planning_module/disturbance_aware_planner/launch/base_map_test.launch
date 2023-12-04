@@ -68,13 +68,13 @@
     </group>
 
     <group ns="Optimization">
-        <param name="poly_order"                      value="5" />
+        <param name="poly_order"                      value="6" />
         <param name="predict_num"                     value="100" />
         <param name="predict_dt"                      value="0.02" />
         <param name="smoothness_cost_weight"          value="1.0" />
         <param name="frs_cost_weight"                 value="1.0" />
         <param name="terminal_cost_weight"            value="1.0" />
-        <param name="max_single_convex_hull_faces"    value="15" />
+        <param name="max_single_convex_hull_faces"    value="20" />
         <param name="total_constrained_points_in_SFC" value="20" />
         <param name="smoothness_cost_order"           value="4" />
     </group>

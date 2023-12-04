@@ -156,7 +156,7 @@ public:
         // to obtain triangle meshs of polyhedra
         Eigen::Matrix3Xd mesh(3, 0), curTris(3, 0), oldTris(3, 0);
 
-        if (!flag) ellipsoid_.Visualize(pub);
+        // if (!flag) ellipsoid_.Visualize(pub);
         LineSegment l(seed_line.first, seed_line.second);
         if (!flag) l.Visualize(pub);
 

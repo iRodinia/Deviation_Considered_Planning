@@ -198,11 +198,23 @@ void FlightCommander::timer2Cb(const ros::TimerEvent&){     // call at each repl
     ROS_INFO("=======================================");
     opter_ptr->setStates(current_pos, current_vel, current_acc, tmp_target_p, tmp_target_vdir);
     opter_ptr->setCollisionConstraints(tmp_sfcs, tmp_times);
+
     if(opter_ptr->optimize()){
         ros::Time t_finish = ros::Time::now();
         replan_dur = t_finish - t_start;
         ROS_INFO("Replan iteration takes %f seconds.", replan_dur.toSec());
-        Eigen::Matrix<double, 3, -1> poly_coefs = opter_ptr->getTrajectoryCoefficients();
+        auto poly_coefs = opter_ptr->getTrajectoryCoefficients();
+
+        /*Test Only!*/
+        std::cout << "polynomial coefficients:" << std::endl;
+        for(int i=0; i<3; i++){
+            for(int j=0; j<poly_coefs.cols(); j++){
+                std::cout << poly_coefs(i,j) << " ";
+            }
+            std::cout << std::endl;
+        }
+
+
         traj_buffer.setNewTraj(poly_coefs, replan_t_hori, replan_dur.toSec());
     }
     else{

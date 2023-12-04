@@ -3,18 +3,17 @@
 using namespace disturbance_aware_planner;
 
 void PolyTrajOptimizer::initParameters(ros::NodeHandle& nh){
-    nh.param("Optimization/poly_order", poly_order, 4);
+    nh.param("Optimization/poly_order", poly_order, 6);
     nh.param("Optimization/predict_num", pred_N, 100);
     nh.param("Optimization/predict_dt", pred_dt, 0.02);
     nh.param("Optimization/smoothness_cost_weight", w_smooth, 1.0);
     nh.param("Optimization/frs_cost_weight", w_frs, 1.0);
     nh.param("Optimization/terminal_cost_weight", w_terminal, 1.0);
     pred_T = pred_dt * pred_N;
-    nh.param("Optimization/max_single_convex_hull_faces", max_faces_num, 15);
+    nh.param("Optimization/max_single_convex_hull_faces", max_faces_num, 20);
     nh.param("Optimization/total_constrained_points_in_SFC", constrained_point_num, 20);
-    constrained_point_num = std::min(constrained_point_num, pred_N);
-    cons_dt = std::max(std::floor(pred_N / constrained_point_num), 1.0) * pred_dt;
-    constraints_.reserve(constrained_point_num);
+    cons_dt = pred_T / constrained_point_num;
+    constraints_.resize(constrained_point_num);
     nh.param("Optimization/smoothness_cost_order", smoothness_cost_order, 4);
     smooth_cost_Q = Eigen::MatrixXd(poly_order+1, poly_order+1).setZero();
     Eigen::RowVectorXd tmp_vec = Eigen::RowVectorXd::LinSpaced(smoothness_cost_order, 0.0, smoothness_cost_order-1.0);
@@ -60,6 +59,7 @@ void PolyTrajOptimizer::setStates(const Point init_p, const Point init_v, const 
     coef_c0 = init_p;   // fixed
     coef_c1 = init_v;   // fixed
     coef_c2 = 0.5 * init_a;   // fixed
+    rest_coefs.setZero();
     rest_coefs.block<3,1>(0,0) = 1 / (pred_T*pred_T*pred_T) * (goal_p - 0.5*pred_T*pred_T*init_a - pred_T*init_v - init_p);   // float
 
     ready_for_optim = true;
@@ -72,41 +72,44 @@ void PolyTrajOptimizer::setCollisionConstraints(const std::vector<Eigen::MatrixX
     }
     int constraints_num = constraints.size();
     std::vector<double> time_splits;
-    std::partial_sum(time_allocs.cbegin(), time_allocs.cend(), time_splits.begin());
+    std::partial_sum(time_allocs.begin(), time_allocs.end(), std::back_inserter(time_splits));
     if(time_splits[constraints_num-1] <= pred_T){
         time_splits[constraints_num-1] = pred_T + pred_dt;
     }
+
     total_cons_num = 0;
-    double t_sum = cons_dt;
-    int seg_num = 0;
-    int faces = constraints[seg_num].rows();
-    for(int i=0; i<constrained_point_num; i++){
-        while(t_sum >= time_splits[seg_num]){
-            seg_num++;
-            faces = constraints[seg_num].rows();
+    int seg_idx = 0;
+    for(int i=1; i<=constrained_point_num; i++){
+        double temp_t = i*cons_dt;
+        while(temp_t > time_splits[seg_idx]){
+            seg_idx++;
         }
-        if(faces > max_faces_num){
-            constraints_[i] = ConvexHull<3>(constraints[seg_num].topRows(max_faces_num));
+        if(constraints[seg_idx].rows() > max_faces_num){
+            constraints_[i-1] = ConvexHull<3>(constraints[seg_idx].topRows(max_faces_num));
             total_cons_num += max_faces_num;
         }
         else{
-            constraints_[i] = ConvexHull<3>(constraints[seg_num]);
-            total_cons_num += faces;
+            constraints_[i] = ConvexHull<3>(constraints[seg_idx]);
+            total_cons_num += constraints[seg_idx].rows();
         }
-        t_sum += cons_dt;
     }
 }
 
 bool PolyTrajOptimizer::optimize(){
+    opter.remove_inequality_constraints();
+
     opter.set_min_objective(PolyTrajOptimizer::wrapTotalCost, this);
     std::vector<double> cons_tolerance(total_cons_num, 0.05);
     opter.add_inequality_mconstraint(PolyTrajOptimizer::wrapTotalConstraints, this, cons_tolerance);
+
+    /*Test Only!*/
+    std::cout << "constraint num: " << total_cons_num << std::endl;
+
     opter.set_xtol_rel(1e-2);
-
     // opter.set_maxeval(1e3);
-    // opter.set_maxtime(0.2);
+    // opter.set_maxtime(0.25);
 
-    std::vector<double> optim_x(rest_coefs.size());
+    std::vector<double> optim_x(rest_coefs.size(), 0.0);
     for(int i=0; i<poly_order-2; i++){
         optim_x[i] = rest_coefs(0,i);
         optim_x[poly_order-2+i] = rest_coefs(1,i);
@@ -117,6 +120,9 @@ bool PolyTrajOptimizer::optimize(){
     if(res < 0){
         ROS_WARN("Unable to solve the optimization problem. Get result code %d.", int(res));
         return false;
+    }
+    else{
+        ROS_INFO("optimized cost: %f", min_f);
     }
 
     for(int i=0; i<poly_order-2; i++){
@@ -155,10 +161,12 @@ double PolyTrajOptimizer::wrapTotalCost(const std::vector<double>& x, std::vecto
         new_coefs(1,i) = x[coef_num+i-6];
         new_coefs(2,i) = x[2*coef_num+i-9];
     }
+
     optimizer->poly_traj.setCoefficients(new_coefs);
     double smoothness_cost = optimizer->calcSmoothnessCost(grad);
     double frs_cost = optimizer->calcFRSCost(grad);
     double terminal_cost = optimizer->calcTerminalCost(grad);
+
     return smoothness_cost + frs_cost + terminal_cost;
 }
 
