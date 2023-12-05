@@ -72,7 +72,7 @@
         <param name="predict_num"                     value="100" />
         <param name="predict_dt"                      value="0.02" />
         <param name="smoothness_cost_weight"          value="1.0" />
-        <param name="frs_cost_weight"                 value="1e-6" />
+        <param name="frs_cost_weight"                 value="1e-7" />
         <param name="terminal_cost_weight"            value="1.0" />
         <param name="max_single_convex_hull_faces"    value="20" />
         <param name="total_constrained_points_in_SFC" value="20" />

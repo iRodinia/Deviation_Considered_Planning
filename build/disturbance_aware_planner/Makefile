@@ -1316,6 +1316,71 @@ visualization_msgs_generate_messages_py/fast:
 .PHONY : visualization_msgs_generate_messages_py/fast
 
 #=============================================================================
+# Target rules for targets named reference_governor_generate_messages_cpp
+
+# Build rule for target.
+reference_governor_generate_messages_cpp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 reference_governor_generate_messages_cpp
+.PHONY : reference_governor_generate_messages_cpp
+
+# fast build rule for target.
+reference_governor_generate_messages_cpp/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reference_governor_generate_messages_cpp.dir/build.make CMakeFiles/reference_governor_generate_messages_cpp.dir/build
+.PHONY : reference_governor_generate_messages_cpp/fast
+
+#=============================================================================
+# Target rules for targets named reference_governor_generate_messages_eus
+
+# Build rule for target.
+reference_governor_generate_messages_eus: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 reference_governor_generate_messages_eus
+.PHONY : reference_governor_generate_messages_eus
+
+# fast build rule for target.
+reference_governor_generate_messages_eus/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reference_governor_generate_messages_eus.dir/build.make CMakeFiles/reference_governor_generate_messages_eus.dir/build
+.PHONY : reference_governor_generate_messages_eus/fast
+
+#=============================================================================
+# Target rules for targets named reference_governor_generate_messages_lisp
+
+# Build rule for target.
+reference_governor_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 reference_governor_generate_messages_lisp
+.PHONY : reference_governor_generate_messages_lisp
+
+# fast build rule for target.
+reference_governor_generate_messages_lisp/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reference_governor_generate_messages_lisp.dir/build.make CMakeFiles/reference_governor_generate_messages_lisp.dir/build
+.PHONY : reference_governor_generate_messages_lisp/fast
+
+#=============================================================================
+# Target rules for targets named reference_governor_generate_messages_nodejs
+
+# Build rule for target.
+reference_governor_generate_messages_nodejs: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 reference_governor_generate_messages_nodejs
+.PHONY : reference_governor_generate_messages_nodejs
+
+# fast build rule for target.
+reference_governor_generate_messages_nodejs/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reference_governor_generate_messages_nodejs.dir/build.make CMakeFiles/reference_governor_generate_messages_nodejs.dir/build
+.PHONY : reference_governor_generate_messages_nodejs/fast
+
+#=============================================================================
+# Target rules for targets named reference_governor_generate_messages_py
+
+# Build rule for target.
+reference_governor_generate_messages_py: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 reference_governor_generate_messages_py
+.PHONY : reference_governor_generate_messages_py
+
+# fast build rule for target.
+reference_governor_generate_messages_py/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reference_governor_generate_messages_py.dir/build.make CMakeFiles/reference_governor_generate_messages_py.dir/build
+.PHONY : reference_governor_generate_messages_py/fast
+
+#=============================================================================
 # Target rules for targets named dap_global_map_process
 
 # Build rule for target.
@@ -1340,19 +1405,6 @@ dap_polytraj_optimizer: cmake_check_build_system
 dap_polytraj_optimizer/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dap_polytraj_optimizer.dir/build.make CMakeFiles/dap_polytraj_optimizer.dir/build
 .PHONY : dap_polytraj_optimizer/fast
-
-#=============================================================================
-# Target rules for targets named dap_reference_manager
-
-# Build rule for target.
-dap_reference_manager: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 dap_reference_manager
-.PHONY : dap_reference_manager
-
-# fast build rule for target.
-dap_reference_manager/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dap_reference_manager.dir/build.make CMakeFiles/dap_reference_manager.dir/build
-.PHONY : dap_reference_manager/fast
 
 #=============================================================================
 # Target rules for targets named dap_node
@@ -1419,30 +1471,6 @@ gtest_main/fast:
 	$(MAKE) $(MAKESILENT) -f gtest/googletest/CMakeFiles/gtest_main.dir/build.make gtest/googletest/CMakeFiles/gtest_main.dir/build
 .PHONY : gtest_main/fast
 
-src/commander_node.o: src/commander_node.cpp.o
-.PHONY : src/commander_node.o
-
-# target to build an object file
-src/commander_node.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dap_node.dir/build.make CMakeFiles/dap_node.dir/src/commander_node.cpp.o
-.PHONY : src/commander_node.cpp.o
-
-src/commander_node.i: src/commander_node.cpp.i
-.PHONY : src/commander_node.i
-
-# target to preprocess a source file
-src/commander_node.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dap_node.dir/build.make CMakeFiles/dap_node.dir/src/commander_node.cpp.i
-.PHONY : src/commander_node.cpp.i
-
-src/commander_node.s: src/commander_node.cpp.s
-.PHONY : src/commander_node.s
-
-# target to generate assembly for a file
-src/commander_node.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dap_node.dir/build.make CMakeFiles/dap_node.dir/src/commander_node.cpp.s
-.PHONY : src/commander_node.cpp.s
-
 src/global_map_process.o: src/global_map_process.cpp.o
 .PHONY : src/global_map_process.o
 
@@ -1467,6 +1495,30 @@ src/global_map_process.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dap_global_map_process.dir/build.make CMakeFiles/dap_global_map_process.dir/src/global_map_process.cpp.s
 .PHONY : src/global_map_process.cpp.s
 
+src/planner_node.o: src/planner_node.cpp.o
+.PHONY : src/planner_node.o
+
+# target to build an object file
+src/planner_node.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dap_node.dir/build.make CMakeFiles/dap_node.dir/src/planner_node.cpp.o
+.PHONY : src/planner_node.cpp.o
+
+src/planner_node.i: src/planner_node.cpp.i
+.PHONY : src/planner_node.i
+
+# target to preprocess a source file
+src/planner_node.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dap_node.dir/build.make CMakeFiles/dap_node.dir/src/planner_node.cpp.i
+.PHONY : src/planner_node.cpp.i
+
+src/planner_node.s: src/planner_node.cpp.s
+.PHONY : src/planner_node.s
+
+# target to generate assembly for a file
+src/planner_node.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dap_node.dir/build.make CMakeFiles/dap_node.dir/src/planner_node.cpp.s
+.PHONY : src/planner_node.cpp.s
+
 src/polytraj_optimizer.o: src/polytraj_optimizer.cpp.o
 .PHONY : src/polytraj_optimizer.o
 
@@ -1490,30 +1542,6 @@ src/polytraj_optimizer.s: src/polytraj_optimizer.cpp.s
 src/polytraj_optimizer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dap_polytraj_optimizer.dir/build.make CMakeFiles/dap_polytraj_optimizer.dir/src/polytraj_optimizer.cpp.s
 .PHONY : src/polytraj_optimizer.cpp.s
-
-src/reference_manager.o: src/reference_manager.cpp.o
-.PHONY : src/reference_manager.o
-
-# target to build an object file
-src/reference_manager.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dap_reference_manager.dir/build.make CMakeFiles/dap_reference_manager.dir/src/reference_manager.cpp.o
-.PHONY : src/reference_manager.cpp.o
-
-src/reference_manager.i: src/reference_manager.cpp.i
-.PHONY : src/reference_manager.i
-
-# target to preprocess a source file
-src/reference_manager.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dap_reference_manager.dir/build.make CMakeFiles/dap_reference_manager.dir/src/reference_manager.cpp.i
-.PHONY : src/reference_manager.cpp.i
-
-src/reference_manager.s: src/reference_manager.cpp.s
-.PHONY : src/reference_manager.s
-
-# target to generate assembly for a file
-src/reference_manager.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/dap_reference_manager.dir/build.make CMakeFiles/dap_reference_manager.dir/src/reference_manager.cpp.s
-.PHONY : src/reference_manager.cpp.s
 
 # Help Target
 help:
@@ -1569,6 +1597,11 @@ help:
 	@echo "... pcl_msgs_generate_messages_nodejs"
 	@echo "... pcl_msgs_generate_messages_py"
 	@echo "... pcl_ros_gencfg"
+	@echo "... reference_governor_generate_messages_cpp"
+	@echo "... reference_governor_generate_messages_eus"
+	@echo "... reference_governor_generate_messages_lisp"
+	@echo "... reference_governor_generate_messages_nodejs"
+	@echo "... reference_governor_generate_messages_py"
 	@echo "... roscpp_generate_messages_cpp"
 	@echo "... roscpp_generate_messages_eus"
 	@echo "... roscpp_generate_messages_lisp"
@@ -1619,23 +1652,19 @@ help:
 	@echo "... dap_global_map_process"
 	@echo "... dap_node"
 	@echo "... dap_polytraj_optimizer"
-	@echo "... dap_reference_manager"
 	@echo "... gmock"
 	@echo "... gmock_main"
 	@echo "... gtest"
 	@echo "... gtest_main"
-	@echo "... src/commander_node.o"
-	@echo "... src/commander_node.i"
-	@echo "... src/commander_node.s"
 	@echo "... src/global_map_process.o"
 	@echo "... src/global_map_process.i"
 	@echo "... src/global_map_process.s"
+	@echo "... src/planner_node.o"
+	@echo "... src/planner_node.i"
+	@echo "... src/planner_node.s"
 	@echo "... src/polytraj_optimizer.o"
 	@echo "... src/polytraj_optimizer.i"
 	@echo "... src/polytraj_optimizer.s"
-	@echo "... src/reference_manager.o"
-	@echo "... src/reference_manager.i"
-	@echo "... src/reference_manager.s"
 .PHONY : help
 
 

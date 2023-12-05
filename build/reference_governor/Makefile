@@ -432,6 +432,175 @@ std_msgs_generate_messages_py/fast:
 .PHONY : std_msgs_generate_messages_py/fast
 
 #=============================================================================
+# Target rules for targets named reference_governor_generate_messages
+
+# Build rule for target.
+reference_governor_generate_messages: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 reference_governor_generate_messages
+.PHONY : reference_governor_generate_messages
+
+# fast build rule for target.
+reference_governor_generate_messages/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reference_governor_generate_messages.dir/build.make CMakeFiles/reference_governor_generate_messages.dir/build
+.PHONY : reference_governor_generate_messages/fast
+
+#=============================================================================
+# Target rules for targets named _reference_governor_generate_messages_check_deps_polyTraj
+
+# Build rule for target.
+_reference_governor_generate_messages_check_deps_polyTraj: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 _reference_governor_generate_messages_check_deps_polyTraj
+.PHONY : _reference_governor_generate_messages_check_deps_polyTraj
+
+# fast build rule for target.
+_reference_governor_generate_messages_check_deps_polyTraj/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/_reference_governor_generate_messages_check_deps_polyTraj.dir/build.make CMakeFiles/_reference_governor_generate_messages_check_deps_polyTraj.dir/build
+.PHONY : _reference_governor_generate_messages_check_deps_polyTraj/fast
+
+#=============================================================================
+# Target rules for targets named reference_governor_generate_messages_cpp
+
+# Build rule for target.
+reference_governor_generate_messages_cpp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 reference_governor_generate_messages_cpp
+.PHONY : reference_governor_generate_messages_cpp
+
+# fast build rule for target.
+reference_governor_generate_messages_cpp/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reference_governor_generate_messages_cpp.dir/build.make CMakeFiles/reference_governor_generate_messages_cpp.dir/build
+.PHONY : reference_governor_generate_messages_cpp/fast
+
+#=============================================================================
+# Target rules for targets named reference_governor_gencpp
+
+# Build rule for target.
+reference_governor_gencpp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 reference_governor_gencpp
+.PHONY : reference_governor_gencpp
+
+# fast build rule for target.
+reference_governor_gencpp/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reference_governor_gencpp.dir/build.make CMakeFiles/reference_governor_gencpp.dir/build
+.PHONY : reference_governor_gencpp/fast
+
+#=============================================================================
+# Target rules for targets named reference_governor_generate_messages_eus
+
+# Build rule for target.
+reference_governor_generate_messages_eus: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 reference_governor_generate_messages_eus
+.PHONY : reference_governor_generate_messages_eus
+
+# fast build rule for target.
+reference_governor_generate_messages_eus/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reference_governor_generate_messages_eus.dir/build.make CMakeFiles/reference_governor_generate_messages_eus.dir/build
+.PHONY : reference_governor_generate_messages_eus/fast
+
+#=============================================================================
+# Target rules for targets named reference_governor_geneus
+
+# Build rule for target.
+reference_governor_geneus: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 reference_governor_geneus
+.PHONY : reference_governor_geneus
+
+# fast build rule for target.
+reference_governor_geneus/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reference_governor_geneus.dir/build.make CMakeFiles/reference_governor_geneus.dir/build
+.PHONY : reference_governor_geneus/fast
+
+#=============================================================================
+# Target rules for targets named reference_governor_generate_messages_lisp
+
+# Build rule for target.
+reference_governor_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 reference_governor_generate_messages_lisp
+.PHONY : reference_governor_generate_messages_lisp
+
+# fast build rule for target.
+reference_governor_generate_messages_lisp/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reference_governor_generate_messages_lisp.dir/build.make CMakeFiles/reference_governor_generate_messages_lisp.dir/build
+.PHONY : reference_governor_generate_messages_lisp/fast
+
+#=============================================================================
+# Target rules for targets named reference_governor_genlisp
+
+# Build rule for target.
+reference_governor_genlisp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 reference_governor_genlisp
+.PHONY : reference_governor_genlisp
+
+# fast build rule for target.
+reference_governor_genlisp/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reference_governor_genlisp.dir/build.make CMakeFiles/reference_governor_genlisp.dir/build
+.PHONY : reference_governor_genlisp/fast
+
+#=============================================================================
+# Target rules for targets named reference_governor_generate_messages_nodejs
+
+# Build rule for target.
+reference_governor_generate_messages_nodejs: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 reference_governor_generate_messages_nodejs
+.PHONY : reference_governor_generate_messages_nodejs
+
+# fast build rule for target.
+reference_governor_generate_messages_nodejs/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reference_governor_generate_messages_nodejs.dir/build.make CMakeFiles/reference_governor_generate_messages_nodejs.dir/build
+.PHONY : reference_governor_generate_messages_nodejs/fast
+
+#=============================================================================
+# Target rules for targets named reference_governor_gennodejs
+
+# Build rule for target.
+reference_governor_gennodejs: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 reference_governor_gennodejs
+.PHONY : reference_governor_gennodejs
+
+# fast build rule for target.
+reference_governor_gennodejs/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reference_governor_gennodejs.dir/build.make CMakeFiles/reference_governor_gennodejs.dir/build
+.PHONY : reference_governor_gennodejs/fast
+
+#=============================================================================
+# Target rules for targets named reference_governor_generate_messages_py
+
+# Build rule for target.
+reference_governor_generate_messages_py: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 reference_governor_generate_messages_py
+.PHONY : reference_governor_generate_messages_py
+
+# fast build rule for target.
+reference_governor_generate_messages_py/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reference_governor_generate_messages_py.dir/build.make CMakeFiles/reference_governor_generate_messages_py.dir/build
+.PHONY : reference_governor_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named reference_governor_genpy
+
+# Build rule for target.
+reference_governor_genpy: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 reference_governor_genpy
+.PHONY : reference_governor_genpy
+
+# fast build rule for target.
+reference_governor_genpy/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reference_governor_genpy.dir/build.make CMakeFiles/reference_governor_genpy.dir/build
+.PHONY : reference_governor_genpy/fast
+
+#=============================================================================
+# Target rules for targets named reference_governor_node
+
+# Build rule for target.
+reference_governor_node: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 reference_governor_node
+.PHONY : reference_governor_node
+
+# fast build rule for target.
+reference_governor_node/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reference_governor_node.dir/build.make CMakeFiles/reference_governor_node.dir/build
+.PHONY : reference_governor_node/fast
+
+#=============================================================================
 # Target rules for targets named gmock
 
 # Build rule for target.
@@ -483,6 +652,30 @@ gtest_main/fast:
 	$(MAKE) $(MAKESILENT) -f gtest/googletest/CMakeFiles/gtest_main.dir/build.make gtest/googletest/CMakeFiles/gtest_main.dir/build
 .PHONY : gtest_main/fast
 
+src/governor.o: src/governor.cpp.o
+.PHONY : src/governor.o
+
+# target to build an object file
+src/governor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reference_governor_node.dir/build.make CMakeFiles/reference_governor_node.dir/src/governor.cpp.o
+.PHONY : src/governor.cpp.o
+
+src/governor.i: src/governor.cpp.i
+.PHONY : src/governor.i
+
+# target to preprocess a source file
+src/governor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reference_governor_node.dir/build.make CMakeFiles/reference_governor_node.dir/src/governor.cpp.i
+.PHONY : src/governor.cpp.i
+
+src/governor.s: src/governor.cpp.s
+.PHONY : src/governor.s
+
+# target to generate assembly for a file
+src/governor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reference_governor_node.dir/build.make CMakeFiles/reference_governor_node.dir/src/governor.cpp.s
+.PHONY : src/governor.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -496,9 +689,21 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... test"
+	@echo "... _reference_governor_generate_messages_check_deps_polyTraj"
 	@echo "... clean_test_results"
 	@echo "... download_extra_data"
 	@echo "... doxygen"
+	@echo "... reference_governor_gencpp"
+	@echo "... reference_governor_generate_messages"
+	@echo "... reference_governor_generate_messages_cpp"
+	@echo "... reference_governor_generate_messages_eus"
+	@echo "... reference_governor_generate_messages_lisp"
+	@echo "... reference_governor_generate_messages_nodejs"
+	@echo "... reference_governor_generate_messages_py"
+	@echo "... reference_governor_geneus"
+	@echo "... reference_governor_genlisp"
+	@echo "... reference_governor_gennodejs"
+	@echo "... reference_governor_genpy"
 	@echo "... roscpp_generate_messages_cpp"
 	@echo "... roscpp_generate_messages_eus"
 	@echo "... roscpp_generate_messages_lisp"
@@ -520,6 +725,10 @@ help:
 	@echo "... gmock_main"
 	@echo "... gtest"
 	@echo "... gtest_main"
+	@echo "... reference_governor_node"
+	@echo "... src/governor.o"
+	@echo "... src/governor.i"
+	@echo "... src/governor.s"
 .PHONY : help
 
 

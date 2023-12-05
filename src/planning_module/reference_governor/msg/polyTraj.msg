@@ -1,0 +1,4 @@
+std_msgs/Header header
+std_msgs/Time start_planning_time
+std_msgs/Float64MultiArray poly_coefs
+std_msgs/Float64 poly_duration

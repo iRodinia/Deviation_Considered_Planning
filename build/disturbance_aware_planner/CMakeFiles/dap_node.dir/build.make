@@ -69,32 +69,31 @@ include CMakeFiles/dap_node.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/dap_node.dir/flags.make
 
-CMakeFiles/dap_node.dir/src/commander_node.cpp.o: CMakeFiles/dap_node.dir/flags.make
-CMakeFiles/dap_node.dir/src/commander_node.cpp.o: /home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/src/commander_node.cpp
-CMakeFiles/dap_node.dir/src/commander_node.cpp.o: CMakeFiles/dap_node.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/cz_linux/Documents/Deviation_Considered_Planning/build/disturbance_aware_planner/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/dap_node.dir/src/commander_node.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/dap_node.dir/src/commander_node.cpp.o -MF CMakeFiles/dap_node.dir/src/commander_node.cpp.o.d -o CMakeFiles/dap_node.dir/src/commander_node.cpp.o -c /home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/src/commander_node.cpp
+CMakeFiles/dap_node.dir/src/planner_node.cpp.o: CMakeFiles/dap_node.dir/flags.make
+CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/src/planner_node.cpp
+CMakeFiles/dap_node.dir/src/planner_node.cpp.o: CMakeFiles/dap_node.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/cz_linux/Documents/Deviation_Considered_Planning/build/disturbance_aware_planner/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/dap_node.dir/src/planner_node.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/dap_node.dir/src/planner_node.cpp.o -MF CMakeFiles/dap_node.dir/src/planner_node.cpp.o.d -o CMakeFiles/dap_node.dir/src/planner_node.cpp.o -c /home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/src/planner_node.cpp
 
-CMakeFiles/dap_node.dir/src/commander_node.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/dap_node.dir/src/commander_node.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/src/commander_node.cpp > CMakeFiles/dap_node.dir/src/commander_node.cpp.i
+CMakeFiles/dap_node.dir/src/planner_node.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/dap_node.dir/src/planner_node.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/src/planner_node.cpp > CMakeFiles/dap_node.dir/src/planner_node.cpp.i
 
-CMakeFiles/dap_node.dir/src/commander_node.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/dap_node.dir/src/commander_node.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/src/commander_node.cpp -o CMakeFiles/dap_node.dir/src/commander_node.cpp.s
+CMakeFiles/dap_node.dir/src/planner_node.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/dap_node.dir/src/planner_node.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/src/planner_node.cpp -o CMakeFiles/dap_node.dir/src/planner_node.cpp.s
 
 # Object files for target dap_node
 dap_node_OBJECTS = \
-"CMakeFiles/dap_node.dir/src/commander_node.cpp.o"
+"CMakeFiles/dap_node.dir/src/planner_node.cpp.o"
 
 # External object files for target dap_node
 dap_node_EXTERNAL_OBJECTS =
 
-/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/disturbance_aware_planner/lib/disturbance_aware_planner/dap_node: CMakeFiles/dap_node.dir/src/commander_node.cpp.o
+/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/disturbance_aware_planner/lib/disturbance_aware_planner/dap_node: CMakeFiles/dap_node.dir/src/planner_node.cpp.o
 /home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/disturbance_aware_planner/lib/disturbance_aware_planner/dap_node: CMakeFiles/dap_node.dir/build.make
 /home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/disturbance_aware_planner/lib/disturbance_aware_planner/dap_node: /home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/disturbance_aware_planner/lib/libdap_global_map_process.so
 /home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/disturbance_aware_planner/lib/disturbance_aware_planner/dap_node: /home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/disturbance_aware_planner/lib/libdap_polytraj_optimizer.so
-/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/disturbance_aware_planner/lib/disturbance_aware_planner/dap_node: /home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/disturbance_aware_planner/lib/libdap_reference_manager.so
 /home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/disturbance_aware_planner/lib/disturbance_aware_planner/dap_node: /opt/ros/noetic/lib/libpcl_ros_filter.so
 /home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/disturbance_aware_planner/lib/disturbance_aware_planner/dap_node: /opt/ros/noetic/lib/libpcl_ros_tf.so
 /home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/disturbance_aware_planner/lib/disturbance_aware_planner/dap_node: /usr/lib/x86_64-linux-gnu/libboost_thread.so
