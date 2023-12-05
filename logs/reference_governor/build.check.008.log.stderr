@@ -1,6 +1,11 @@
-[36m--[0m Using CATKIN_DEVEL_PREFIX: /home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/disturbance_aware_planner
-[36m--[0m Using CMAKE_PREFIX_PATH: /home/cz_linux/Documents/Deviation_Considered_Planning/devel;/home/cz_linux/catkin_overlay_ws/devel;/opt/ros/noetic;/home/cz_linux/Documents/catkin_ws_build/devel;/home/cz_linux/Documents/catkin_ws_make/devel;/home/cz_linux/Documents/ego-planner-swarm/devel;/home/cz_linux/Documents/crazyswarm/ros_ws/devel
-[36m--[0m This workspace overlays: /home/cz_linux/Documents/Deviation_Considered_Planning/devel;/home/cz_linux/catkin_overlay_ws/devel;/opt/ros/noetic;/home/cz_linux/Documents/catkin_ws_build/devel;/home/cz_linux/Documents/catkin_ws_make/devel;/home/cz_linux/Documents/ego-planner-swarm/devel;/home/cz_linux/Documents/crazyswarm/ros_ws/devel
+[0mCMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.5 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value or use a ...<max> suffix to tell
+  CMake that the project does not need compatibility with older versions.
+
+[0m
 [33mCMake Warning (dev) at /opt/ros/noetic/share/catkin/cmake/python.cmake:4 (find_package):
   Policy CMP0148 is not set: The FindPythonInterp and FindPythonLibs modules
   are removed.  Run "cmake --help-policy CMP0148" for policy details.  Use
@@ -9,19 +14,9 @@
 [36mCall Stack (most recent call first):[0m
   /opt/ros/noetic/share/catkin/cmake/all.cmake:164 (include)
   /opt/ros/noetic/share/catkin/cmake/catkinConfig.cmake:20 (include)
-  CMakeLists.txt:12 (find_package)
+  CMakeLists.txt:10 (find_package)
 This warning is for project developers.  Use -Wno-dev to suppress it.
 [0m
-[36m--[0m Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3")
-[36m--[0m Using PYTHON_EXECUTABLE: /usr/bin/python3
-[36m--[0m Using Debian Python package layout
-[36m--[0m Using empy: /usr/lib/python3/dist-packages/em.py
-[36m--[0m Using CATKIN_ENABLE_TESTING: ON
-[36m--[0m Call enable_testing()
-[36m--[0m Using CATKIN_TEST_RESULTS_DIR: /home/cz_linux/Documents/Deviation_Considered_Planning/build/disturbance_aware_planner/test_results
-[36m--[0m Forcing gtest/gmock from source, though one was otherwise available.
-[36m--[0m Found gtest sources under '/usr/src/googletest': gtests will be built
-[36m--[0m Found gmock sources under '/usr/src/googletest': gmock will be built
 [0mCMake Deprecation Warning at /usr/src/googletest/CMakeLists.txt:4 (cmake_minimum_required):
   Compatibility with CMake < 3.5 will be removed from a future version of
   CMake.
@@ -55,11 +50,3 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
   /usr/src/googletest/googletest/CMakeLists.txt:91 (include)
 This warning is for project developers.  Use -Wno-dev to suppress it.
 [0m
-[36m--[0m Found PythonInterp: /usr/bin/python3 (found version "3.8.10")
-[36m--[0m Using Python nosetests: /usr/bin/nosetests3
-[36m--[0m catkin 0.8.10
-[36m--[0m BUILD_SHARED_LIBS is on
-[36m--[0m Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
-[36m--[0m Configuring done (0.7s)
-[36m--[0m Generating done (0.0s)
-[36m--[0m Build files have been written to: /home/cz_linux/Documents/Deviation_Considered_Planning/build/disturbance_aware_planner
