@@ -270,5 +270,8 @@ void PolyTrajOptimizer::getFlatStatesInputes(std::vector<quadState>& return_stat
 }
 
 Eigen::Vector4d PolyTrajOptimizer::getMotorNoise(Point pos){
-    return Eigen::Vector4d(0.02, 0.02, 0.02, 0.02) * pred_dt;
+    Eigen::Vector4d nominal_inputs = quad.getNominalInputs();
+    double max_disturb_ratio = 0.05;
+    double disturb_frac = 1 / (pos - Eigen::Vector3d(0,0,1)).norm();
+    return nominal_inputs * max_disturb_ratio * disturb_frac * pred_dt;
 }

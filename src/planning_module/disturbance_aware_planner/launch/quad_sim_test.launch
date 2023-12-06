@@ -2,6 +2,7 @@
     <arg name="global_map_topic"              		     default="/global_map"/>
     <arg name="global_ref_path_topic"              		 default="/global/ref_path"/>
     <arg name="global_ref_sfc_topic"              		 default="/global/ref_sfc"/>
+    <arg name="local_ref_traj_topic"              		 default="/crazyflie/local_traj"/>
     <arg name="uav_pose_topic"              		     default="/crazyflie/state_pose"/>
     <arg name="uav_vel_topic"              		         default="/crazyflie/state_vel"/>
     <arg name="uav_ctrl_mode_topic"              		 default="/crazyflie/state_ctrl_mode"/>
@@ -68,14 +69,14 @@
     </group>
 
     <group ns="Optimization">
-        <param name="poly_order"                      value="6" />
-        <param name="predict_num"                     value="100" />
-        <param name="predict_dt"                      value="0.02" />
+        <param name="poly_order"                      value="4" />
+        <param name="predict_num"                     value="40" />
+        <param name="predict_dt"                      value="0.05" />
         <param name="smoothness_cost_weight"          value="1.0" />
         <param name="frs_cost_weight"                 value="1e-7" />
         <param name="terminal_cost_weight"            value="1.0" />
         <param name="max_single_convex_hull_faces"    value="20" />
-        <param name="total_constrained_points_in_SFC" value="20" />
+        <param name="total_constrained_points_in_SFC" value="10" />
         <param name="smoothness_cost_order"           value="4" />
     </group>
 
@@ -101,7 +102,14 @@
         <remap from="crazyflie/pose_and_att"          to="$(arg uav_pose_topic)"/>
         <remap from="crazyflie/vel_and_angrate"       to="$(arg uav_vel_topic)"/>
         <remap from="crazyflie/ctrl_mode"             to="$(arg uav_ctrl_mode_topic)"/>
-        <remap from="crazyflie/local_point_cloud"     to="$(arg uav_local_sensing_inflated_map_topic)"/>
+        <remap from="planner/ref_polytraj"            to="$(arg local_ref_traj_topic)"/>
+    </node>
+
+    <node name="reference_governor" pkg="reference_governor" type="reference_governor_node" output="screen">
+        <remap from="planner/ref_polytraj"            to="$(arg local_ref_traj_topic)"/>
+        <remap from="crazyflie/pose_and_att"          to="$(arg uav_pose_topic)"/>
+        <remap from="crazyflie/vel_and_angrate"       to="$(arg uav_vel_topic)"/>
+        <remap from="crazyflie/ctrl_mode"             to="$(arg uav_ctrl_mode_topic)"/>
         <remap from="crazyflie/pose_and_att_cmd"      to="$(arg uav_pose_cmd_topic)"/>
         <remap from="crazyflie/vel_and_angrate_cmd"   to="$(arg uav_vel_cmd_topic)"/>
         <remap from="crazyflie/acc_cmd"               to="$(arg uav_acc_cmd_topic)"/>

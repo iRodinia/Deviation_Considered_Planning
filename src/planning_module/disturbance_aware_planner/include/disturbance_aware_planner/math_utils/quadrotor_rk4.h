@@ -33,6 +33,7 @@ public:
     QuadRotor() {}
     ~QuadRotor() {}
     inline void setParams(double grav, double mass, Eigen::Matrix<double, 3, 3> inertia, double armlen, double kf, double km);
+    inline Eigen::Vector4d getNominalInputs();
     inline state f(const state& x, const input& u);
     inline matA dfdx(const state& x, const input& u);
     inline matB dfdu(const state& x, const input& u);
@@ -58,6 +59,12 @@ inline void QuadRotor::setParams(double grav, double mass, Eigen::Matrix<double,
     g=grav;
     m=mass;
     e3 = Eigen::Vector3d(0, 0, 1);
+}
+
+inline Eigen::Vector4d QuadRotor::getNominalInputs(){
+    double total_f = m * g;
+    double single_motor_f = total_f / 4;
+    return Eigen::Vector4d(single_motor_f, single_motor_f, single_motor_f, single_motor_f);
 }
 
 inline QuadRotor::state QuadRotor::f(const state& x, const input& u){
