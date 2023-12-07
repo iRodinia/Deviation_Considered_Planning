@@ -58,6 +58,24 @@ public:
         return Polynomial3D(derivative_coefficients);
     }
 
+    std::vector<Value> genTrajPlotPoints(const std::vector<double> ts) const {
+        std::vector<Value> pts(ts.size(), Value::Zero());
+        for(int i=0; i<ts.size(); i++){
+            pts[i] = this->evaluate(ts[i]);
+        }
+        return pts;
+    }
+
+    std::vector<Value> genTrajPlotPoints(double t_hori, double dt) const {
+        double dt_ = std::max(dt, 0.05);
+        int pts_num = std::floor(t_hori / dt);
+        std::vector<Value> pts(pts_num, Value::Zero());
+        for(int i=0; i<pts_num; i++){
+            pts[i] = this->evaluate(i*dt_);
+        }
+        return pts;
+    }
+
 private:
     int order_;  // order = n
     Coefs coefficients_;   // [c0, c1, c2, ..., cn]

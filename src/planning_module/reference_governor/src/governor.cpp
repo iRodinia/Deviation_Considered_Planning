@@ -3,8 +3,8 @@
 using namespace disturbance_aware_planner;
 
 ReferenceGovernor::ReferenceGovernor(ros::NodeHandle* node): nh(*node){
-    double cmd_freq;   // frequency for sending commands
     nh.param("Commander/cmd_frequency", cmd_freq, 10.0);
+    nh.param("Commander/traj_plot_frequency", traj_plot_freq, 5.0);
     nh.param("Task/start_pos_x", init_ref_pos(0), 0.0);
     nh.param("Task/start_pos_y", init_ref_pos(1), 0.0);
     nh.param("Task/hover_height", init_ref_pos(2), 1.0);
@@ -12,6 +12,7 @@ ReferenceGovernor::ReferenceGovernor(ros::NodeHandle* node): nh(*node){
     nh.param("Task/goal_pos_y", goal_pos(1), 1.0);
     nh.param("Task/goal_pos_z", goal_pos(2), 1.0);
     nh.param("Task/land_after_complete", land_after_complete, false);
+    nh.param("grid_map/world_frame_name", world_frame_id, std::string("world"));
 
     traj_sub = nh.subscribe<reference_governor::polyTraj>("planner/ref_polytraj", 1, &ReferenceGovernor::trajSubCb, this);
     local_pos_sub = nh.subscribe<geometry_msgs::PoseStamped>("crazyflie/pose_and_att", 10, &ReferenceGovernor::subPosCb, this);
@@ -22,7 +23,9 @@ ReferenceGovernor::ReferenceGovernor(ros::NodeHandle* node): nh(*node){
     target_vel_pub = nh.advertise<geometry_msgs::TwistStamped>("crazyflie/vel_and_angrate_cmd", 10);
     target_acc_pub = nh.advertise<geometry_msgs::AccelStamped>("crazyflie/acc_cmd", 10);
     target_mode_pub = nh.advertise<std_msgs::Int16>("crazyflie/mode_cmd", 1);
+    local_ref_traj_pub = nh.advertise<sensor_msgs::PointCloud2>("planner/ref_traj_plot", 2);
     timer1 = nh.createTimer(ros::Rate(cmd_freq), &ReferenceGovernor::timer1Cb, this);
+    timer2 = nh.createTimer(ros::Rate(traj_plot_freq), &ReferenceGovernor::timer2Cb, this);
 
     current_ctrl_mode = 0;
     traj_set = false;
@@ -231,6 +234,26 @@ void ReferenceGovernor::timer1Cb(const ros::TimerEvent&){
             goal_reached = false;
         }
     }
+}
+
+void ReferenceGovernor::timer2Cb(const ros::TimerEvent&){
+    std::vector<Eigen::Vector3d> plot_pts = tmp_traj.genTrajPlotPoints(traj_time_len, 3 / cmd_freq);
+    pcl::PointCloud<pcl::PointXYZ> ref_traj_cloud;
+    pcl::PointXYZ pt;
+    for(auto p : plot_pts){
+        pt.x = p(0);
+        pt.y = p(1);
+        pt.z = p(2);
+        ref_traj_cloud.push_back(pt);
+    }
+
+    ref_traj_cloud.width = ref_traj_cloud.points.size();
+    ref_traj_cloud.height = 1;
+    ref_traj_cloud.is_dense = true;
+    ref_traj_cloud.header.frame_id = world_frame_id;
+    sensor_msgs::PointCloud2 ref_traj_msg;
+    pcl::toROSMsg(ref_traj_cloud, ref_traj_msg);
+    local_ref_traj_pub.publish(ref_traj_msg);
 }
 
 int main(int argc, char** argv){
