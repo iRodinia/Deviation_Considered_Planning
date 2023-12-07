@@ -16,8 +16,8 @@ GlobalMapProcessor::GlobalMapProcessor(ros::NodeHandle& nh){
     nh.param("Model/nominal_vel", uav_vel, 1.2);
     nh.param("global_map_process/plan_path_sfc_frequency", plan_freq, 2.0);
     nh.param("global_map_process/visualization_frequency", vis_freq, 2.5);
-    global_ref_path_pub = nh.advertise<visualization_msgs::Marker>("global_reference_path", 10);
-    global_polygons_pub = nh.advertise<visualization_msgs::MarkerArray>("global_polygons", 10);
+    global_ref_path_pub = nh.advertise<visualization_msgs::Marker>("global_map_process/global_reference_path", 10);
+    global_polygons_pub = nh.advertise<visualization_msgs::MarkerArray>("global_map_process/global_polygons", 10);
     planTimer = nh.createTimer(ros::Rate(plan_freq), &GlobalMapProcessor::globalPlanCb, this);
     visTimer = nh.createTimer(ros::Rate(vis_freq), &GlobalMapProcessor::visualizationCb, this);
 }

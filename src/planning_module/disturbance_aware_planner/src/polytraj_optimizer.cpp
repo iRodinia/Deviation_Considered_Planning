@@ -7,7 +7,7 @@ void PolyTrajOptimizer::initParameters(ros::NodeHandle& nh){
     nh.param("Optimization/predict_num", pred_N, 100);
     nh.param("Optimization/predict_dt", pred_dt, 0.02);
     nh.param("Optimization/smoothness_cost_weight", w_smooth, 1.0);
-    nh.param("Optimization/frs_cost_weight", w_frs, 1e-6);
+    nh.param("Optimization/frs_cost_weight", w_frs, 1e-3);
     nh.param("Optimization/terminal_cost_weight", w_terminal, 1.0);
     pred_T = pred_dt * pred_N;
     nh.param("Optimization/max_single_convex_hull_faces", max_faces_num, 20);
@@ -233,7 +233,7 @@ double PolyTrajOptimizer::calcFRSCost(std::vector<double>& grad){
         M = F * M * F.transpose();
     }
     Eigen::Matrix<double, 3, 3> E_pos = M.block<3,3>(0,0);
-    double determ = std::abs(E_pos.determinant());
+    double determ = std::sqrt(std::abs(E_pos.determinant()));
     // return 4/3 * M_PI * determ;
     return determ;
 
@@ -270,5 +270,8 @@ void PolyTrajOptimizer::getFlatStatesInputes(std::vector<quadState>& return_stat
 }
 
 Eigen::Vector4d PolyTrajOptimizer::getMotorNoise(Point pos){
-    return Eigen::Vector4d(0.02, 0.02, 0.02, 0.02) * pred_dt;
+    Eigen::Vector4d nominal_inputs = quad.getNominalInputs();
+    double max_disturb_ratio = 0.05;
+    double disturb_frac = 1 / (pos - Eigen::Vector3d(0,0,1)).norm();
+    return nominal_inputs * max_disturb_ratio * disturb_frac * pred_dt;
 }

@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC -O3 -Wall -g -shared -Wl,-soname,libgmock.so -o ../lib/libgmock.so "CMakeFiles/gmock.dir/src/gmock-all.cc.o"  -Wl,-rpath,/home/cz_linux/Documents/Deviation_Considered_Planning/build/grid_map/gtest/lib ../lib/libgtest.so -lpthread 

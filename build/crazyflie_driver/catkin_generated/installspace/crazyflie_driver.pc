@@ -1,8 +1,0 @@
-prefix=/home/cz_linux/Documents/Deviation_Considered_Planning/install
-
-Name: crazyflie_driver
-Description: Description of crazyflie_driver
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

@@ -3,6 +3,6 @@ prefix=/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/ref
 Name: reference_governor
 Description: Description of reference_governor
 Version: 0.0.0
-Cflags: 
+Cflags: -I/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/reference_governor/include -I/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/reference_governor/include
 Libs: -L${prefix}/lib 
-Requires: 
+Requires: roscpp rospy std_msgs message_generation message_runtime

@@ -20,6 +20,7 @@ find_package(catkin REQUIRED COMPONENTS
   visualization_msgs
   grid_map
   grid_map_planner
+  reference_governor
 )
 
 ## System dependencies are found with CMake's conventions
@@ -116,7 +117,7 @@ find_package(NLopt REQUIRED)
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES ${PROJECT_NAME}
+  LIBRARIES ${PROJECT_NAME} reference_governor
   CATKIN_DEPENDS roscpp rospy std_msgs grid_map grid_map_planner
 #  DEPENDS Eigen3
 )
@@ -146,23 +147,19 @@ add_library(dap_global_map_process
 add_library(dap_polytraj_optimizer
   src/polytraj_optimizer.cpp
 )
-add_library(dap_reference_manager
-  src/reference_manager.cpp
-)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
 add_dependencies(dap_global_map_process ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(dap_polytraj_optimizer ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(dap_reference_manager ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/disturbance_aware_planner_node.cpp)
 add_executable(dap_node 
-  src/commander_node.cpp
+  src/planner_node.cpp
   )
 
 ## Rename C++ executable without prefix
@@ -183,7 +180,6 @@ add_executable(dap_node
 target_link_libraries(dap_node
   dap_global_map_process
   dap_polytraj_optimizer
-  dap_reference_manager
   ${catkin_LIBRARIES}
   ${NLOPT_LIBRARIES}
   fmt::fmt
