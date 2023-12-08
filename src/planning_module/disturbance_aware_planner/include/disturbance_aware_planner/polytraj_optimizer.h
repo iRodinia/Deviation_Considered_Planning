@@ -164,7 +164,7 @@ public:
     double smooth_cost_save, frs_cost_save, terminal_cost_save;
 
     Point init_p_, init_v_, init_a_;
-    Point goal_p_, goal_vdir_;
+    Point goal_p_, goal_v_;
     Coef coef_c0, coef_c1, coef_c2;   // determined by the initial conditions in setStates(*).
     Coefs rest_coefs;
     Eigen::MatrixXd smooth_cost_Q;

@@ -73,7 +73,7 @@
         <param name="predict_num"                     value="40" />
         <param name="predict_dt"                      value="0.05" />
         <param name="smoothness_cost_weight"          value="1.0" />
-        <param name="frs_cost_weight"                 value="1e-7" />
+        <param name="frs_cost_weight"                 value="0.01" />
         <param name="terminal_cost_weight"            value="1.0" />
         <param name="max_single_convex_hull_faces"    value="20" />
         <param name="total_constrained_points_in_SFC" value="10" />
@@ -87,7 +87,8 @@
 
     <group ns="Commander">
         <param name="cmd_frequency"                   value="15.0" />
-        <param name="replan_frequency"                value="1.0" />
+        <param name="replan_frequency"                value="1.2" />
+        <param name="traj_plot_frequency"             value="5.0" />
     </group>
 
     <node name="dap_planner" pkg="disturbance_aware_planner" type="dap_node" output="screen">

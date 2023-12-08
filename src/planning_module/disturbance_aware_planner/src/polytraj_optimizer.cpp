@@ -4,10 +4,11 @@ using namespace disturbance_aware_planner;
 
 void PolyTrajOptimizer::initParameters(ros::NodeHandle& nh){
     nh.param("Optimization/poly_order", poly_order, 6);
+    poly_order = std::max(poly_order, 4);
     nh.param("Optimization/predict_num", pred_N, 100);
     nh.param("Optimization/predict_dt", pred_dt, 0.02);
     nh.param("Optimization/smoothness_cost_weight", w_smooth, 1.0);
-    nh.param("Optimization/frs_cost_weight", w_frs, 1e-3);
+    nh.param("Optimization/frs_cost_weight", w_frs, 0.01);
     nh.param("Optimization/terminal_cost_weight", w_terminal, 1.0);
     pred_T = pred_dt * pred_N;
     nh.param("Optimization/max_single_convex_hull_faces", max_faces_num, 20);
@@ -49,18 +50,34 @@ void PolyTrajOptimizer::initParameters(ros::NodeHandle& nh){
 }
 
 void PolyTrajOptimizer::setStates(const Point init_p, const Point init_v, const Point init_a, 
-                                    const Point goal_p, const Point goal_vdir){
+                                    const Point goal_p, const Point goal_v){
     init_p_ = init_p;
     init_v_ = init_v;
     init_a_ = init_a;
     goal_p_ = goal_p;
-    goal_vdir_ = goal_vdir;
+    goal_v_ = goal_v;
 
     coef_c0 = init_p;   // fixed
     coef_c1 = init_v;   // fixed
     coef_c2 = 0.5 * init_a;   // fixed
     rest_coefs.setZero();
-    rest_coefs.block<3,1>(0,0) = 1 / (pred_T*pred_T*pred_T) * (goal_p - 0.5*pred_T*pred_T*init_a - pred_T*init_v - init_p);   // float
+
+    Eigen::Vector3d k1 = init_p + init_v*pred_T + 0.5*init_a*pred_T*pred_T;
+    Eigen::Vector3d k2 = init_v + init_a*pred_T;
+
+    Eigen::MatrixXd inv_mat(2, 2);
+    inv_mat(0,0) = 4 / (pred_T*pred_T*pred_T);
+    inv_mat(0,1) = -1 / (pred_T*pred_T);
+    inv_mat(1,0) = -3 / (pred_T*pred_T*pred_T*pred_T);
+    inv_mat(1,1) = 1 / (pred_T*pred_T*pred_T);
+    
+    Eigen::MatrixXd b_mat(2, 3);
+    b_mat.row(0) = (goal_p - k1).transpose();
+    b_mat.row(1) = (goal_v - k2).transpose();
+
+    Eigen::Matrix2Xd default_coefs = inv_mat * b_mat;
+    rest_coefs.block<3,1>(0,0) = default_coefs.row(0).transpose();   // float
+    rest_coefs.block<3,1>(0,1) = default_coefs.row(1).transpose();   // float
 
     ready_for_optim = true;
 }
@@ -248,8 +265,8 @@ double PolyTrajOptimizer::calcTerminalCost(std::vector<double>& grad){
     Polynomial<3> deriv1 = poly_traj.derivative();
     double pos_cost = (end_p - goal_p_).norm();
     Point end_v = deriv1.evaluate(pred_T);
-    double ang_cost = 1 - end_v.dot(goal_vdir_) / (end_v.norm()*goal_vdir_.norm());
-    return pos_cost + 1.5*ang_cost;
+    double vel_cost = (end_v - goal_v_).norm();
+    return pos_cost + 1.1*vel_cost;
 }
 
 void PolyTrajOptimizer::getFlatStatesInputes(std::vector<quadState>& return_states, std::vector<quadInput>& return_inputes){

@@ -157,7 +157,7 @@ double point2LineDist(const Eigen::Vector3d p, const Eigen::Vector3d l1, const E
 
 void GlobalMapProcessor::getReplanInfo(const Eigen::Vector3d cur_pos, double pred_T, std::vector<double>& time_alloc, 
                                     std::vector<Eigen::MatrixX4d>& polygons, Eigen::Vector3d& goal_pos,
-                                    Eigen::Vector3d& goal_vel_dir){
+                                    Eigen::Vector3d& goal_vel){
     if(!sfcs_generated){
         return;
     }
@@ -186,7 +186,7 @@ void GlobalMapProcessor::getReplanInfo(const Eigen::Vector3d cur_pos, double pre
     if(seg_time_remain > time_remain){
         time_alloc.push_back(time_remain);
         goal_pos = cur_pos + (ref_path[min_seg+1]-cur_pos)*pred_T/seg_time_remain;
-        goal_vel_dir = (goal_pos - cur_pos).normalized();
+        goal_vel = (goal_pos - cur_pos).normalized() * uav_vel;
     }
     else{
         time_alloc.push_back(seg_time_remain);
@@ -198,7 +198,7 @@ void GlobalMapProcessor::getReplanInfo(const Eigen::Vector3d cur_pos, double pre
         if(seg_time_remain > time_remain){
             time_alloc.push_back(time_remain);
             goal_pos = ref_path[seg_idx] + (ref_path[seg_idx+1]-ref_path[seg_idx])*time_remain/seg_time_remain;
-            goal_vel_dir = (ref_path[seg_idx+1]-ref_path[seg_idx]).normalized();
+            goal_vel = (ref_path[seg_idx+1]-ref_path[seg_idx]).normalized() * uav_vel;
         }
         else{
             time_alloc.push_back(seg_time_remain);
@@ -208,8 +208,8 @@ void GlobalMapProcessor::getReplanInfo(const Eigen::Vector3d cur_pos, double pre
     }
     if(time_remain >= 0 && seg_idx == seg_num){
         *(time_alloc.end()-1) += time_remain;
-        goal_pos = ref_path[seg_num+1];
-        goal_vel_dir = (ref_path[seg_num+1]-ref_path[seg_num]).normalized();
+        goal_pos = ref_path[seg_num];
+        goal_vel = Eigen::Vector3d::Zero();
         time_remain = 0;
     }
 
