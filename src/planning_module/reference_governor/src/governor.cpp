@@ -13,7 +13,8 @@ ReferenceGovernor::ReferenceGovernor(ros::NodeHandle* node): nh(*node){
     nh.param("Task/goal_pos_z", goal_pos(2), 1.0);
     nh.param("Task/land_after_complete", land_after_complete, false);
     nh.param("grid_map/world_frame_name", world_frame_id, std::string("world"));
-
+    nh.param("grid_map/resolution", goal_pos_delta, 0.05);
+    
     traj_sub = nh.subscribe<reference_governor::polyTraj>("planner/ref_polytraj", 1, &ReferenceGovernor::trajSubCb, this);
     local_pos_sub = nh.subscribe<geometry_msgs::PoseStamped>("crazyflie/pose_and_att", 10, &ReferenceGovernor::subPosCb, this);
     local_vel_sub = nh.subscribe<geometry_msgs::TwistStamped>("crazyflie/vel_and_angrate", 10, &ReferenceGovernor::subVelCb, this);
@@ -222,7 +223,7 @@ void ReferenceGovernor::timer1Cb(const ros::TimerEvent&){
         target_vel_pub.publish(vel_cmd);
         target_acc_pub.publish(acc_cmd);
 
-        if((current_pos - goal_pos).norm() <= 0.05){
+        if((current_pos - goal_pos).norm() <= 1.2*goal_pos_delta){
             if(at_goal_pos_count >= 50){
                 goal_reached = true;
                 at_goal_pos_count = 100;

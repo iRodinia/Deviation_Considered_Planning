@@ -66,6 +66,7 @@ private:
     int mode_change_count;
     int at_goal_pos_count;
     std::string world_frame_id;
+    double goal_pos_delta;
 
     void trajSubCb(const reference_governor::polyTraj::ConstPtr& msg);
     void subPosCb(const geometry_msgs::PoseStamped::ConstPtr& msg);
