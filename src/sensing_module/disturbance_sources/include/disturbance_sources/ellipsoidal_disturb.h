@@ -9,7 +9,6 @@
 #include <ros/ros.h>
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2/LinearMath/Matrix3x3.h>
-#include <geometry_msgs/PoseStamped.h>
 #include <sensor_msgs/PointCloud2.h>
 
 #include <pcl/point_cloud.h>

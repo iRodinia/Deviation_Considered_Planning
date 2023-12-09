@@ -18,8 +18,8 @@ EllipseDisturb::EllipseDisturb(ros::NodeHandle* node): nh(*node){
     nh.param("/grid_map/world_frame_name", world_frame, string("world"));
 
     disturb_vis_pub = nh.advertise<sensor_msgs::PointCloud2>("disturbances/ellipse_disturb_vis", 5);
-    get_disturb_ratio = nh.advertiseService("get_disturb_ratio", getDisturbRatioSrv, this);
-    timer1 = nh.createTimer(ros::Rate(2.0), timer1Cb, this);
+    get_disturb_ratio = nh.advertiseService("get_disturb_ratio", &EllipseDisturb::getDisturbRatioSrv, this);
+    timer1 = nh.createTimer(ros::Rate(2.0), &EllipseDisturb::timer1Cb, this);
     cloud_gen = false;
 }
 
