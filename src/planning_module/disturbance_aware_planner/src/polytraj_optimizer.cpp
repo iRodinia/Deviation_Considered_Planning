@@ -41,6 +41,23 @@ void PolyTrajOptimizer::initParameters(ros::NodeHandle& nh){
     nh.param("Model/nominal_vel", uav_vel, 1.2);
     quad.setParams(9.8066, mass, Inertia, arm_len, kf, km);
 
+    nh.param("FanDisturbance/center_pos_x", cylinder_pos(0), 0.0);
+    nh.param("FanDisturbance/center_pos_y", cylinder_pos(1), 0.0);
+    nh.param("FanDisturbance/center_pos_z", cylinder_pos(2), 0.0);
+    nh.param("FanDisturbance/center_dir_x", cylinder_dir(0), 1.0);
+    nh.param("FanDisturbance/center_dir_y", cylinder_dir(1), 0.0);
+    nh.param("FanDisturbance/center_dir_z", cylinder_dir(2), 0.0);
+    if(cylinder_dir.norm() == 0){
+        cylinder_dir(0) = 1;
+    }
+    else{
+        cylinder_dir.normalize();
+    }
+    nh.param("FanDisturbance/fan_radius", cylinder_rad, 0.3);
+    nh.param("FanDisturbance/wind_range", cylinder_h, 1.0);
+    nh.param("FanDisturbance/center_bias", cylinder_center_bias, 0.2);
+    nh.param("FanDisturbance/max_disturb_ratio", max_disturb_ratio, 0.1);
+
     coef_c0 = Coef(0, 0, 0);
     coef_c1 = Coef(0, 0, 0);
     coef_c2 = Coef(0, 0, 0);
@@ -288,7 +305,23 @@ void PolyTrajOptimizer::getFlatStatesInputes(std::vector<quadState>& return_stat
 
 Eigen::Vector4d PolyTrajOptimizer::getMotorNoise(Point pos){
     Eigen::Vector4d nominal_inputs = quad.getNominalInputs();
-    double max_disturb_ratio = 0.05;
-    double disturb_frac = 1 / (pos - Eigen::Vector3d(0,0,1)).norm();
-    return nominal_inputs * max_disturb_ratio * disturb_frac * pred_dt;
+    Eigen::Vector3d vec_cp = pos - cylinder_pos;
+    if(vec_cp.norm() == 0){
+        return nominal_inputs * max_disturb_ratio * pred_dt;
+    }
+    else{
+        double len_proj = vec_cp.dot(cylinder_dir);
+        double disturb_frac = 0;
+        if(len_proj > 0){
+            if(len_proj <= (cylinder_h-cylinder_center_bias)){
+                disturb_frac = pow(1 - len_proj / (cylinder_h-cylinder_center_bias), 2);
+            }
+        }
+        else{
+            if(len_proj > -cylinder_center_bias){
+                disturb_frac = pow(1 + len_proj / cylinder_center_bias, 2);
+            }
+        }
+        return nominal_inputs * max_disturb_ratio * disturb_frac * pred_dt;
+    }
 }

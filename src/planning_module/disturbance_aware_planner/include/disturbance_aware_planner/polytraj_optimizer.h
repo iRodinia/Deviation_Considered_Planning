@@ -173,6 +173,15 @@ public:
     double uav_vel;
     bool ready_for_optim;
 
+    /* Fan Disturbance Model */
+    /* a cylinder with height cylinder_h and radius cylinder_rad */
+    /* assume the fan is placed at cylinder_pos and heading to cylinder_dir */
+    /* then the fan center is at length cylinder_center_bias along the middle symmetric line of the cylinder (from the bottom) */
+    Eigen::Vector3d cylinder_pos, cylinder_dir;
+    double cylinder_rad, cylinder_h;
+    double cylinder_center_bias;
+    double max_disturb_ratio;
+
     void getFlatStatesInputes(std::vector<quadState>& return_states, std::vector<quadInput>& return_inputes);
     Eigen::Vector4d getMotorNoise(Point pos);
 

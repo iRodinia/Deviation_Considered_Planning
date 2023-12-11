@@ -1,23 +1,44 @@
 #include "disturbance_sources/ellipsoidal_disturb.h"
 
 EllipseDisturb::EllipseDisturb(ros::NodeHandle* node): nh(*node){
+    Eigen::Vector3d center_dir;
+    nh.param("FanDisturbance/center_pos_x", source_p(0), 0.0);
+    nh.param("FanDisturbance/center_pos_x", source_p(1), 0.0);
+    nh.param("FanDisturbance/center_pos_x", source_p(2), 0.0);
 
-    nh.param("/ellipse_disturb/source_px", source_p(0), 0.0);
-    nh.param("/ellipse_disturb/source_py", source_p(1), 0.0);
-    nh.param("/ellipse_disturb/source_pz", source_p(2), 0.0);
-    nh.param("/ellipse_disturb/source_roll", source_roll, 0.0);
-    nh.param("/ellipse_disturb/source_pitch", source_pitch, 0.0);
-    nh.param("/ellipse_disturb/source_yaw", source_yaw, 0.0);
-    nh.param("/ellipse_disturb/ellipse_a", range_a, 0.1);
-    nh.param("/ellipse_disturb/ellipse_r", range_r, 0.1);
-    nh.param("/ellipse_disturb/max_disturb_ratio", max_ratio, 0.1);
-    nh.param("/ellipse_disturb/source_bias_from_center", bias_a, 0.0);
+    nh.param("FanDisturbance/center_dir_x", center_dir(0), 1.0);
+    nh.param("FanDisturbance/center_dir_x", center_dir(1), 0.0);
+    nh.param("FanDisturbance/center_dir_x", center_dir(2), 0.0);
+    if(center_dir.norm() == 0){
+        center_dir(0) = 1;
+    }
+    if(center_dir.topRows(2).norm() == 0){
+        source_yaw = 0;
+    }
+    else{
+        source_yaw = atan2(center_dir(1), center_dir(0));
+    }
+    if(center_dir(2) == 0){
+        source_pitch = 0;
+    }
+    else{
+        source_pitch = atan2(center_dir(2), center_dir.topRows(2).norm());
+    }
+    source_roll = 0;
+    double long_axis_len;
+    nh.param("FanDisturbance/wind_range", long_axis_len, 0.2);
+    range_a = long_axis_len / 2;
+    nh.param("FanDisturbance/fan_radius", range_r, 0.1);
+    nh.param("FanDisturbance/max_disturb_ratio", max_ratio, 0.1);
+    double bias_from_bottom;
+    nh.param("FanDisturbance/center_bias", bias_from_bottom, 0.0);
+    bias_a = range_a - bias_from_bottom;
     double vis_dense;
-    nh.param("/ellipse_disturb/visualize_density", vis_dense, 0.8);
+    nh.param("FanDisturbance/visualize_density", vis_dense, 0.8);
     vis_d = max(1 - vis_dense, 0.01);
     nh.param("/grid_map/world_frame_name", world_frame, string("world"));
 
-    disturb_vis_pub = nh.advertise<sensor_msgs::PointCloud2>("disturbances/ellipse_disturb_vis", 5);
+    disturb_vis_pub = nh.advertise<sensor_msgs::PointCloud2>("disturbancesFanDisturbance_vis", 5);
     get_disturb_ratio = nh.advertiseService("get_disturb_ratio", &EllipseDisturb::getDisturbRatioSrv, this);
     timer1 = nh.createTimer(ros::Rate(2.0), &EllipseDisturb::timer1Cb, this);
     cloud_gen = false;
@@ -136,6 +157,7 @@ bool EllipseDisturb::getDisturbRatioSrv(disturbance_sources::DisturbRatio::Reque
 
 void EllipseDisturb::timer1Cb(const ros::TimerEvent&){
     if(!cloud_gen){
+        this->genVisCloud();
         return;
     }
     disturb_vis_pub.publish(disturb_vis_msg);
