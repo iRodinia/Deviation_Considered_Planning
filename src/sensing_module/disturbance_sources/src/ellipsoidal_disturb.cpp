@@ -36,36 +36,33 @@ void EllipseDisturb::genVisCloud(){
 
     Eigen::MatrixXd trans_mat(4, 4);
     trans_mat.setZero();
-    Eigen::Vector3d rot_axis(0, source_dir(2), -source_dir(1));
-    if(rot_axis.norm() == 0){
-        trans_mat(0,0) = 1;
-        trans_mat(1,1) = 1;
-        trans_mat(2,2) = 1;
-    }
-    else{
-        double cos_a = source_dir(0);
-        Eigen::Vector3d rot_axis_norm = rot_axis.normalized();
-        Eigen::Vector3d v_t = (1-cos_a) * rot_axis_norm;
-        trans_mat(0,0) = v_t(0)*rot_axis_norm(0) + cos_a;
-        trans_mat(1,1) = v_t(1)*rot_axis_norm(1) + cos_a;
-        trans_mat(2,2) = v_t(2)*rot_axis_norm(2) + cos_a;
-        v_t(0) *= rot_axis_norm(1);
-        v_t(2) *= rot_axis_norm(0);
-        v_t(1) *= rot_axis_norm(2);
-        trans_mat(0,1) = v_t(0) - rot_axis(2);
-        trans_mat(0,2) = v_t(2) - rot_axis(1);
-        trans_mat(1,0) = v_t(0) - rot_axis(2);
-        trans_mat(1,2) = v_t(1) - rot_axis(0);
-        trans_mat(2,0) = v_t(2) - rot_axis(1);
-        trans_mat(2,1) = v_t(1) - rot_axis(0);
-    }
+    trans_mat.block<3,3>(0,0) = Eigen::Quaterniond::FromTwoVectors(Eigen::Vector3d(1,0,0), source_dir).toRotationMatrix();
+    // Eigen::Vector3d rot_axis(0, source_dir(2), -source_dir(1));
+    // if(rot_axis.norm() == 0){
+    //     trans_mat(0,0) = 1;
+    //     trans_mat(1,1) = 1;
+    //     trans_mat(2,2) = 1;
+    // }
+    // else{
+    //     double cos_a = source_dir(0);
+    //     Eigen::Vector3d rot_axis_norm = rot_axis.normalized();
+    //     Eigen::Vector3d v_t = (1-cos_a) * rot_axis_norm;
+    //     trans_mat(0,0) = v_t(0)*rot_axis_norm(0) + cos_a;
+    //     trans_mat(1,1) = v_t(1)*rot_axis_norm(1) + cos_a;
+    //     trans_mat(2,2) = v_t(2)*rot_axis_norm(2) + cos_a;
+    //     v_t(0) *= rot_axis_norm(1);
+    //     v_t(2) *= rot_axis_norm(0);
+    //     v_t(1) *= rot_axis_norm(2);
+    //     trans_mat(0,1) = v_t(0) - rot_axis(2);
+    //     trans_mat(0,2) = v_t(2) + rot_axis(1);
+    //     trans_mat(1,0) = v_t(0) + rot_axis(2);
+    //     trans_mat(1,2) = v_t(1) - rot_axis(0);
+    //     trans_mat(2,0) = v_t(2) - rot_axis(1);
+    //     trans_mat(2,1) = v_t(1) + rot_axis(0);
+    // }
     trans_mat.block<3,1>(0,3) = source_p;
     trans_mat(3,3) = 1;
     ellipse_center = (trans_mat * Eigen::Vector4d(bias_a, 0, 0, 1)).block<3,1>(0,0);
-
-    /* Test Only! */
-    std::cout << "trans_mat: " << std::endl;
-    std::cout << trans_mat << std::endl;
 
     Eigen::Vector3d surf_pt;
     vector<Eigen::Vector3d> surf_pts;
@@ -79,18 +76,6 @@ void EllipseDisturb::genVisCloud(){
             surf_pts.push_back(surf_pt);
         }
     }
-
-    // pcl::PointXYZ _vis_pt;
-    // pcl::PointCloud<pcl::PointXYZ> _vis_cloud_raw;
-    // for(auto p : surf_pts){
-    //     Eigen::Vector4d orig_pt(p(0), p(1), p(2), 1);
-    //     Eigen::Vector4d new_pt = trans_mat * orig_pt;
-    //     _vis_pt.x = new_pt(0);
-    //     _vis_pt.y = new_pt(1);
-    //     _vis_pt.z = new_pt(2);
-    //     _vis_cloud_raw.push_back(_vis_pt);
-    // }
-    // cout << "orig_cloud size: " << surf_pts.size() << endl;
 
     Eigen::Vector3d _pt;
     vector<Eigen::Vector3d> _orig_vis_cloud;
@@ -121,9 +106,6 @@ void EllipseDisturb::genVisCloud(){
     ft.setLeafSize(0.001, 0.001, 0.001);
     ft.setInputCloud(boost::make_shared<pcl::PointCloud<pcl::PointXYZ>>(_vis_cloud_raw));
     ft.filter(_vis_cloud);
-
-    /* Test Only! */
-    // std::cout << "ellipse points number (filtered): " << _vis_cloud.points.size() << std::endl;
 
     _vis_cloud.header.frame_id = world_frame;
     _vis_cloud.is_dense = true;
