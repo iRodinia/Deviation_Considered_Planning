@@ -97,7 +97,7 @@ void GlobalMapProcessor::globalPlanCb(const ros::TimerEvent& /*event*/){
         planRefPath(start_pos, goal_pos);
         ROS_INFO("Finish one path plan iteration. Current status: %s", path_generated ? "true" : "false");
     }
-    if(!sfcs_generated){
+    else if(!sfcs_generated){
         ROS_INFO("Try to plan global sfc.");
         planPolygons();
         ROS_INFO("Finish one sfc plan iteration. Current status: %s", sfcs_generated ? "true" : "false");

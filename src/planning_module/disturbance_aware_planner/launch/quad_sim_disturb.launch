@@ -103,7 +103,7 @@
         <param name="wind_range"                      value="2.5" />
         <param name="center_bias"                     value="0.5" />
         <param name="max_disturb_ratio"               value="0.08" />
-        <param name="visualize_density"               value="0.2" />
+        <param name="visualize_density"               value="1.0" />
     </group>
 
     <node name="dap_planner" pkg="disturbance_aware_planner" type="dap_node" output="screen">
@@ -152,7 +152,7 @@
     </node>
 
     <node name="disturbance_model" pkg="disturbance_sources" type="disturbance_sources_node" output="screen">
-        <remap from="disturbancesFanDisturbance_vis"  to="$(arg disturb_model_topic)"/>
+        <remap from="disturbances/FanDisturbance_vis"  to="$(arg disturb_model_topic)"/>
     </node>
 
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find disturbance_aware_planner)/rviz_config/quad_sim_disturb_test.rviz" required="true" />

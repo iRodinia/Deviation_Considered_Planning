@@ -31,9 +31,8 @@ private:
     ros::ServiceServer get_disturb_ratio;
     ros::Timer timer1;
 
-    Eigen::Vector3d source_p, ellipse_center;
-    double vis_d, max_ratio;
-    double source_roll, source_pitch, source_yaw;
+    Eigen::Vector3d source_p, source_dir, ellipse_center;
+    double max_ratio;
     double range_a, range_r, bias_a;     // ellipse long axis a, short axises both r
     bool cloud_gen = false;
     sensor_msgs::PointCloud2 disturb_vis_msg;

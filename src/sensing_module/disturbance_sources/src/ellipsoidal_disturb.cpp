@@ -1,30 +1,18 @@
 #include "disturbance_sources/ellipsoidal_disturb.h"
 
 EllipseDisturb::EllipseDisturb(ros::NodeHandle* node): nh(*node){
-    Eigen::Vector3d center_dir;
     nh.param("FanDisturbance/center_pos_x", source_p(0), 0.0);
-    nh.param("FanDisturbance/center_pos_x", source_p(1), 0.0);
-    nh.param("FanDisturbance/center_pos_x", source_p(2), 0.0);
-
-    nh.param("FanDisturbance/center_dir_x", center_dir(0), 1.0);
-    nh.param("FanDisturbance/center_dir_x", center_dir(1), 0.0);
-    nh.param("FanDisturbance/center_dir_x", center_dir(2), 0.0);
-    if(center_dir.norm() == 0){
-        center_dir(0) = 1;
-    }
-    if(center_dir.topRows(2).norm() == 0){
-        source_yaw = 0;
+    nh.param("FanDisturbance/center_pos_y", source_p(1), 0.0);
+    nh.param("FanDisturbance/center_pos_z", source_p(2), 0.0);
+    nh.param("FanDisturbance/center_dir_x", source_dir(0), 1.0);
+    nh.param("FanDisturbance/center_dir_y", source_dir(1), 0.0);
+    nh.param("FanDisturbance/center_dir_z", source_dir(2), 0.0);
+    if(source_dir.norm() == 0){
+        source_dir(0) = 1;
     }
     else{
-        source_yaw = atan2(center_dir(1), center_dir(0));
+        source_dir.normalize();
     }
-    if(center_dir(2) == 0){
-        source_pitch = 0;
-    }
-    else{
-        source_pitch = atan2(center_dir(2), center_dir.topRows(2).norm());
-    }
-    source_roll = 0;
     double long_axis_len;
     nh.param("FanDisturbance/wind_range", long_axis_len, 0.2);
     range_a = long_axis_len / 2;
@@ -33,12 +21,9 @@ EllipseDisturb::EllipseDisturb(ros::NodeHandle* node): nh(*node){
     double bias_from_bottom;
     nh.param("FanDisturbance/center_bias", bias_from_bottom, 0.0);
     bias_a = range_a - bias_from_bottom;
-    double vis_dense;
-    nh.param("FanDisturbance/visualize_density", vis_dense, 0.8);
-    vis_d = max(1 - vis_dense, 0.01);
     nh.param("/grid_map/world_frame_name", world_frame, string("world"));
 
-    disturb_vis_pub = nh.advertise<sensor_msgs::PointCloud2>("disturbancesFanDisturbance_vis", 5);
+    disturb_vis_pub = nh.advertise<sensor_msgs::PointCloud2>("disturbances/FanDisturbance_vis", 5);
     get_disturb_ratio = nh.advertiseService("get_disturb_ratio", &EllipseDisturb::getDisturbRatioSrv, this);
     timer1 = nh.createTimer(ros::Rate(2.0), &EllipseDisturb::timer1Cb, this);
     cloud_gen = false;
@@ -49,25 +34,45 @@ void EllipseDisturb::genVisCloud(){
         return;
     }
 
-    tf2::Matrix3x3 rot_mat;
-    rot_mat.setEulerZYX(source_yaw, source_pitch, source_roll);
     Eigen::MatrixXd trans_mat(4, 4);
     trans_mat.setZero();
-    for(int i=0; i<3; i++){
-        for(int j=0; j<3; j++){
-            trans_mat(i,j) = rot_mat[i][j];
-        }
+    Eigen::Vector3d rot_axis(0, source_dir(2), -source_dir(1));
+    if(rot_axis.norm() == 0){
+        trans_mat(0,0) = 1;
+        trans_mat(1,1) = 1;
+        trans_mat(2,2) = 1;
+    }
+    else{
+        double cos_a = source_dir(0);
+        Eigen::Vector3d rot_axis_norm = rot_axis.normalized();
+        Eigen::Vector3d v_t = (1-cos_a) * rot_axis_norm;
+        trans_mat(0,0) = v_t(0)*rot_axis_norm(0) + cos_a;
+        trans_mat(1,1) = v_t(1)*rot_axis_norm(1) + cos_a;
+        trans_mat(2,2) = v_t(2)*rot_axis_norm(2) + cos_a;
+        v_t(0) *= rot_axis_norm(1);
+        v_t(2) *= rot_axis_norm(0);
+        v_t(1) *= rot_axis_norm(2);
+        trans_mat(0,1) = v_t(0) - rot_axis(2);
+        trans_mat(0,2) = v_t(2) - rot_axis(1);
+        trans_mat(1,0) = v_t(0) - rot_axis(2);
+        trans_mat(1,2) = v_t(1) - rot_axis(0);
+        trans_mat(2,0) = v_t(2) - rot_axis(1);
+        trans_mat(2,1) = v_t(1) - rot_axis(0);
     }
     trans_mat.block<3,1>(0,3) = source_p;
     trans_mat(3,3) = 1;
     ellipse_center = (trans_mat * Eigen::Vector4d(bias_a, 0, 0, 1)).block<3,1>(0,0);
 
+    /* Test Only! */
+    std::cout << "trans_mat: " << std::endl;
+    std::cout << trans_mat << std::endl;
+
     Eigen::Vector3d surf_pt;
     vector<Eigen::Vector3d> surf_pts;
     for(int i=0; i<=15; i++){
+        double theta = i / 15.0 * M_PI;
         for(int j=0; j<30; j++){
-            double theta = 1/15 * M_PI;
-            double phi = j/15 * M_PI;
+            double phi = j / 15.0 * M_PI;
             surf_pt(0) = range_a * sin(theta) * cos(phi) + bias_a;
             surf_pt(1) = range_r * sin(theta) * sin(phi);
             surf_pt(2) = range_r * cos(theta);
@@ -75,17 +80,29 @@ void EllipseDisturb::genVisCloud(){
         }
     }
 
+    // pcl::PointXYZ _vis_pt;
+    // pcl::PointCloud<pcl::PointXYZ> _vis_cloud_raw;
+    // for(auto p : surf_pts){
+    //     Eigen::Vector4d orig_pt(p(0), p(1), p(2), 1);
+    //     Eigen::Vector4d new_pt = trans_mat * orig_pt;
+    //     _vis_pt.x = new_pt(0);
+    //     _vis_pt.y = new_pt(1);
+    //     _vis_pt.z = new_pt(2);
+    //     _vis_cloud_raw.push_back(_vis_pt);
+    // }
+    // cout << "orig_cloud size: " << surf_pts.size() << endl;
+
     Eigen::Vector3d _pt;
     vector<Eigen::Vector3d> _orig_vis_cloud;
     for(auto p : surf_pts){
         double max_len = p.norm();
-        double tmp_len = vis_d;
-        int count = 0;
+        double tmp_len = 0;
+        int count = 1;
         while(tmp_len < max_len){
             double _r = tmp_len / max_len;
             _pt = p * _r;
             _orig_vis_cloud.push_back(_pt);
-            tmp_len += count * count * vis_d;
+            tmp_len += count * count * 0.005;
             count++;
         }
     }
@@ -101,9 +118,12 @@ void EllipseDisturb::genVisCloud(){
     }
 
     pcl::VoxelGrid<pcl::PointXYZ> ft;
-    ft.setLeafSize(vis_d, vis_d, vis_d);
+    ft.setLeafSize(0.001, 0.001, 0.001);
     ft.setInputCloud(boost::make_shared<pcl::PointCloud<pcl::PointXYZ>>(_vis_cloud_raw));
     ft.filter(_vis_cloud);
+
+    /* Test Only! */
+    // std::cout << "ellipse points number (filtered): " << _vis_cloud.points.size() << std::endl;
 
     _vis_cloud.header.frame_id = world_frame;
     _vis_cloud.is_dense = true;

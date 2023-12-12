@@ -8,7 +8,7 @@ void PolyTrajOptimizer::initParameters(ros::NodeHandle& nh){
     nh.param("Optimization/predict_num", pred_N, 100);
     nh.param("Optimization/predict_dt", pred_dt, 0.02);
     nh.param("Optimization/smoothness_cost_weight", w_smooth, 1.0);
-    nh.param("Optimization/frs_cost_weight", w_frs, 0.01);
+    nh.param("Optimization/frs_cost_weight", w_frs, 0.001);
     nh.param("Optimization/terminal_cost_weight", w_terminal, 1.0);
     pred_T = pred_dt * pred_N;
     nh.param("Optimization/max_single_convex_hull_faces", max_faces_num, 20);
