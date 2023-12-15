@@ -7,8 +7,8 @@
 #include <string>
 #include <unordered_map>
 #include <cmath>
-
-#include <ros/ros.h>
+#include <unistd.h>
+#include <boost/filesystem.hpp>
 #include <ros/package.h>
 
 using namespace std;
@@ -24,14 +24,15 @@ public:
     void logParameter(string param_name, double param_val);
     void logParameter(vector<string> param_names, vector<double> param_vals);
     void setDataTags(vector<string> tags);
+    void logData(double time_sec, string tag, double val);
     void logData(double time_sec, vector<string> tags, vector<double> vals);
     bool saveFile();
 
 private:
-    string target_file_path, f_name;
+    string target_file_folder, target_file_path, f_name;
     unordered_map<string, double> params_map;
     unordered_map<string, vector<double>> datas_map;
-    int param_num, data_type_num, data_length;
+    int param_num, data_type_num;
     bool tags_set = false;
 };
 

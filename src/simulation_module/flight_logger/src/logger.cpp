@@ -1,13 +1,22 @@
 #include "flight_logger/logger.h"
 
+#define RED "\033[31m"
+#define YELLOW "\033[33m"
+#define CYAN "\033[36m"
+
 FlightLogger::FlightLogger(string folder_name, string file_name){
     f_name = file_name;
+    target_file_folder = LOG_PATH_PREFIX + folder_name;
     target_file_path = LOG_PATH_PREFIX + folder_name + "/" + file_name + ".csv";
+    cout << CYAN << "Set log path to: " << target_file_path << endl;
+    if(access(target_file_path.c_str(), F_OK) != -1){
+        if(remove(target_file_path.c_str()) == 0){
+            cout << YELLOW << "Delete existing log file [" << file_name << "]..." << endl;
+        }
+    }
     param_num = 0;
     data_type_num = 0;
-    data_length = 0;
     tags_set = false;
-    
 }
 
 void FlightLogger::logParameter(string param_name, double param_value){
@@ -19,7 +28,7 @@ void FlightLogger::logParameter(string param_name, double param_value){
 
 void FlightLogger::logParameter(vector<string> param_names, vector<double> param_vals){
     if(param_names.size() != param_vals.size()){
-        ROS_WARN("Log parameters with names (%ld) and values (%ld) size mismatch.", param_names.size(), param_vals.size());
+        cout << YELLOW << "Log parameters with names (" << param_names.size() << ") and values (" << param_vals.size() << ") size mismatch." << endl;
         return;
     }
     for(int i=0; i<param_names.size(); i++){
@@ -34,62 +43,82 @@ void FlightLogger::setDataTags(vector<string> tags){
     datas_map.clear();
     data_type_num = tags.size();
     if(data_type_num <= 0){
-        ROS_WARN("Attempt to set %d tags, not allowed.", data_type_num);
+        cout << YELLOW << "Attempt to set " << data_type_num << " tags, not allowed." << endl;
         data_type_num = 0;
         tags_set = false;
         return;
     }
-    datas_map["timestamps"] = vector<double>();
     for(int i=0; i<data_type_num; i++){
         datas_map[tags[i]] = vector<double>();
+        datas_map[tags[i]].reserve(1e5);
+        datas_map[tags[i]+"_ts"] = vector<double>();
+        datas_map[tags[i]+"_ts"].reserve(1e5);
     }
-    data_length = 0;
     tags_set = true;
+}
+
+void FlightLogger::logData(double time_sec, string tag, double val){
+    if(!tags_set){
+        cout << RED << "Log data in [" << f_name << "] before set tags is not allowed." << endl;
+        return;
+    }
+    if(datas_map.find(tag) == datas_map.end()){
+        cout << YELLOW << "Tag [" << tag << "] not in the data list." << endl;
+        return;
+    }
+    datas_map[tag].push_back(val);
+    datas_map[tag+"_ts"].push_back(time_sec);
 }
 
 void FlightLogger::logData(double time_sec, vector<string> tags, vector<double> vals){
     if(!tags_set){
-        ROS_INFO("Log data in [%s] before set tags is not allowed.", f_name.c_str());
+        cout << RED << "Log data in [" << f_name << "] before set tags is not allowed." << endl;
         return;
     }
     int len = tags.size();
     if(vals.size() != len){
-        ROS_WARN("Log data with tags (%ld) and values (%ld) size mismatch.", tags.size(), vals.size());
-        return;
-    }
-    if(len != data_type_num){
-        ROS_INFO("Log %d datas, but %d expected.", len, data_type_num);
+        cout << YELLOW << "Log data with tags (" << tags.size() << ") and values (" << vals.size() << ") size mismatch." << endl;
         return;
     }
     bool legal_tags = true;
     for(auto t : tags){
         if(datas_map.find(t) == datas_map.end()){
-            ROS_WARN("Tag [%s] not in the data list.", t.c_str());
+            cout << YELLOW << "Tag [" << t << "] not in the data list." << endl;
             legal_tags = false;
         }
     }
     if(!legal_tags){
-        ROS_INFO("Abandon data log at time %f due to illegal data tags.", time_sec);
+        cout << YELLOW << "Abandon data log at time " << time_sec << " due to illegal data tags." << endl;
         return;
     }
-    datas_map["timestamps"].push_back(time_sec);
     for(int i=0; i<len; i++){
         datas_map[tags[i]].push_back(vals[i]);
+        datas_map[tags[i]+"_ts"].push_back(time_sec);
     }
-    data_length++;
 }
 
 bool FlightLogger::saveFile(){
     if(param_num <= 0 && data_type_num <= 0){
-        ROS_INFO("Nothing to record in [%s], abort creating log file.", f_name.c_str());
+        cout << RED << "Nothing to record in [" << f_name << "], abort creating log file." << endl;
         return true;
     }
+
+    if (!boost::filesystem::is_directory(target_file_folder)){
+        cout << YELLOW << "Create log folder: " << target_file_folder << endl;
+        if (!boost::filesystem::create_directory(target_file_folder)){
+            cout << RED << "Create folder failed: " << target_file_folder << endl;
+            return false;
+        }
+    }
+
     fstream fout;
-    fout.open(target_file_path.c_str(), ios::out | ios::app);
+    fout.open(target_file_path.c_str(), ios::out);
     if(!fout.good()){
-        ROS_WARN("Open/Create log file [%s] failed!", f_name.c_str());
+        cout << RED << "Open/Create log file [" << f_name << "] failed!" << endl;
         return false;
     }
+    fout << "parameter_number: " << param_num << '\n';
+    fout << "data_type_number: " << data_type_num << '\n';
     if(param_num > 0){
         for(auto it = params_map.begin(); it != params_map.end(); it++){
             string _name = it->first;

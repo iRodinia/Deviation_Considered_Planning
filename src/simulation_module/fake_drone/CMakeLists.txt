@@ -12,13 +12,14 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   geometry_msgs
   tf2_ros
+  flight_logger
 )
 find_package(Eigen3 REQUIRED)
 
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
-  CATKIN_DEPENDS roscpp std_msgs geometry_msgs tf2_ros
+  CATKIN_DEPENDS roscpp std_msgs geometry_msgs tf2_ros flight_logger
 )
 
 include_directories(

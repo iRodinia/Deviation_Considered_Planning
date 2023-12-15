@@ -16,10 +16,13 @@
 #include <geometry_msgs/TwistStamped.h>
 #include <geometry_msgs/AccelStamped.h>
 
+#include "flight_logger/logger.h"
+
 class FakeDrone{
 public:
     FakeDrone(ros::NodeHandle* node);
     ~FakeDrone() {};
+    void setLogger(FlightLogger* logger_ptr);
 
     int current_uav_mode = 0;
     Eigen::Vector3d current_pos;
@@ -31,6 +34,9 @@ public:
 private:
     ros::NodeHandle nh_;
     double sim_freq;
+    bool enable_log;
+    ros::Time start_log_ts;
+    
     ros::Publisher uav_pos_pub;   // include pos and att
     ros::Publisher uav_vel_pub;   // include vel and angrate
     ros::Publisher flight_mode_pub;   // 0: land, 1: takeoff, 2: offb_ctrl
@@ -47,6 +53,8 @@ private:
     void subAccCb(const geometry_msgs::AccelStamped::ConstPtr& msg);
     void subModeCb(const std_msgs::Int16::ConstPtr& msg);
     void timer1Cb(const ros::TimerEvent&);
+
+    FlightLogger* logger_ptr;
 };
 
 

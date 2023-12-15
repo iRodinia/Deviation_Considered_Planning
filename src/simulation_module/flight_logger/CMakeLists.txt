@@ -10,10 +10,11 @@ project(flight_logger)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
+  roslib
 )
 
 ## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
+find_package(Boost REQUIRED COMPONENTS system)
 # find_package(Eigen REQUIRED)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -104,7 +105,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES flight_logger
-  CATKIN_DEPENDS roscpp std_msgs
+  CATKIN_DEPENDS roscpp std_msgs roslib
 #  DEPENDS system_lib
 )
 
@@ -152,6 +153,9 @@ add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EX
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
+target_link_libraries(${PROJECT_NAME}
+  ${catkin_LIBRARIES}
+)
 
 #############
 ## Install ##
