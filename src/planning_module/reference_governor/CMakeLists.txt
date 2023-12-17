@@ -17,6 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_conversions
   message_generation
   message_runtime
+  flight_logger
 )
 
 ## System dependencies are found with CMake's conventions
@@ -119,7 +120,7 @@ generate_messages(
 catkin_package(
   INCLUDE_DIRS include
 # LIBRARIES reference_governor
-  CATKIN_DEPENDS roscpp rospy std_msgs message_generation message_runtime
+  CATKIN_DEPENDS roscpp rospy std_msgs message_generation message_runtime flight_logger
 # DEPENDS system_lib
 )
 

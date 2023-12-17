@@ -27,6 +27,14 @@ EllipseDisturb::EllipseDisturb(ros::NodeHandle* node): nh(*node){
     get_disturb_ratio = nh.advertiseService("get_disturb_ratio", &EllipseDisturb::getDisturbRatioSrv, this);
     timer1 = nh.createTimer(ros::Rate(2.0), &EllipseDisturb::timer1Cb, this);
     cloud_gen = false;
+
+    log_enable = false;
+}
+
+void EllipseDisturb::setLogger(FlightLogger* _logger){
+    logger_ptr = _logger;
+    log_start_ts = ros::Time::now();
+    log_enable = true;
 }
 
 void EllipseDisturb::genVisCloud(){
@@ -63,6 +71,21 @@ void EllipseDisturb::genVisCloud(){
     trans_mat.block<3,1>(0,3) = source_p;
     trans_mat(3,3) = 1;
     ellipse_center = (trans_mat * Eigen::Vector4d(bias_a, 0, 0, 1)).block<3,1>(0,0);
+
+    if(log_enable){
+        logger_ptr->logParameter("trans_mat_00", trans_mat(0,0));
+        logger_ptr->logParameter("trans_mat_01", trans_mat(0,1));
+        logger_ptr->logParameter("trans_mat_02", trans_mat(0,2));
+        logger_ptr->logParameter("trans_mat_10", trans_mat(1,0));
+        logger_ptr->logParameter("trans_mat_11", trans_mat(1,1));
+        logger_ptr->logParameter("trans_mat_12", trans_mat(1,2));
+        logger_ptr->logParameter("trans_mat_20", trans_mat(2,0));
+        logger_ptr->logParameter("trans_mat_21", trans_mat(2,1));
+        logger_ptr->logParameter("trans_mat_22", trans_mat(2,2));
+        logger_ptr->logParameter("trans_mat_03", trans_mat(0,3));
+        logger_ptr->logParameter("trans_mat_13", trans_mat(1,3));
+        logger_ptr->logParameter("trans_mat_23", trans_mat(2,3));
+    }
 
     Eigen::Vector3d surf_pt;
     vector<Eigen::Vector3d> surf_pts;
@@ -170,6 +193,20 @@ int main(int argc, char** argv){
     ros::NodeHandle node;
     EllipseDisturb disturb(&node);
 
-    ros::spin();
+    bool log_enable = false;
+	node.param("Log/enable_log", log_enable, false);
+	string log_folder_name;
+	node.param("Log/log_folder_name", log_folder_name, string("default_folder"));
+	FlightLogger logger(log_folder_name, "disturbance_generator");
+	if(log_enable){
+		disturb.setLogger(&logger);
+	}
+    
+	ros::spin();
+
+	if(log_enable){
+		logger.saveFile();
+	}
+
     return 0;
 }

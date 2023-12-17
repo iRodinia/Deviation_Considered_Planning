@@ -37,6 +37,7 @@ ReferenceGovernor::ReferenceGovernor(ros::NodeHandle* node): nh(*node){
     cmd_offb = false;
     mode_change_count = 0;
     at_goal_pos_count = 0;
+    enable_log = false;
 }
 
 void ReferenceGovernor::setNewTraj(Eigen::Matrix<double, 3, -1> coefs, double t_horizon, ros::Time start_time){
@@ -47,14 +48,22 @@ void ReferenceGovernor::setNewTraj(Eigen::Matrix<double, 3, -1> coefs, double t_
     traj_start_time = start_time;
     traj_set = true;
     ROS_INFO("New reference trajectory of order %ld received.", coefs.cols());
-    /*Test Only!*/
-    for(int i=0; i<3; i++){
-        std::cout << "coefs of dim [" << i << "]:";
-        for(int j=0; j<coefs.cols(); j++){
-            std::cout << " " << coefs(i,j);
-        }
-        std::cout << std::endl;
+    
+    /* Log file */
+    double _log_t = (ros::Time::now() - start_log_ts).toSec();
+    vector<string> log_tags;
+    vector<double> log_data;
+    for(int i=0; i<coefs.cols(); i++){
+        log_tags.push_back("coef_x_"+to_string(i));
+        log_tags.push_back("coef_y_"+to_string(i));
+        log_tags.push_back("coef_z_"+to_string(i));
+        log_data.push_back(coefs(0,i));
+        log_data.push_back(coefs(1,i));
+        log_data.push_back(coefs(2,i));
     }
+    logger_ptr->logData(_log_t, log_tags, log_data);
+    logger_ptr->logData(_log_t, "traj_time_horizon", t_horizon);
+    logger_ptr->logData(_log_t, "traj_plan_time", (ros::Time::now() - start_time).toSec());
 }
 
 ReferenceGovernor::RefState ReferenceGovernor::getRefCmd_Full(){
@@ -80,6 +89,14 @@ ReferenceGovernor::RefState ReferenceGovernor::getRefCmd_Full(){
     }
     last_cmd = result;
     return result;
+}
+
+void ReferenceGovernor::setLogger(FlightLogger* _ptr){
+	logger_ptr = _ptr;
+	enable_log = true;
+	logger_ptr->logParameter("cmd_freq", cmd_freq);
+    logger_ptr->logParameter("land_after_complete", land_after_complete);
+	start_log_ts = ros::Time::now();
 }
 
 void ReferenceGovernor::trajSubCb(const reference_governor::polyTraj::ConstPtr& msg){
@@ -126,6 +143,11 @@ void ReferenceGovernor::timer1Cb(const ros::TimerEvent&){
     else{
         ROS_INFO_ONCE("Flight commander found quadrotor driver connected!");
     }
+
+    /* Log file */
+    double _log_t = (ros::Time::now() - start_log_ts).toSec();
+    logger_ptr->logData(_log_t, "goal_reached", goal_reached);
+    logger_ptr->logData(_log_t, "cmd_offboard", cmd_offb);
 
     if(goal_reached){
         if(land_after_complete){
@@ -262,6 +284,31 @@ int main(int argc, char** argv){
     ros::NodeHandle nh;
     ReferenceGovernor governor(&nh);
 
+    bool log_enable = false;
+	nh.param("Log/enable_log", log_enable, false);
+	string log_folder_name;
+	nh.param("Log/log_folder_name", log_folder_name, string("default_folder"));
+	FlightLogger logger(log_folder_name, "reference_governor");
+	if(log_enable){
+		vector<string> tags = {
+            "goal_reached", "cmd_offboard", "traj_time_horizon", "traj_plan_time",
+        };
+        int _order;
+        nh.param("Optimization/poly_order", _order, 4);
+        for(int i=0; i<=_order; i++){
+            tags.push_back("coef_x_"+to_string(i));
+            tags.push_back("coef_y_"+to_string(i));
+            tags.push_back("coef_z_"+to_string(i));
+        }
+		logger.setDataTags(tags);
+		governor.setLogger(&logger);
+	}
+
     ros::spin();
+
+    if(log_enable){
+		logger.saveFile();
+	}
+
     return 0;
 }

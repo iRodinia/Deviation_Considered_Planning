@@ -16,6 +16,7 @@
 #include <pcl/point_types.h>
 #include <pcl_conversions/pcl_conversions.h>
 
+#include "flight_logger/logger.h"
 #include "reference_governor/polynomial3d.h"
 #include "reference_governor/polyTraj.h"
 
@@ -29,6 +30,8 @@ public:
     ~ReferenceGovernor() {};
     void setNewTraj(Eigen::Matrix<double, 3, -1> coefs, double t_horizon, ros::Time start_time);
     RefState getRefCmd_Full();
+
+    void setLogger(FlightLogger* logger_ptr);
 
 private:
     ros::NodeHandle nh;
@@ -67,6 +70,8 @@ private:
     int at_goal_pos_count;
     std::string world_frame_id;
     double goal_pos_delta;
+    bool enable_log;
+    ros::Time start_log_ts;
 
     void trajSubCb(const reference_governor::polyTraj::ConstPtr& msg);
     void subPosCb(const geometry_msgs::PoseStamped::ConstPtr& msg);
@@ -74,6 +79,8 @@ private:
     void subModeCb(const std_msgs::Int16::ConstPtr& msg);
     void timer1Cb(const ros::TimerEvent&);   // call at each command iteration
     void timer2Cb(const ros::TimerEvent&);   // call at each traj plot iteration
+
+    FlightLogger* logger_ptr;
 };
 
 

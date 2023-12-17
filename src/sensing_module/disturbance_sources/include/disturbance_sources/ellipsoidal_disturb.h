@@ -16,6 +16,7 @@
 #include <pcl_conversions/pcl_conversions.h>
 #include <pcl/filters/voxel_grid.h>
 
+#include "flight_logger/logger.h"
 #include "disturbance_sources/DisturbRatio.h"
 
 using namespace std;
@@ -24,6 +25,7 @@ class EllipseDisturb{
 public:
     EllipseDisturb(ros::NodeHandle* node);
     ~EllipseDisturb() {};
+    void setLogger(FlightLogger* _logger);
 
 private:
     ros::NodeHandle nh;
@@ -37,6 +39,10 @@ private:
     bool cloud_gen = false;
     sensor_msgs::PointCloud2 disturb_vis_msg;
     string world_frame;
+
+    bool log_enable;
+    FlightLogger* logger_ptr;
+    ros::Time log_start_ts;
 
     void genVisCloud();
     bool getDisturbRatioSrv(disturbance_sources::DisturbRatio::Request &req, disturbance_sources::DisturbRatio::Response &res);

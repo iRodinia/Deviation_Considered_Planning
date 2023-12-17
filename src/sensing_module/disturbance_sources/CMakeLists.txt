@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   message_generation
+  flight_logger
 )
 
 ## System dependencies are found with CMake's conventions
@@ -118,7 +119,7 @@ generate_messages(
 catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES disturbance_sources
-  CATKIN_DEPENDS pcl_ros roscpp sensor_msgs std_msgs tf2_ros sensor_msgs
+  CATKIN_DEPENDS pcl_ros roscpp sensor_msgs std_msgs tf2_ros sensor_msgs flight_logger
 #  DEPENDS system_lib
 )
 
