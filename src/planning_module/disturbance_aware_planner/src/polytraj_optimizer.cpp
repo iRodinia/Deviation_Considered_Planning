@@ -136,7 +136,7 @@ bool PolyTrajOptimizer::optimize(){
     std::vector<double> cons_tolerance(total_cons_num, 0.05);
     opter.add_inequality_mconstraint(PolyTrajOptimizer::wrapTotalConstraints, this, cons_tolerance);
 
-    opter.set_xtol_rel(1e-1);
+    opter.set_xtol_rel(1e-2);
     // opter.set_maxeval(1e3);
     opter.set_maxtime(0.5);
 
