@@ -25,8 +25,10 @@ EllipseDisturb::EllipseDisturb(ros::NodeHandle* node): nh(*node){
 
     disturb_vis_pub = nh.advertise<sensor_msgs::PointCloud2>("disturbances/FanDisturbance_vis", 5);
     get_disturb_ratio = nh.advertiseService("get_disturb_ratio", &EllipseDisturb::getDisturbRatioSrv, this);
-    timer1 = nh.createTimer(ros::Rate(2.0), &EllipseDisturb::timer1Cb, this);
+    timer1 = nh.createTimer(ros::Rate(5.0), &EllipseDisturb::timer1Cb, this);
     cloud_gen = false;
+    disturb_vis_msg_queue = vector<sensor_msgs::PointCloud2>(5, sensor_msgs::PointCloud2());
+    pub_count = 0;
 
     log_enable = false;
 }
@@ -45,29 +47,6 @@ void EllipseDisturb::genVisCloud(){
     Eigen::MatrixXd trans_mat(4, 4);
     trans_mat.setZero();
     trans_mat.block<3,3>(0,0) = Eigen::Quaterniond::FromTwoVectors(Eigen::Vector3d(1,0,0), source_dir).toRotationMatrix();
-    // Eigen::Vector3d rot_axis(0, source_dir(2), -source_dir(1));
-    // if(rot_axis.norm() == 0){
-    //     trans_mat(0,0) = 1;
-    //     trans_mat(1,1) = 1;
-    //     trans_mat(2,2) = 1;
-    // }
-    // else{
-    //     double cos_a = source_dir(0);
-    //     Eigen::Vector3d rot_axis_norm = rot_axis.normalized();
-    //     Eigen::Vector3d v_t = (1-cos_a) * rot_axis_norm;
-    //     trans_mat(0,0) = v_t(0)*rot_axis_norm(0) + cos_a;
-    //     trans_mat(1,1) = v_t(1)*rot_axis_norm(1) + cos_a;
-    //     trans_mat(2,2) = v_t(2)*rot_axis_norm(2) + cos_a;
-    //     v_t(0) *= rot_axis_norm(1);
-    //     v_t(2) *= rot_axis_norm(0);
-    //     v_t(1) *= rot_axis_norm(2);
-    //     trans_mat(0,1) = v_t(0) - rot_axis(2);
-    //     trans_mat(0,2) = v_t(2) + rot_axis(1);
-    //     trans_mat(1,0) = v_t(0) + rot_axis(2);
-    //     trans_mat(1,2) = v_t(1) - rot_axis(0);
-    //     trans_mat(2,0) = v_t(2) - rot_axis(1);
-    //     trans_mat(2,1) = v_t(1) + rot_axis(0);
-    // }
     trans_mat.block<3,1>(0,3) = source_p;
     trans_mat(3,3) = 1;
     ellipse_center = (trans_mat * Eigen::Vector4d(bias_a, 0, 0, 1)).block<3,1>(0,0);
@@ -101,40 +80,42 @@ void EllipseDisturb::genVisCloud(){
     }
 
     Eigen::Vector3d _pt;
-    vector<Eigen::Vector3d> _orig_vis_cloud;
+    vector<vector<Eigen::Vector3d>> _orig_vis_clouds(5, vector<Eigen::Vector3d>());
     for(auto p : surf_pts){
-        double max_len = p.norm();
-        double tmp_len = 0;
-        int count = 1;
-        while(tmp_len < max_len){
-            double _r = tmp_len / max_len;
-            _pt = p * _r;
-            _orig_vis_cloud.push_back(_pt);
-            tmp_len += count * count * 0.005;
-            count++;
+        double p_len = p.norm();
+        for(int i=0; i<5; i++){
+            for(int j=0; j<3; j++){
+                _pt = (j/3.0 + i/15.0) * p;
+                _orig_vis_clouds[i].push_back(_pt);
+            }
         }
     }
-    pcl::PointXYZ _vis_pt;
-    pcl::PointCloud<pcl::PointXYZ> _vis_cloud_raw, _vis_cloud;
-    for(auto p : _orig_vis_cloud){
-        Eigen::Vector4d orig_pt(p(0), p(1), p(2), 1);
-        Eigen::Vector4d new_pt = trans_mat * orig_pt;
-        _vis_pt.x = new_pt(0);
-        _vis_pt.y = new_pt(1);
-        _vis_pt.z = new_pt(2);
-        _vis_cloud_raw.push_back(_vis_pt);
-    }
 
+    pcl::PointXYZ _vis_pt;
+    vector<pcl::PointCloud<pcl::PointXYZ>> _vis_cloud_raw_queue(5, pcl::PointCloud<pcl::PointXYZ>());
+    vector<pcl::PointCloud<pcl::PointXYZ>> _vis_cloud_queue(5, pcl::PointCloud<pcl::PointXYZ>());
     pcl::VoxelGrid<pcl::PointXYZ> ft;
     ft.setLeafSize(0.001, 0.001, 0.001);
-    ft.setInputCloud(boost::make_shared<pcl::PointCloud<pcl::PointXYZ>>(_vis_cloud_raw));
-    ft.filter(_vis_cloud);
+    for(int i=0; i<5; i++){
+        for(auto p : _orig_vis_clouds[i]){
+            Eigen::Vector4d orig_pt(p(0), p(1), p(2), 1);
+            Eigen::Vector4d new_pt = trans_mat * orig_pt;
+            _vis_pt.x = new_pt(0);
+            _vis_pt.y = new_pt(1);
+            _vis_pt.z = new_pt(2);
+            _vis_cloud_raw_queue[i].push_back(_vis_pt);
+        }
 
-    _vis_cloud.header.frame_id = world_frame;
-    _vis_cloud.is_dense = true;
-    _vis_cloud.width = _vis_cloud.points.size();
-    _vis_cloud.height = 1;
-    pcl::toROSMsg(_vis_cloud, disturb_vis_msg);
+        ft.setInputCloud(boost::make_shared<pcl::PointCloud<pcl::PointXYZ>>(_vis_cloud_raw_queue[i]));
+        ft.filter(_vis_cloud_queue[i]);
+        _vis_cloud_queue[i].header.frame_id = world_frame;
+        _vis_cloud_queue[i].is_dense = true;
+        _vis_cloud_queue[i].width = _vis_cloud_queue[i].points.size();
+        _vis_cloud_queue[i].height = 1;
+
+        pcl::toROSMsg(_vis_cloud_queue[i], disturb_vis_msg_queue[i]);
+    }
+    
     cloud_gen = true;
 }
 
@@ -185,7 +166,8 @@ void EllipseDisturb::timer1Cb(const ros::TimerEvent&){
         this->genVisCloud();
         return;
     }
-    disturb_vis_pub.publish(disturb_vis_msg);
+    disturb_vis_pub.publish(disturb_vis_msg_queue[pub_count]);
+    pub_count = (pub_count+1) % 5;
 }
 
 int main(int argc, char** argv){

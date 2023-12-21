@@ -3,6 +3,7 @@
 #define RED "\033[31m"
 #define YELLOW "\033[33m"
 #define CYAN "\033[36m"
+#define CLOSE "\033[0m"
 
 FlightLogger::FlightLogger(string folder_name, string file_name){
     f_name = file_name;
@@ -140,5 +141,6 @@ bool FlightLogger::saveFile(){
         }
     }
     fout.close();
+    cout << CLOSE << endl;
     return true;
 }

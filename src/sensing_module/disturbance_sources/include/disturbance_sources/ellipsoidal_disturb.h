@@ -37,8 +37,9 @@ private:
     double max_ratio;
     double range_a, range_r, bias_a;     // ellipse long axis a, short axises both r
     bool cloud_gen = false;
-    sensor_msgs::PointCloud2 disturb_vis_msg;
+    vector<sensor_msgs::PointCloud2> disturb_vis_msg_queue;
     string world_frame;
+    int pub_count;
 
     bool log_enable;
     FlightLogger* logger_ptr;

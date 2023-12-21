@@ -311,7 +311,7 @@ Eigen::Vector4d PolyTrajOptimizer::getMotorNoise(Point pos){
     }
     else{
         double len_proj = vec_cp.dot(cylinder_dir);
-        double disturb_frac = 0.001;
+        double disturb_frac = 0.0;
         if(len_proj > 0){
             if(len_proj <= (cylinder_h-cylinder_center_bias)){
                 disturb_frac = pow(1 - len_proj / (cylinder_h-cylinder_center_bias), 2);

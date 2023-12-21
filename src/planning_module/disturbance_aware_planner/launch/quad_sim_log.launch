@@ -79,8 +79,8 @@
         <param name="predict_num"                     value="40" />
         <param name="predict_dt"                      value="0.05" />
         <param name="smoothness_cost_weight"          value="1.0" />
-        <param name="frs_cost_weight"                 value="0.01" />
-        <param name="terminal_cost_weight"            value="2.0" />
+        <param name="frs_cost_weight"                 value="0.02" />
+        <param name="terminal_cost_weight"            value="1.5" />
         <param name="max_single_convex_hull_faces"    value="20" />
         <param name="total_constrained_points_in_SFC" value="10" />
         <param name="smoothness_cost_order"           value="4" />
@@ -98,16 +98,16 @@
     </group>
 
     <group ns="FanDisturbance">
-        <param name="center_pos_x"                    value="0.0" />
-        <param name="center_pos_y"                    value="-1.2" />
-        <param name="center_pos_z"                    value="2.1" />
-        <param name="center_dir_x"                    value="-0.5" />
+        <param name="center_pos_x"                    value="-0.3" />
+        <param name="center_pos_y"                    value="-1.1" />
+        <param name="center_pos_z"                    value="1.7" />
+        <param name="center_dir_x"                    value="-1.0" />
         <param name="center_dir_y"                    value="1.0" />
-        <param name="center_dir_z"                    value="-0.2" />
-        <param name="fan_radius"                      value="0.3" />
+        <param name="center_dir_z"                    value="-0.4" />
+        <param name="fan_radius"                      value="0.5" />
         <param name="wind_range"                      value="2.8" />
         <param name="center_bias"                     value="0.5" />
-        <param name="max_disturb_ratio"               value="0.05" />
+        <param name="max_disturb_ratio"               value="1.0" />
     </group>
 
     <node name="dap_planner" pkg="disturbance_aware_planner" type="dap_node" output="screen">
