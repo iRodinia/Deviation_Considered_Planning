@@ -8,12 +8,6 @@ FlightLogger::FlightLogger(string folder_name, string file_name){
     f_name = file_name;
     target_file_folder = LOG_PATH_PREFIX + folder_name;
     target_file_path = LOG_PATH_PREFIX + folder_name + "/" + file_name + ".csv";
-    cout << CYAN << "Set log path to: " << target_file_path << endl;
-    if(access(target_file_path.c_str(), F_OK) != -1){
-        if(remove(target_file_path.c_str()) == 0){
-            cout << YELLOW << "Delete existing log file [" << file_name << "]..." << endl;
-        }
-    }
     param_num = 0;
     data_type_num = 0;
     tags_set = false;
@@ -101,6 +95,13 @@ bool FlightLogger::saveFile(){
     if(param_num <= 0 && data_type_num <= 0){
         cout << RED << "Nothing to record in [" << f_name << "], abort creating log file." << endl;
         return true;
+    }
+
+    cout << CYAN << "Set log path to: " << target_file_path << endl;
+    if(access(target_file_path.c_str(), F_OK) != -1){
+        if(remove(target_file_path.c_str()) == 0){
+            cout << YELLOW << "Delete existing log file [" << f_name << "]..." << endl;
+        }
     }
 
     if (!boost::filesystem::is_directory(target_file_folder)){

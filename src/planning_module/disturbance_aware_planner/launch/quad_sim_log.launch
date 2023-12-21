@@ -142,9 +142,10 @@
         <param name="place_z"                         value="0.05" />
         <param name="place_yaw"                       value="0.0" />
         <param name="frequency"                       value="12.0" />
+        <param name="time_constant"                   value="1.0" />
     </group>
 
-    <node name="fake_drone_node" pkg="fake_drone" type="fake_drone_node" output="screen">
+    <node name="fake_drone_node" pkg="fake_drone_pro" type="fake_drone_node" output="screen">
         <remap from="/uav/pos"                        to="$(arg uav_pose_topic)"/>
         <remap from="/uav/vel"                        to="$(arg uav_vel_topic)"/>
         <remap from="/uav/flight_mode"                to="$(arg uav_ctrl_mode_topic)"/>
