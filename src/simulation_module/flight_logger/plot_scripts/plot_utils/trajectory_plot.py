@@ -26,7 +26,7 @@ class TrajPloter(object):
             'line_width': 1.5,
         }
         
-        self.draw_ref_signal = True
+        self.draw_ref_signal = False
         self.draw_ref_traj = True
         self.draw_real_signal = True
         
@@ -64,7 +64,7 @@ class TrajPloter(object):
         if order is None:
             return
         else:
-            self.ref_traj_order  = order
+            self.ref_traj_order = int(order)
         self.ref_traj_hori = data_loader.get_data('traj_time_horizon')
         for i in range(self.ref_traj_order+1):
             self.ref_traj_x_coef.append(data_loader.get_data('coef_x_'+str(i)))
@@ -84,37 +84,60 @@ class TrajPloter(object):
             return
         ref_pos = np.array(self.ref_pos)
         uav_pos = np.array(self.uav_pos)
-        plot_handle.plot(ref_pos[:,0], ref_pos[:,1], ref_pos[:,2], 
-                         color=self.plot_settings['ref_color'], 
-                         linestyle=self.plot_settings['ref_linestyle'], 
-                         linewidth=self.plot_settings['line_width'],
-                         label=self.plot_settings['ref_label'])
-        plot_handle.plot(uav_pos[:,0], uav_pos[:,1], uav_pos[:,2],
-                         color=self.plot_settings['pos_color'], 
-                         linestyle=self.plot_settings['pos_linestyle'], 
-                         linewidth=self.plot_settings['line_width'],
-                         label=self.plot_settings['pos_label'])
-        for i in range(len(self.ref_traj_hori)):
-            _th = self.ref_traj_hori[i]
-            _traj = []
-            for _t in np.linspace(0, _th, 20, endpoint=True):
-                _tmp_x = 0
-                _tmp_y = 0
-                _tmp_z = 0
-                for j in range(self.ref_traj_order+1):
-                    _tmp_x += self.ref_traj_x_coef[j][i] * _t**j
-                    _tmp_y += self.ref_traj_y_coef[j][i] * _t**j
-                    _tmp_z += self.ref_traj_z_coef[j][i] * _t**j
-                _traj.append([_tmp_x, _tmp_y, _tmp_z])
-            _traj_mat = np.array(_traj)
-            if i == 0:
-                plot_handle.plot(_traj_mat[:,0], _traj_mat[:,1], _traj_mat[:,2],
-                                 color=self.plot_settings['ref_color'], 
-                                 linestyle=self.plot_settings['traj_linestyle'], 
-                                 linewidth=self.plot_settings['line_width'],
-                                 label=self.plot_settings['ref_label'])
-            else:
-                plot_handle.plot(_traj_mat[:,0], _traj_mat[:,1], _traj_mat[:,2],
-                                 color=self.plot_settings['ref_color'], 
-                                 linestyle=self.plot_settings['traj_linestyle'], 
-                                 linewidth=self.plot_settings['line_width'])
+        if self.draw_ref_signal:
+            plot_handle.plot(ref_pos[:,0], ref_pos[:,1], ref_pos[:,2], 
+                            color=self.plot_settings['ref_color'], 
+                            linestyle=self.plot_settings['ref_linestyle'], 
+                            linewidth=self.plot_settings['line_width'],
+                            label=self.plot_settings['ref_label'])
+        if self.draw_real_signal:
+            plot_handle.plot(uav_pos[:,0], uav_pos[:,1], uav_pos[:,2],
+                            color=self.plot_settings['pos_color'], 
+                            linestyle=self.plot_settings['pos_linestyle'], 
+                            linewidth=self.plot_settings['line_width'],
+                            label=self.plot_settings['pos_label'])
+        if self.draw_ref_traj:
+            for i in range(len(self.ref_traj_hori)):
+                _th = self.ref_traj_hori[i]
+                _traj = []
+                for _t in np.linspace(0, _th-1.0, 20, endpoint=True):   # _th-1.0 is a modification for better illustrating the result
+                    _tmp_x = 0
+                    _tmp_y = 0
+                    _tmp_z = 0
+                    for j in range(self.ref_traj_order+1):
+                        _tmp_x += self.ref_traj_x_coef[j][i] * _t**j
+                        _tmp_y += self.ref_traj_y_coef[j][i] * _t**j
+                        _tmp_z += self.ref_traj_z_coef[j][i] * _t**j
+                    _traj.append([_tmp_x, _tmp_y, _tmp_z])
+                _traj_mat = np.array(_traj)
+                if i == 0:
+                    plot_handle.plot(_traj_mat[:,0], _traj_mat[:,1], _traj_mat[:,2],
+                                    color=self.plot_settings['ref_color'], 
+                                    linestyle=self.plot_settings['traj_linestyle'], 
+                                    linewidth=self.plot_settings['line_width'],
+                                    label=self.plot_settings['ref_label'])
+                else:
+                    plot_handle.plot(_traj_mat[:,0], _traj_mat[:,1], _traj_mat[:,2],
+                                    color=self.plot_settings['ref_color'], 
+                                    linestyle=self.plot_settings['traj_linestyle'], 
+                                    linewidth=self.plot_settings['line_width'])
+                
+
+if __name__ == "__main__":
+    disturb_gen_path = '/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/flight_logs/log_test_exp/disturbance_generator.csv'
+    quad_path = '/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/flight_logs/log_test_exp/quadrotor.csv'
+    ref_gev_path = '/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/flight_logs/log_test_exp/reference_governor.csv'
+    csv_paths = [disturb_gen_path, quad_path, ref_gev_path]
+    
+    loader = DataLoader()
+    loader.set_csv_paths(csv_paths)
+    if(loader.load()):
+        plter = TrajPloter()
+        plter.load_data(loader)
+        fig = plt.figure("NNYY")
+        ax = fig.add_axes([0.15,0.15,0.8,0.8], projection='3d')
+        plter.plot(ax)
+        ax.legend()
+        plt.show()
+    
+    exit(0)

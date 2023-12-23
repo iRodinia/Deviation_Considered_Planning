@@ -45,7 +45,7 @@ class DataLoader(object):
                     else:
                         if line_count < 2 + param_num:
                             self.params[row[0]] = float(row[1])
-                        elif line_count < 2 + param_num + data_num:
+                        elif line_count < 2 + param_num + 2*data_num:
                             if row[0] in self.datas:
                                 print('The key: %s has already been loaded, delete existing data.' % row[0])
                             self.datas[row[0]] = []
