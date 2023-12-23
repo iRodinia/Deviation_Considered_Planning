@@ -119,8 +119,8 @@ bool FlightLogger::saveFile(){
         cout << RED << "Open/Create log file [" << f_name << "] failed!" << endl;
         return false;
     }
-    fout << "parameter_number: " << param_num << '\n';
-    fout << "data_type_number: " << data_type_num << '\n';
+    fout << "parameter_number, " << param_num << '\n';
+    fout << "data_type_number, " << data_type_num << '\n';
     if(param_num > 0){
         for(auto it = params_map.begin(); it != params_map.end(); it++){
             string _name = it->first;

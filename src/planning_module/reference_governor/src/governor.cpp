@@ -47,7 +47,7 @@ void ReferenceGovernor::setNewTraj(Eigen::Matrix<double, 3, -1> coefs, double t_
     traj_time_len = std::max(t_horizon, 0.0);
     traj_start_time = start_time;
     traj_set = true;
-    ROS_INFO("New reference trajectory of order %ld received.", coefs.cols());
+    ROS_INFO("New reference trajectory of order %ld received.", coefs.cols()-1);
     
     /* Log file */
     double _log_t = (ros::Time::now() - start_log_ts).toSec();
@@ -301,6 +301,7 @@ int main(int argc, char** argv){
             tags.push_back("coef_z_"+to_string(i));
         }
 		logger.setDataTags(tags);
+        logger.logParameter("traj_poly_order", _order);
 		governor.setLogger(&logger);
 	}
 

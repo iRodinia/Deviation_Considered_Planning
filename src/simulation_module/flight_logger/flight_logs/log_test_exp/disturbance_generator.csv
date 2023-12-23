@@ -1,5 +1,5 @@
-parameter_number: 12
-data_type_number: 0
+parameter_number, 12
+data_type_number, 0
 trans_mat_03, -0.3
 trans_mat_22, 0.768219
 trans_mat_12, 0.579453

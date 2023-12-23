@@ -39,7 +39,7 @@ private:
     bool cloud_gen = false;
     vector<sensor_msgs::PointCloud2> disturb_vis_msg_queue;
     string world_frame;
-    int pub_count;
+    int discret_num, pub_count;
 
     bool log_enable;
     FlightLogger* logger_ptr;

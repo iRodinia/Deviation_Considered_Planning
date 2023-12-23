@@ -14,6 +14,7 @@ EllipseDisturb::EllipseDisturb(ros::NodeHandle* node): nh(*node){
         source_dir.normalize();
     }
     double long_axis_len;
+    discret_num = 8;
     nh.param("FanDisturbance/wind_range", long_axis_len, 0.2);
     range_a = long_axis_len / 2;
     nh.param("FanDisturbance/fan_radius", range_r, 0.1);
@@ -27,7 +28,7 @@ EllipseDisturb::EllipseDisturb(ros::NodeHandle* node): nh(*node){
     get_disturb_ratio = nh.advertiseService("get_disturb_ratio", &EllipseDisturb::getDisturbRatioSrv, this);
     timer1 = nh.createTimer(ros::Rate(5.0), &EllipseDisturb::timer1Cb, this);
     cloud_gen = false;
-    disturb_vis_msg_queue = vector<sensor_msgs::PointCloud2>(5, sensor_msgs::PointCloud2());
+    disturb_vis_msg_queue = vector<sensor_msgs::PointCloud2>(discret_num, sensor_msgs::PointCloud2());
     pub_count = 0;
 
     log_enable = false;
@@ -80,23 +81,23 @@ void EllipseDisturb::genVisCloud(){
     }
 
     Eigen::Vector3d _pt;
-    vector<vector<Eigen::Vector3d>> _orig_vis_clouds(5, vector<Eigen::Vector3d>());
+    vector<vector<Eigen::Vector3d>> _orig_vis_clouds(discret_num, vector<Eigen::Vector3d>());
     for(auto p : surf_pts){
         double p_len = p.norm();
-        for(int i=0; i<5; i++){
+        for(int i=0; i<discret_num; i++){
             for(int j=0; j<3; j++){
-                _pt = (j/3.0 + i/15.0) * p;
+                _pt = (j/3.0 + i/3.0/discret_num) * p;
                 _orig_vis_clouds[i].push_back(_pt);
             }
         }
     }
 
     pcl::PointXYZ _vis_pt;
-    vector<pcl::PointCloud<pcl::PointXYZ>> _vis_cloud_raw_queue(5, pcl::PointCloud<pcl::PointXYZ>());
-    vector<pcl::PointCloud<pcl::PointXYZ>> _vis_cloud_queue(5, pcl::PointCloud<pcl::PointXYZ>());
+    vector<pcl::PointCloud<pcl::PointXYZ>> _vis_cloud_raw_queue(discret_num, pcl::PointCloud<pcl::PointXYZ>());
+    vector<pcl::PointCloud<pcl::PointXYZ>> _vis_cloud_queue(discret_num, pcl::PointCloud<pcl::PointXYZ>());
     pcl::VoxelGrid<pcl::PointXYZ> ft;
     ft.setLeafSize(0.001, 0.001, 0.001);
-    for(int i=0; i<5; i++){
+    for(int i=0; i<discret_num; i++){
         for(auto p : _orig_vis_clouds[i]){
             Eigen::Vector4d orig_pt(p(0), p(1), p(2), 1);
             Eigen::Vector4d new_pt = trans_mat * orig_pt;
@@ -167,7 +168,7 @@ void EllipseDisturb::timer1Cb(const ros::TimerEvent&){
         return;
     }
     disturb_vis_pub.publish(disturb_vis_msg_queue[pub_count]);
-    pub_count = (pub_count+1) % 5;
+    pub_count = (pub_count+1) % discret_num;
 }
 
 int main(int argc, char** argv){
