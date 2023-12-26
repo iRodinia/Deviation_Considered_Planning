@@ -180,7 +180,7 @@ public:
     Eigen::Vector3d cylinder_pos, cylinder_dir;
     double cylinder_rad, cylinder_h;
     double cylinder_center_bias;
-    double max_disturb_ratio;
+    double max_disturb_ratio, min_disturb_ratio;
 
     void getFlatStatesInputes(std::vector<quadState>& return_states, std::vector<quadInput>& return_inputes);
     Eigen::Vector4d getMotorNoise(Point pos);

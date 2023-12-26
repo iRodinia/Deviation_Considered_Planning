@@ -57,6 +57,8 @@ void PolyTrajOptimizer::initParameters(ros::NodeHandle& nh){
     nh.param("FanDisturbance/wind_range", cylinder_h, 1.0);
     nh.param("FanDisturbance/center_bias", cylinder_center_bias, 0.2);
     nh.param("FanDisturbance/max_disturb_ratio", max_disturb_ratio, 0.1);
+    max_disturb_ratio = std::max(max_disturb_ratio, 0.0);
+    min_disturb_ratio = 0.05 * max_disturb_ratio;
 
     coef_c0 = Coef(0, 0, 0);
     coef_c1 = Coef(0, 0, 0);
@@ -311,15 +313,18 @@ Eigen::Vector4d PolyTrajOptimizer::getMotorNoise(Point pos){
     }
     else{
         double len_proj = vec_cp.dot(cylinder_dir);
+        double rad_len = vec_cp.cross(cylinder_dir).norm();
         double disturb_frac = 0.0;
         if(len_proj > 0){
-            if(len_proj <= (cylinder_h-cylinder_center_bias)){
-                disturb_frac = pow(1 - len_proj / (cylinder_h-cylinder_center_bias), 2);
+            if(len_proj <= (cylinder_h-cylinder_center_bias) && rad_len <= cylinder_rad){
+                disturb_frac = std::max(min_disturb_ratio, 1 - len_proj / (cylinder_h-cylinder_center_bias) - rad_len / cylinder_rad);
+                // disturb_frac = pow(1 - len_proj / (cylinder_h-cylinder_center_bias), 2);
             }
         }
         else{
-            if(len_proj > -cylinder_center_bias){
-                disturb_frac = pow(1 + len_proj / cylinder_center_bias, 2);
+            if(len_proj > -cylinder_center_bias && rad_len <= cylinder_rad){
+                disturb_frac = std::max(min_disturb_ratio, 1 + len_proj / cylinder_center_bias - rad_len / cylinder_rad);
+                // disturb_frac = pow(1 + len_proj / cylinder_center_bias, 2);
             }
         }
         return nominal_inputs * max_disturb_ratio * disturb_frac * pred_dt;
