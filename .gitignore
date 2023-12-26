@@ -32,6 +32,6 @@
 *.app
 
 # Folders
-build/
-devel/
-logs/
+/build
+/devel
+/logs
