@@ -27,7 +27,10 @@ class PositionPlot(object):
             'ref_linestyle': 'dashdot',
             'pos_linestyle': 'solid',
             'line_width': 1.5,
+            'disturb_color': 'slategrey',
+            'disturb_transp': 0.4,
         }
+        self.plot_disturb = True
     
     def load_data(self, data_loader: DataLoader):
         if not data_loader.loaded:
@@ -60,6 +63,21 @@ class PositionPlot(object):
             _p = [pos_x[i], pos_y[i], pos_z[i]]
             self.uav_pos.append(_p)
             self.uav_pos_ts.append(pos_times[i])
+        
+        if self.plot_disturb:
+            self.disturb_pos = np.array([data_loader.get_param('disturb_pos_x'),
+                                         data_loader.get_param('disturb_pos_y'),
+                                         data_loader.get_param('disturb_pos_z')])
+            self.disturb_dir = np.array([data_loader.get_param('disturb_dir_x'),
+                                         data_loader.get_param('disturb_dir_y'),
+                                         data_loader.get_param('disturb_dir_z')])
+            self.disturb_h = data_loader.get_param('disturb_cylinder_h')
+            self.disturb_rad = data_loader.get_param('disturb_cylinder_rad')
+            self.disturb_bias = data_loader.get_param('disturb_cylinder_bias')
+            
+            if self.disturb_h is None or self.disturb_rad is None or self.disturb_bias is None:
+                print('Unable to plot disturbance range.')
+                self.plot_disturb = False
 
         self.data_prepared = True
     
@@ -113,9 +131,36 @@ class PositionPlot(object):
                         label=self.plot_settings['pos_z_label'])
         z_handle.set_xlabel('timestamp /s')
         z_handle.set_xlabel('z /m')
-
-
-
+        
+        if self.plot_disturb:
+            if self.disturb_h is None or self.disturb_rad is None or self.disturb_bias is None:
+                print('Unable to plot disturbance range.')
+                self.plot_disturb = False
+                return
+            
+            disturb_area = []
+            for i in range(uav_pos.shape[0]):
+                _p = uav_pos[i,:]
+                vec_cp = _p - self.disturb_pos
+                rad_len = np.linalg.norm(np.cross(vec_cp, self.disturb_dir))
+                proj_len = vec_cp.dot(self.disturb_dir)
+                if proj_len >= 0:
+                    if proj_len <= (self.disturb_h - self.disturb_bias) and rad_len <= self.disturb_rad:
+                        disturb_area.append(True)
+                    else:
+                        disturb_area.append(False)
+                else:
+                    if proj_len > -self.disturb_bias and rad_len <= self.disturb_rad:
+                        disturb_area.append(True)
+                    else:
+                        disturb_area.append(False)
+                        
+            x_handle.fill_between(uav_pos_t, uav_pos[:,0].min()-0.05, uav_pos[:,0].max()+0.05, where=disturb_area, 
+                                  facecolor=self.plot_settings['disturb_color'], alpha=self.plot_settings['disturb_transp'])
+            y_handle.fill_between(uav_pos_t, uav_pos[:,1].min()-0.05, uav_pos[:,1].max()+0.05, where=disturb_area,
+                                  facecolor=self.plot_settings['disturb_color'], alpha=self.plot_settings['disturb_transp'])
+            z_handle.fill_between(uav_pos_t, uav_pos[:,2].min()-0.05, uav_pos[:,2].max()+0.05, where=disturb_area,
+                                  facecolor=self.plot_settings['disturb_color'], alpha=self.plot_settings['disturb_transp'])
 
 
 if __name__ == "__main__":

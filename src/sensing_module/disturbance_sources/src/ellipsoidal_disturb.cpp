@@ -38,6 +38,16 @@ void EllipseDisturb::setLogger(FlightLogger* _logger){
     logger_ptr = _logger;
     log_start_ts = ros::Time::now();
     log_enable = true;
+
+    logger_ptr->logParameter("disturb_pos_x", source_p(0));
+    logger_ptr->logParameter("disturb_pos_y", source_p(1));
+    logger_ptr->logParameter("disturb_pos_z", source_p(2));
+    logger_ptr->logParameter("disturb_dir_x", source_dir(0));
+    logger_ptr->logParameter("disturb_dir_y", source_dir(1));
+    logger_ptr->logParameter("disturb_dir_z", source_dir(2));
+    logger_ptr->logParameter("disturb_cylinder_h", 2 * range_a);
+    logger_ptr->logParameter("disturb_cylinder_rad", range_r);
+    logger_ptr->logParameter("disturb_cylinder_bias", range_a - bias_a);
 }
 
 void EllipseDisturb::genVisCloud(){
