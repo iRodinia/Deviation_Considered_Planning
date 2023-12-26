@@ -1,0 +1,223 @@
+In file included from [01m[K/opt/ros/noetic/include/ros/ros.h:40[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/include/flight_logger/logger.h:11[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:1[m[K:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:[m[K In member function ‘[01m[Kvoid FlightLogger::logParameter(std::vector<std::__cxx11::basic_string<char> >, std::vector<double>)[m[K’:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:22:18:[m[K [01;35m[Kwarning: [m[Kformat ‘[01m[K%d[m[K’ expects argument of type ‘[01m[Kint[m[K’, but argument 8 has type ‘[01m[Kstd::vector<std::__cxx11::basic_string<char> >::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K-Wformat=[m[K]
+   22 |         ROS_WARN([01;35m[K"Log parameters with names (%d) and values (%d) size mismatch."[m[K, [32m[Kparam_names.size()[m[K, param_vals.size());
+      |                  [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K  [32m[K~~~~~~~~~~~~~~~~~~[m[K
+      |                                                                                                   [32m[K|[m[K
+      |                                                                                                   [32m[Kstd::vector<std::__cxx11::basic_string<char> >::size_type {aka long unsigned int}[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:351:165:[m[K [01;36m[Knote: [m[Kin definition of macro ‘[01m[KROSCONSOLE_PRINT_AT_LOCATION_WITH_FILTER[m[K’
+  351 |     ::ros::console::print(filter, __rosconsole_define_location__loc.logger_, __rosconsole_define_location__loc.level_, __FILE__, __LINE__, __ROSCONSOLE_FUNCTION__, [01;36m[K__VA_ARGS__[m[K)
+      |                                                                                                                                                                     [01;36m[K^~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:390:7:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROSCONSOLE_PRINT_AT_LOCATION[m[K’
+  390 |       [01;36m[KROSCONSOLE_PRINT_AT_LOCATION[m[K(__VA_ARGS__); \
+      |       [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:575:35:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_LOG_COND[m[K’
+  575 | #define ROS_LOG(level, name, ...) [01;36m[KROS_LOG_COND[m[K(true, level, name, __VA_ARGS__)
+      |                                   [01;36m[K^~~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/rosconsole/macros_generated.h:162:23:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_LOG[m[K’
+  162 | #define ROS_WARN(...) [01;36m[KROS_LOG[m[K(::ros::console::levels::Warn, ROSCONSOLE_DEFAULT_NAME, __VA_ARGS__)
+      |                       [01;36m[K^~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:22:9:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_WARN[m[K’
+   22 |         [01;36m[KROS_WARN[m[K("Log parameters with names (%d) and values (%d) size mismatch.", param_names.size(), param_vals.size());
+      |         [01;36m[K^~~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:22:47:[m[K [01;36m[Knote: [m[Kformat string is defined here
+   22 |         ROS_WARN("Log parameters with names ([01;36m[K%d[m[K) and values (%d) size mismatch.", param_names.size(), param_vals.size());
+      |                                              [01;36m[K~^[m[K
+      |                                               [01;36m[K|[m[K
+      |                                               [01;36m[Kint[m[K
+      |                                              [32m[K%ld[m[K
+In file included from [01m[K/opt/ros/noetic/include/ros/ros.h:40[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/include/flight_logger/logger.h:11[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:1[m[K:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:22:18:[m[K [01;35m[Kwarning: [m[Kformat ‘[01m[K%d[m[K’ expects argument of type ‘[01m[Kint[m[K’, but argument 9 has type ‘[01m[Kstd::vector<double>::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K-Wformat=[m[K]
+   22 |         ROS_WARN([01;35m[K"Log parameters with names (%d) and values (%d) size mismatch."[m[K, param_names.size(), [32m[Kparam_vals.size()[m[K);
+      |                  [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K                      [32m[K~~~~~~~~~~~~~~~~~[m[K
+      |                                                                                                                      [32m[K|[m[K
+      |                                                                                                                      [32m[Kstd::vector<double>::size_type {aka long unsigned int}[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:351:165:[m[K [01;36m[Knote: [m[Kin definition of macro ‘[01m[KROSCONSOLE_PRINT_AT_LOCATION_WITH_FILTER[m[K’
+  351 |     ::ros::console::print(filter, __rosconsole_define_location__loc.logger_, __rosconsole_define_location__loc.level_, __FILE__, __LINE__, __ROSCONSOLE_FUNCTION__, [01;36m[K__VA_ARGS__[m[K)
+      |                                                                                                                                                                     [01;36m[K^~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:390:7:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROSCONSOLE_PRINT_AT_LOCATION[m[K’
+  390 |       [01;36m[KROSCONSOLE_PRINT_AT_LOCATION[m[K(__VA_ARGS__); \
+      |       [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:575:35:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_LOG_COND[m[K’
+  575 | #define ROS_LOG(level, name, ...) [01;36m[KROS_LOG_COND[m[K(true, level, name, __VA_ARGS__)
+      |                                   [01;36m[K^~~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/rosconsole/macros_generated.h:162:23:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_LOG[m[K’
+  162 | #define ROS_WARN(...) [01;36m[KROS_LOG[m[K(::ros::console::levels::Warn, ROSCONSOLE_DEFAULT_NAME, __VA_ARGS__)
+      |                       [01;36m[K^~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:22:9:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_WARN[m[K’
+   22 |         [01;36m[KROS_WARN[m[K("Log parameters with names (%d) and values (%d) size mismatch.", param_names.size(), param_vals.size());
+      |         [01;36m[K^~~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:22:63:[m[K [01;36m[Knote: [m[Kformat string is defined here
+   22 |         ROS_WARN("Log parameters with names (%d) and values ([01;36m[K%d[m[K) size mismatch.", param_names.size(), param_vals.size());
+      |                                                              [01;36m[K~^[m[K
+      |                                                               [01;36m[K|[m[K
+      |                                                               [01;36m[Kint[m[K
+      |                                                              [32m[K%ld[m[K
+In file included from [01m[K/opt/ros/noetic/include/ros/ros.h:40[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/include/flight_logger/logger.h:11[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:1[m[K:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:[m[K In member function ‘[01m[Kvoid FlightLogger::logData(double, std::vector<std::__cxx11::basic_string<char> >, std::vector<double>)[m[K’:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:52:18:[m[K [01;35m[Kwarning: [m[Kformat ‘[01m[K%s[m[K’ expects argument of type ‘[01m[Kchar*[m[K’, but argument 8 has type ‘[01m[Kstd::string[m[K’ {aka ‘[01m[Kstd::__cxx11::basic_string<char>[m[K’} [[01;35m[K-Wformat=[m[K]
+   52 |         ROS_INFO([01;35m[K"Log data in [%s] before set tags is not allowed."[m[K, f_name);
+      |                  [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:351:165:[m[K [01;36m[Knote: [m[Kin definition of macro ‘[01m[KROSCONSOLE_PRINT_AT_LOCATION_WITH_FILTER[m[K’
+  351 |     ::ros::console::print(filter, __rosconsole_define_location__loc.logger_, __rosconsole_define_location__loc.level_, __FILE__, __LINE__, __ROSCONSOLE_FUNCTION__, [01;36m[K__VA_ARGS__[m[K)
+      |                                                                                                                                                                     [01;36m[K^~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:390:7:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROSCONSOLE_PRINT_AT_LOCATION[m[K’
+  390 |       [01;36m[KROSCONSOLE_PRINT_AT_LOCATION[m[K(__VA_ARGS__); \
+      |       [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:575:35:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_LOG_COND[m[K’
+  575 | #define ROS_LOG(level, name, ...) [01;36m[KROS_LOG_COND[m[K(true, level, name, __VA_ARGS__)
+      |                                   [01;36m[K^~~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/rosconsole/macros_generated.h:110:23:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_LOG[m[K’
+  110 | #define ROS_INFO(...) [01;36m[KROS_LOG[m[K(::ros::console::levels::Info, ROSCONSOLE_DEFAULT_NAME, __VA_ARGS__)
+      |                       [01;36m[K^~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:52:9:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_INFO[m[K’
+   52 |         [01;36m[KROS_INFO[m[K("Log data in [%s] before set tags is not allowed.", f_name);
+      |         [01;36m[K^~~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:52:33:[m[K [01;36m[Knote: [m[Kformat string is defined here
+   52 |         ROS_INFO("Log data in [[01;36m[K%s[m[K] before set tags is not allowed.", f_name);
+      |                                [01;36m[K~^[m[K
+      |                                 [01;36m[K|[m[K
+      |                                 [01;36m[Kchar*[m[K
+In file included from [01m[K/opt/ros/noetic/include/ros/ros.h:40[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/include/flight_logger/logger.h:11[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:1[m[K:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:57:18:[m[K [01;35m[Kwarning: [m[Kformat ‘[01m[K%d[m[K’ expects argument of type ‘[01m[Kint[m[K’, but argument 8 has type ‘[01m[Kstd::vector<std::__cxx11::basic_string<char> >::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K-Wformat=[m[K]
+   57 |         ROS_WARN([01;35m[K"Log data with tags (%d) and values (%d) size mismatch."[m[K, [32m[Ktags.size()[m[K, vals.size());
+      |                  [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K  [32m[K~~~~~~~~~~~[m[K
+      |                                                                                     [32m[K|[m[K
+      |                                                                                     [32m[Kstd::vector<std::__cxx11::basic_string<char> >::size_type {aka long unsigned int}[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:351:165:[m[K [01;36m[Knote: [m[Kin definition of macro ‘[01m[KROSCONSOLE_PRINT_AT_LOCATION_WITH_FILTER[m[K’
+  351 |     ::ros::console::print(filter, __rosconsole_define_location__loc.logger_, __rosconsole_define_location__loc.level_, __FILE__, __LINE__, __ROSCONSOLE_FUNCTION__, [01;36m[K__VA_ARGS__[m[K)
+      |                                                                                                                                                                     [01;36m[K^~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:390:7:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROSCONSOLE_PRINT_AT_LOCATION[m[K’
+  390 |       [01;36m[KROSCONSOLE_PRINT_AT_LOCATION[m[K(__VA_ARGS__); \
+      |       [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:575:35:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_LOG_COND[m[K’
+  575 | #define ROS_LOG(level, name, ...) [01;36m[KROS_LOG_COND[m[K(true, level, name, __VA_ARGS__)
+      |                                   [01;36m[K^~~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/rosconsole/macros_generated.h:162:23:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_LOG[m[K’
+  162 | #define ROS_WARN(...) [01;36m[KROS_LOG[m[K(::ros::console::levels::Warn, ROSCONSOLE_DEFAULT_NAME, __VA_ARGS__)
+      |                       [01;36m[K^~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:57:9:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_WARN[m[K’
+   57 |         [01;36m[KROS_WARN[m[K("Log data with tags (%d) and values (%d) size mismatch.", tags.size(), vals.size());
+      |         [01;36m[K^~~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:57:40:[m[K [01;36m[Knote: [m[Kformat string is defined here
+   57 |         ROS_WARN("Log data with tags ([01;36m[K%d[m[K) and values (%d) size mismatch.", tags.size(), vals.size());
+      |                                       [01;36m[K~^[m[K
+      |                                        [01;36m[K|[m[K
+      |                                        [01;36m[Kint[m[K
+      |                                       [32m[K%ld[m[K
+In file included from [01m[K/opt/ros/noetic/include/ros/ros.h:40[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/include/flight_logger/logger.h:11[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:1[m[K:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:57:18:[m[K [01;35m[Kwarning: [m[Kformat ‘[01m[K%d[m[K’ expects argument of type ‘[01m[Kint[m[K’, but argument 9 has type ‘[01m[Kstd::vector<double>::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K-Wformat=[m[K]
+   57 |         ROS_WARN([01;35m[K"Log data with tags (%d) and values (%d) size mismatch."[m[K, tags.size(), [32m[Kvals.size()[m[K);
+      |                  [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K               [32m[K~~~~~~~~~~~[m[K
+      |                                                                                                  [32m[K|[m[K
+      |                                                                                                  [32m[Kstd::vector<double>::size_type {aka long unsigned int}[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:351:165:[m[K [01;36m[Knote: [m[Kin definition of macro ‘[01m[KROSCONSOLE_PRINT_AT_LOCATION_WITH_FILTER[m[K’
+  351 |     ::ros::console::print(filter, __rosconsole_define_location__loc.logger_, __rosconsole_define_location__loc.level_, __FILE__, __LINE__, __ROSCONSOLE_FUNCTION__, [01;36m[K__VA_ARGS__[m[K)
+      |                                                                                                                                                                     [01;36m[K^~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:390:7:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROSCONSOLE_PRINT_AT_LOCATION[m[K’
+  390 |       [01;36m[KROSCONSOLE_PRINT_AT_LOCATION[m[K(__VA_ARGS__); \
+      |       [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:575:35:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_LOG_COND[m[K’
+  575 | #define ROS_LOG(level, name, ...) [01;36m[KROS_LOG_COND[m[K(true, level, name, __VA_ARGS__)
+      |                                   [01;36m[K^~~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/rosconsole/macros_generated.h:162:23:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_LOG[m[K’
+  162 | #define ROS_WARN(...) [01;36m[KROS_LOG[m[K(::ros::console::levels::Warn, ROSCONSOLE_DEFAULT_NAME, __VA_ARGS__)
+      |                       [01;36m[K^~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:57:9:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_WARN[m[K’
+   57 |         [01;36m[KROS_WARN[m[K("Log data with tags (%d) and values (%d) size mismatch.", tags.size(), vals.size());
+      |         [01;36m[K^~~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:57:56:[m[K [01;36m[Knote: [m[Kformat string is defined here
+   57 |         ROS_WARN("Log data with tags (%d) and values ([01;36m[K%d[m[K) size mismatch.", tags.size(), vals.size());
+      |                                                       [01;36m[K~^[m[K
+      |                                                        [01;36m[K|[m[K
+      |                                                        [01;36m[Kint[m[K
+      |                                                       [32m[K%ld[m[K
+In file included from [01m[K/opt/ros/noetic/include/ros/ros.h:40[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/include/flight_logger/logger.h:11[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:1[m[K:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:67:22:[m[K [01;35m[Kwarning: [m[Kformat ‘[01m[K%s[m[K’ expects argument of type ‘[01m[Kchar*[m[K’, but argument 8 has type ‘[01m[Kstd::__cxx11::basic_string<char>[m[K’ [[01;35m[K-Wformat=[m[K]
+   67 |             ROS_WARN([01;35m[K"Tag [%s] not in the data list."[m[K, t);
+      |                      [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:351:165:[m[K [01;36m[Knote: [m[Kin definition of macro ‘[01m[KROSCONSOLE_PRINT_AT_LOCATION_WITH_FILTER[m[K’
+  351 |     ::ros::console::print(filter, __rosconsole_define_location__loc.logger_, __rosconsole_define_location__loc.level_, __FILE__, __LINE__, __ROSCONSOLE_FUNCTION__, [01;36m[K__VA_ARGS__[m[K)
+      |                                                                                                                                                                     [01;36m[K^~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:390:7:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROSCONSOLE_PRINT_AT_LOCATION[m[K’
+  390 |       [01;36m[KROSCONSOLE_PRINT_AT_LOCATION[m[K(__VA_ARGS__); \
+      |       [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:575:35:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_LOG_COND[m[K’
+  575 | #define ROS_LOG(level, name, ...) [01;36m[KROS_LOG_COND[m[K(true, level, name, __VA_ARGS__)
+      |                                   [01;36m[K^~~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/rosconsole/macros_generated.h:162:23:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_LOG[m[K’
+  162 | #define ROS_WARN(...) [01;36m[KROS_LOG[m[K(::ros::console::levels::Warn, ROSCONSOLE_DEFAULT_NAME, __VA_ARGS__)
+      |                       [01;36m[K^~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:67:13:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_WARN[m[K’
+   67 |             [01;36m[KROS_WARN[m[K("Tag [%s] not in the data list.", t);
+      |             [01;36m[K^~~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:67:29:[m[K [01;36m[Knote: [m[Kformat string is defined here
+   67 |             ROS_WARN("Tag [[01;36m[K%s[m[K] not in the data list.", t);
+      |                            [01;36m[K~^[m[K
+      |                             [01;36m[K|[m[K
+      |                             [01;36m[Kchar*[m[K
+In file included from [01m[K/opt/ros/noetic/include/ros/ros.h:40[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/include/flight_logger/logger.h:11[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:1[m[K:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:[m[K In member function ‘[01m[Kbool FlightLogger::saveFile()[m[K’:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:84:18:[m[K [01;35m[Kwarning: [m[Kformat ‘[01m[K%s[m[K’ expects argument of type ‘[01m[Kchar*[m[K’, but argument 8 has type ‘[01m[Kstd::string[m[K’ {aka ‘[01m[Kstd::__cxx11::basic_string<char>[m[K’} [[01;35m[K-Wformat=[m[K]
+   84 |         ROS_INFO([01;35m[K"Nothing to record in [%s], abort creating log file."[m[K, f_name);
+      |                  [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:351:165:[m[K [01;36m[Knote: [m[Kin definition of macro ‘[01m[KROSCONSOLE_PRINT_AT_LOCATION_WITH_FILTER[m[K’
+  351 |     ::ros::console::print(filter, __rosconsole_define_location__loc.logger_, __rosconsole_define_location__loc.level_, __FILE__, __LINE__, __ROSCONSOLE_FUNCTION__, [01;36m[K__VA_ARGS__[m[K)
+      |                                                                                                                                                                     [01;36m[K^~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:390:7:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROSCONSOLE_PRINT_AT_LOCATION[m[K’
+  390 |       [01;36m[KROSCONSOLE_PRINT_AT_LOCATION[m[K(__VA_ARGS__); \
+      |       [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:575:35:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_LOG_COND[m[K’
+  575 | #define ROS_LOG(level, name, ...) [01;36m[KROS_LOG_COND[m[K(true, level, name, __VA_ARGS__)
+      |                                   [01;36m[K^~~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/rosconsole/macros_generated.h:110:23:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_LOG[m[K’
+  110 | #define ROS_INFO(...) [01;36m[KROS_LOG[m[K(::ros::console::levels::Info, ROSCONSOLE_DEFAULT_NAME, __VA_ARGS__)
+      |                       [01;36m[K^~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:84:9:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_INFO[m[K’
+   84 |         [01;36m[KROS_INFO[m[K("Nothing to record in [%s], abort creating log file.", f_name);
+      |         [01;36m[K^~~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:84:42:[m[K [01;36m[Knote: [m[Kformat string is defined here
+   84 |         ROS_INFO("Nothing to record in [[01;36m[K%s[m[K], abort creating log file.", f_name);
+      |                                         [01;36m[K~^[m[K
+      |                                          [01;36m[K|[m[K
+      |                                          [01;36m[Kchar*[m[K
+In file included from [01m[K/opt/ros/noetic/include/ros/ros.h:40[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/include/flight_logger/logger.h:11[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:1[m[K:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:90:18:[m[K [01;35m[Kwarning: [m[Kformat ‘[01m[K%s[m[K’ expects argument of type ‘[01m[Kchar*[m[K’, but argument 8 has type ‘[01m[Kstd::string[m[K’ {aka ‘[01m[Kstd::__cxx11::basic_string<char>[m[K’} [[01;35m[K-Wformat=[m[K]
+   90 |         ROS_WARN([01;35m[K"Open/Create log file [%s] failed!"[m[K, f_name);
+      |                  [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:351:165:[m[K [01;36m[Knote: [m[Kin definition of macro ‘[01m[KROSCONSOLE_PRINT_AT_LOCATION_WITH_FILTER[m[K’
+  351 |     ::ros::console::print(filter, __rosconsole_define_location__loc.logger_, __rosconsole_define_location__loc.level_, __FILE__, __LINE__, __ROSCONSOLE_FUNCTION__, [01;36m[K__VA_ARGS__[m[K)
+      |                                                                                                                                                                     [01;36m[K^~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:390:7:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROSCONSOLE_PRINT_AT_LOCATION[m[K’
+  390 |       [01;36m[KROSCONSOLE_PRINT_AT_LOCATION[m[K(__VA_ARGS__); \
+      |       [01;36m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/ros/console.h:575:35:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_LOG_COND[m[K’
+  575 | #define ROS_LOG(level, name, ...) [01;36m[KROS_LOG_COND[m[K(true, level, name, __VA_ARGS__)
+      |                                   [01;36m[K^~~~~~~~~~~~[m[K
+[01m[K/opt/ros/noetic/include/rosconsole/macros_generated.h:162:23:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_LOG[m[K’
+  162 | #define ROS_WARN(...) [01;36m[KROS_LOG[m[K(::ros::console::levels::Warn, ROSCONSOLE_DEFAULT_NAME, __VA_ARGS__)
+      |                       [01;36m[K^~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:90:9:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KROS_WARN[m[K’
+   90 |         [01;36m[KROS_WARN[m[K("Open/Create log file [%s] failed!", f_name);
+      |         [01;36m[K^~~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/src/logger.cpp:90:42:[m[K [01;36m[Knote: [m[Kformat string is defined here
+   90 |         ROS_WARN("Open/Create log file [[01;36m[K%s[m[K] failed!", f_name);
+      |                                         [01;36m[K~^[m[K
+      |                                          [01;36m[K|[m[K
+      |                                          [01;36m[Kchar*[m[K

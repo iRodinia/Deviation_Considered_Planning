@@ -1,0 +1,16 @@
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/disturbance_sources/src/ellipsoidal_disturb.cpp:[m[K In member function ‘[01m[Kvoid EllipseDisturb::genVisCloud()[m[K’:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/disturbance_sources/src/ellipsoidal_disturb.cpp:109:19:[m[K [01;31m[Kerror: [m[Kredeclaration of ‘[01m[Kpcl::PointXYZ _vis_pt[m[K’
+  109 |     pcl::PointXYZ [01;31m[K_vis_pt[m[K;
+      |                   [01;31m[K^~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/disturbance_sources/src/ellipsoidal_disturb.cpp:83:19:[m[K [01;36m[Knote: [m[K‘[01m[Kpcl::PointXYZ _vis_pt[m[K’ previously declared here
+   83 |     pcl::PointXYZ [01;36m[K_vis_pt[m[K;
+      |                   [01;36m[K^~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/disturbance_sources/src/ellipsoidal_disturb.cpp:110:36:[m[K [01;31m[Kerror: [m[Kredeclaration of ‘[01m[Kpcl::PointCloud<pcl::PointXYZ> _vis_cloud_raw[m[K’
+  110 |     pcl::PointCloud<pcl::PointXYZ> [01;31m[K_vis_cloud_raw[m[K, _vis_cloud;
+      |                                    [01;31m[K^~~~~~~~~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/disturbance_sources/src/ellipsoidal_disturb.cpp:84:36:[m[K [01;36m[Knote: [m[K‘[01m[Kpcl::PointCloud<pcl::PointXYZ> _vis_cloud_raw[m[K’ previously declared here
+   84 |     pcl::PointCloud<pcl::PointXYZ> [01;36m[K_vis_cloud_raw[m[K;
+      |                                    [01;36m[K^~~~~~~~~~~~~~[m[K
+make[2]: *** [CMakeFiles/disturbance_sources_node.dir/build.make:76：CMakeFiles/disturbance_sources_node.dir/src/ellipsoidal_disturb.cpp.o] 错误 1
+make[1]: *** [CMakeFiles/Makefile2:2818：CMakeFiles/disturbance_sources_node.dir/all] 错误 2
+make: *** [Makefile:146：all] 错误 2

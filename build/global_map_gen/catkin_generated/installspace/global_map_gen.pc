@@ -1,0 +1,8 @@
+prefix=/home/cz_linux/Documents/Deviation_Considered_Planning/install
+
+Name: global_map_gen
+Description: Description of global_map_gen
+Version: 0.1.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lglobal_map_gen
+Requires: roscpp pcl_ros pcl_conversions

@@ -1,0 +1,9 @@
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/disturbance_sources/src/ellipsoidal_disturb.cpp:[m[K In member function ‘[01m[Kvoid EllipseDisturb::genVisCloud()[m[K’:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/disturbance_sources/src/ellipsoidal_disturb.cpp:51:62:[m[K [01;35m[Kwarning: [m[K‘[01m[Kvoid tf2::Matrix3x3::setEulerZYX(const tf2Scalar&, const tf2Scalar&, const tf2Scalar&)[m[K’ is deprecated [[01;35m[K-Wdeprecated-declarations[m[K]
+   51 |     rot_mat.setEulerZYX(source_yaw, source_pitch, source_roll[01;35m[K)[m[K;
+      |                                                              [01;35m[K^[m[K
+In file included from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/disturbance_sources/include/disturbance_sources/ellipsoidal_disturb.h:11[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/disturbance_sources/src/ellipsoidal_disturb.cpp:1[m[K:
+[01m[K/opt/ros/noetic/include/tf2/LinearMath/Matrix3x3.h:168:22:[m[K [01;36m[Knote: [m[Kdeclared here
+  168 |  ROS_DEPRECATED void [01;36m[KsetEulerZYX[m[K(const tf2Scalar& yaw, const tf2Scalar& pitch, const tf2Scalar& roll)
+      |                      [01;36m[K^~~~~~~~~~~[m[K

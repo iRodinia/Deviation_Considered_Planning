@@ -1,0 +1,8 @@
+prefix=/home/cz_linux/Documents/Deviation_Considered_Planning/install
+
+Name: flight_logger
+Description: Description of flight_logger
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lflight_logger
+Requires: roscpp std_msgs roslib

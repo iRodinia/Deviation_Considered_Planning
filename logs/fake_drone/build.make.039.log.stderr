@@ -1,0 +1,8 @@
+In file included from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/fake_drone/src/fake_drone.cpp:7[m[K:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/fake_drone/include/fake_drone/fake_drone.h:19:10:[m[K [01;31m[Kfatal error: [m[Kflight_logger/logger.h: 没有那个文件或目录
+   19 | #include [01;31m[K"flight_logger/logger.h"[m[K
+      |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~[m[K
+compilation terminated.
+make[2]: *** [CMakeFiles/fake_drone_node.dir/build.make:76：CMakeFiles/fake_drone_node.dir/src/fake_drone.cpp.o] 错误 1
+make[1]: *** [CMakeFiles/Makefile2:1213：CMakeFiles/fake_drone_node.dir/all] 错误 2
+make: *** [Makefile:146：all] 错误 2

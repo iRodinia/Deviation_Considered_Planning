@@ -96,7 +96,7 @@ void EllipseDisturb::genVisCloud(){
     vector<pcl::PointCloud<pcl::PointXYZ>> _vis_cloud_raw_queue(discret_num, pcl::PointCloud<pcl::PointXYZ>());
     vector<pcl::PointCloud<pcl::PointXYZ>> _vis_cloud_queue(discret_num, pcl::PointCloud<pcl::PointXYZ>());
     pcl::VoxelGrid<pcl::PointXYZ> ft;
-    ft.setLeafSize(0.001, 0.001, 0.001);
+    ft.setLeafSize(0.01, 0.01, 0.01);
     for(int i=0; i<discret_num; i++){
         for(auto p : _orig_vis_clouds[i]){
             Eigen::Vector4d orig_pt(p(0), p(1), p(2), 1);

@@ -1,0 +1,8 @@
+prefix=/home/cz_linux/Documents/Deviation_Considered_Planning/install
+
+Name: fake_drone_pro
+Description: Description of fake_drone_pro
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lfake_drone_pro
+Requires: flight_logger geometry_msgs roscpp std_msgs tf2_ros

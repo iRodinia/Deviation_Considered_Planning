@@ -29,6 +29,12 @@ class TrajPloter(object):
         self.draw_ref_signal = False
         self.draw_ref_traj = True
         self.draw_real_signal = True
+    
+    def change_setting(self, key: str, val_str: str):
+        if not key in self.plot_settings:
+            print('No such setting as [%s] in this plot.' % key)
+        else:
+            self.plot_settings[key] = val_str
         
     def load_data(self, data_loader: DataLoader):
         if not data_loader.loaded:

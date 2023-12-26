@@ -1,0 +1,27 @@
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/disturbance_sources/src/ellipsoidal_disturb.cpp:[m[K In constructor ‘[01m[KEllipseDisturb::EllipseDisturb(ros::NodeHandle*)[m[K’:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/disturbance_sources/src/ellipsoidal_disturb.cpp:21:66:[m[K [01;31m[Kerror: [m[Kinvalid use of non-static member function ‘[01m[Kbool EllipseDisturb::getDisturbRatioSrv(disturbance_sources::DisturbRatio::Request&, disturbance_sources::DisturbRatio::Response&)[m[K’
+   21 |     get_disturb_ratio = nh.advertiseService("get_disturb_ratio", [01;31m[KgetDisturbRatioSrv[m[K, this);
+      |                                                                  [01;31m[K^~~~~~~~~~~~~~~~~~[m[K
+In file included from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/disturbance_sources/src/ellipsoidal_disturb.cpp:1[m[K:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/disturbance_sources/include/disturbance_sources/ellipsoidal_disturb.h:43:10:[m[K [01;36m[Knote: [m[Kdeclared here
+   43 |     bool [01;36m[KgetDisturbRatioSrv[m[K(disturbance_sources::DisturbRatio::Request &req, disturbance_sources::DisturbRatio::Response &res);
+      |          [01;36m[K^~~~~~~~~~~~~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/disturbance_sources/src/ellipsoidal_disturb.cpp:22:45:[m[K [01;31m[Kerror: [m[Kinvalid use of non-static member function ‘[01m[Kvoid EllipseDisturb::timer1Cb(const ros::TimerEvent&)[m[K’
+   22 |     timer1 = nh.createTimer(ros::Rate(2.0), [01;31m[Ktimer1Cb[m[K, this);
+      |                                             [01;31m[K^~~~~~~~[m[K
+In file included from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/disturbance_sources/src/ellipsoidal_disturb.cpp:1[m[K:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/disturbance_sources/include/disturbance_sources/ellipsoidal_disturb.h:44:10:[m[K [01;36m[Knote: [m[Kdeclared here
+   44 |     void [01;36m[Ktimer1Cb[m[K(const ros::TimerEvent&);
+      |          [01;36m[K^~~~~~~~[m[K
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/disturbance_sources/src/ellipsoidal_disturb.cpp:[m[K In member function ‘[01m[Kvoid EllipseDisturb::genVisCloud()[m[K’:
+[01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/disturbance_sources/src/ellipsoidal_disturb.cpp:32:62:[m[K [01;35m[Kwarning: [m[K‘[01m[Kvoid tf2::Matrix3x3::setEulerZYX(const tf2Scalar&, const tf2Scalar&, const tf2Scalar&)[m[K’ is deprecated [[01;35m[K-Wdeprecated-declarations[m[K]
+   32 |     rot_mat.setEulerZYX(source_yaw, source_pitch, source_roll[01;35m[K)[m[K;
+      |                                                              [01;35m[K^[m[K
+In file included from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/disturbance_sources/include/disturbance_sources/ellipsoidal_disturb.h:11[m[K,
+                 from [01m[K/home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/disturbance_sources/src/ellipsoidal_disturb.cpp:1[m[K:
+[01m[K/opt/ros/noetic/include/tf2/LinearMath/Matrix3x3.h:168:22:[m[K [01;36m[Knote: [m[Kdeclared here
+  168 |  ROS_DEPRECATED void [01;36m[KsetEulerZYX[m[K(const tf2Scalar& yaw, const tf2Scalar& pitch, const tf2Scalar& roll)
+      |                      [01;36m[K^~~~~~~~~~~[m[K
+make[2]: *** [CMakeFiles/disturbance_sources_node.dir/build.make:76：CMakeFiles/disturbance_sources_node.dir/src/ellipsoidal_disturb.cpp.o] 错误 1
+make[1]: *** [CMakeFiles/Makefile2:2818：CMakeFiles/disturbance_sources_node.dir/all] 错误 2
+make: *** [Makefile:146：all] 错误 2
