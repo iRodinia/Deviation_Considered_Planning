@@ -185,7 +185,7 @@ foreach(t ${disturbance_aware_planner_EXPORTED_TARGETS})
   endif()
 endforeach()
 
-set(depends "roscpp;rospy;std_msgs;grid_map;grid_map_planner")
+set(depends "roscpp;rospy;std_msgs;grid_map;grid_map_planner;flight_logger")
 foreach(depend ${depends})
   string(REPLACE " " ";" depend_list ${depend})
   # the package name of the dependency must be kept in a unique variable so that it is not overwritten in recursive calls

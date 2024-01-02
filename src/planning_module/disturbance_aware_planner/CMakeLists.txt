@@ -21,6 +21,7 @@ find_package(catkin REQUIRED COMPONENTS
   grid_map
   grid_map_planner
   reference_governor
+  flight_logger
 )
 
 ## System dependencies are found with CMake's conventions
@@ -118,7 +119,7 @@ find_package(NLopt REQUIRED)
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME} reference_governor
-  CATKIN_DEPENDS roscpp rospy std_msgs grid_map grid_map_planner
+  CATKIN_DEPENDS roscpp rospy std_msgs grid_map grid_map_planner flight_logger
 #  DEPENDS Eigen3
 )
 

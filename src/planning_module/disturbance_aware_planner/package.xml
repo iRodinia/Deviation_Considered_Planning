@@ -56,10 +56,12 @@
   <build_depend>grid_map_planner</build_depend>
   <build_depend>reference_governor</build_depend>
   <build_depend>libpcl-all-dev</build_depend>
+  <build_depend>flight_logger</build_depend>
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>rospy</build_export_depend>
   <build_export_depend>std_msgs</build_export_depend>
   <build_export_depend>reference_governor</build_export_depend>
+  <build_export_depend>flight_logger</build_export_depend>
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
@@ -67,6 +69,7 @@
   <exec_depend>grid_map_planner</exec_depend>
   <exec_depend>reference_governor</exec_depend>
   <exec_depend>libpcl-all</exec_depend>
+  <exec_depend>flight_logger</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

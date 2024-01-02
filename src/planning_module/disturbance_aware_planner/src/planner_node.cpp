@@ -26,6 +26,20 @@ DisturbanceAwarePlanner::DisturbanceAwarePlanner(ros::NodeHandle* nh): nh_(*nh){
     global_ptr.reset(new GlobalMapProcessor(nh_));
     opter_ptr.reset(new PolyTrajOptimizer);
     opter_ptr->initParameters(nh_);
+
+    enable_log = false;
+}
+
+void DisturbanceAwarePlanner::setLogger(FlightLogger* _ptr){
+	logger_ptr = _ptr;
+	enable_log = true;
+	logger_ptr->logParameter("start_pos_x", start_pos(0));
+    logger_ptr->logParameter("start_pos_y", start_pos(1));
+    logger_ptr->logParameter("start_pos_z", start_pos(2));
+    logger_ptr->logParameter("goal_pos_x", goal_pos(0));
+    logger_ptr->logParameter("goal_pos_y", goal_pos(1));
+    logger_ptr->logParameter("goal_pos_z", goal_pos(2));
+	start_log_ts = ros::Time::now();
 }
 
 void DisturbanceAwarePlanner::subPosCb(const geometry_msgs::PoseStamped::ConstPtr& msg){
@@ -64,6 +78,16 @@ void DisturbanceAwarePlanner::timer1Cb(const ros::TimerEvent&){     // call at e
     ROS_INFO("Local target velocity: (%f, %f, %f)", tmp_target_v(0), tmp_target_v(1), tmp_target_v(2));
     opter_ptr->setStates(current_pos, current_vel, current_acc, tmp_target_p, tmp_target_v);
     opter_ptr->setCollisionConstraints(tmp_sfcs, tmp_times);
+
+    if(enable_log){
+        double _log_t = (ros::Time::now() - start_log_ts).toSec();
+        logger_ptr->logData(_log_t, "ref_path_px", tmp_target_p(0));
+        logger_ptr->logData(_log_t, "ref_path_py", tmp_target_p(1));
+        logger_ptr->logData(_log_t, "ref_path_pz", tmp_target_p(2));
+        logger_ptr->logData(_log_t, "ref_path_vx", tmp_target_v(0));
+        logger_ptr->logData(_log_t, "ref_path_vy", tmp_target_v(1));
+        logger_ptr->logData(_log_t, "ref_path_vz", tmp_target_v(2));
+    }
 
     if(opter_ptr->optimize()){
         ros::Time t_finish = ros::Time::now();
@@ -105,6 +129,26 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "commander_node");
     ros::NodeHandle nh;
     DisturbanceAwarePlanner cmder(&nh);
+
+    bool log_enable = false;
+	nh.param("Log/enable_log", log_enable, false);
+	string log_folder_name;
+	nh.param("Log/log_folder_name", log_folder_name, string("default_folder"));
+	FlightLogger logger(log_folder_name, "global_planner");
+	if(log_enable){
+		vector<string> tags = {
+            "ref_path_px", "ref_path_py", "ref_path_pz", 
+            "ref_path_vx", "ref_path_vy", "ref_path_vz", 
+        };
+		logger.setDataTags(tags);
+		cmder.setLogger(&logger);
+	}
+
+    ros::spin();
+
+    if(log_enable){
+		logger.saveFile();
+	}
 
     ros::spin();
     return 0;

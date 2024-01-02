@@ -24,6 +24,7 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
   /home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/grid_map_planner/include/jps_planner/jps_utils/jps_basis/data_type.h \
   /home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/grid_map_planner/include/jps_planner/jps_utils/jps_collision/map_util.h \
   /home/cz_linux/Documents/Deviation_Considered_Planning/src/sensing_module/grid_map/include/grid_map/grid_map.h \
+  /home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/include/flight_logger/logger.h \
   /opt/ros/noetic/include/geometry_msgs/Accel.h \
   /opt/ros/noetic/include/geometry_msgs/AccelStamped.h \
   /opt/ros/noetic/include/geometry_msgs/Point.h \
@@ -60,6 +61,7 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
   /opt/ros/noetic/include/ros/message_traits.h \
   /opt/ros/noetic/include/ros/names.h \
   /opt/ros/noetic/include/ros/node_handle.h \
+  /opt/ros/noetic/include/ros/package.h \
   /opt/ros/noetic/include/ros/param.h \
   /opt/ros/noetic/include/ros/parameter_adapter.h \
   /opt/ros/noetic/include/ros/platform.h \
@@ -3593,7 +3595,7 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 
 /usr/include/boost/predef/os/bsd/bsdi.h:
 
-/usr/include/boost/mpl/vector/aux_/pop_front.hpp:
+/usr/include/boost/predef/os/beos.h:
 
 /usr/include/boost/iostreams/operations_fwd.hpp:
 
@@ -3701,10 +3703,6 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 
 /usr/include/boost/interprocess/detail/os_thread_functions.hpp:
 
-/usr/include/boost/iostreams/positioning.hpp:
-
-/usr/include/boost/detail/container_fwd.hpp:
-
 /usr/include/boost/mpl/insert_fwd.hpp:
 
 /usr/include/boost/utility/result_of.hpp:
@@ -3808,8 +3806,6 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 /usr/include/boost/token_iterator.hpp:
 
 /usr/include/boost/mpl/not.hpp:
-
-/usr/include/boost/predef/os/beos.h:
 
 /usr/include/boost/bind/mem_fn_template.hpp:
 
@@ -4001,6 +3997,8 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 
 /usr/include/boost/predef/platform/cloudabi.h:
 
+/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/include/flight_logger/logger.h:
+
 /usr/include/boost/numeric/conversion/detail/preprocessed/numeric_cast_traits_common.hpp:
 
 /usr/include/boost/filesystem/fstream.hpp:
@@ -4147,11 +4145,11 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 
 /usr/include/boost/fusion/view/single_view/detail/size_impl.hpp:
 
-/usr/include/boost/algorithm/string/detail/find_format.hpp:
-
 /usr/include/eigen3/Eigen/src/Core/functors/TernaryFunctors.h:
 
 /usr/include/boost/date_time/date_generators.hpp:
+
+/usr/include/boost/algorithm/string/detail/find_format.hpp:
 
 /usr/include/boost/interprocess/detail/posix_time_types_wrk.hpp:
 
@@ -4283,8 +4281,6 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 
 /usr/include/boost/date_time/gregorian/formatters.hpp:
 
-/usr/include/boost/mpl/list/aux_/push_back.hpp:
-
 /usr/include/pcl-1.10/pcl/common/io.h:
 
 /usr/include/c++/9/atomic:
@@ -4308,10 +4304,6 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 /usr/include/boost/date_time/date_duration_types.hpp:
 
 /usr/include/boost/chrono/config.hpp:
-
-/usr/include/boost/preprocessor/repetition/repeat_from_to.hpp:
-
-/usr/include/boost/iostreams/read.hpp:
 
 /usr/include/boost/algorithm/string/compare.hpp:
 
@@ -4533,13 +4525,13 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 
 /usr/include/boost/algorithm/string/find.hpp:
 
+/usr/include/boost/preprocessor/repetition/repeat_from_to.hpp:
+
+/usr/include/boost/iostreams/read.hpp:
+
 /opt/ros/noetic/include/ros/publisher.h:
 
 /usr/include/boost/mpl/aux_/preprocessed/gcc/arg.hpp:
-
-/usr/include/c++/9/iostream:
-
-/usr/include/boost/detail/select_type.hpp:
 
 /usr/include/boost/date_time/parse_format_base.hpp:
 
@@ -4563,6 +4555,14 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 
 /opt/ros/noetic/include/ros/param.h:
 
+/usr/include/boost/mpl/list/aux_/push_back.hpp:
+
+/opt/ros/noetic/include/ros/package.h:
+
+/usr/include/boost/none_t.hpp:
+
+/usr/include/boost/numeric/conversion/detail/int_float_mixture.hpp:
+
 /usr/include/boost/variant/detail/forced_return.hpp:
 
 /home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/include/disturbance_aware_planner/polytraj_optimizer.h:
@@ -4573,37 +4573,51 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 
 /usr/include/boost/filesystem/string_file.hpp:
 
-/usr/include/boost/heap/detail/stable_heap.hpp:
+/usr/include/c++/9/bits/stl_heap.h:
 
-/usr/include/c++/9/set:
+/usr/include/boost/visit_each.hpp:
 
-/usr/include/boost/fusion/view/joint_view/detail/end_impl.hpp:
+/usr/include/asm-generic/bitsperlong.h:
 
-/usr/include/x86_64-linux-gnu/bits/time64.h:
+/usr/include/boost/predef/architecture/parisc.h:
 
-/usr/include/log4cxx/helpers/object.h:
+/opt/ros/noetic/include/std_msgs/Header.h:
 
-/usr/include/boost/mpl/empty_fwd.hpp:
+/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/include/polytope/line_segment.hpp:
 
-/usr/include/boost/algorithm/string/split.hpp:
+/usr/include/pcl-1.10/pcl/PCLHeader.h:
 
-/usr/include/eigen3/Eigen/src/SparseCore/SparseTriangularView.h:
+/usr/include/log4cxx/logstring.h:
 
-/usr/include/eigen3/Eigen/SparseQR:
+/usr/include/boost/parameter/aux_/is_maybe.hpp:
 
-/usr/include/boost/mpl/inherit_linearly.hpp:
+/opt/ros/noetic/include/ros/service_client.h:
 
-/usr/include/boost/predef/platform/windows_store.h:
+/usr/include/boost/fusion/support/is_sequence.hpp:
 
-/usr/include/boost/mpl/plus.hpp:
+/usr/include/boost/type_traits/has_trivial_destructor.hpp:
 
-/opt/ros/noetic/include/geometry_msgs/Quaternion.h:
+/opt/ros/noetic/include/ros/steady_timer.h:
 
-/usr/include/eigen3/Eigen/src/Core/arch/CUDA/Half.h:
+/usr/include/boost/fusion/view/single_view/detail/distance_impl.hpp:
 
-/usr/include/boost/mpl/pop_front_fwd.hpp:
+/usr/include/boost/core/explicit_operator_bool.hpp:
 
-/opt/ros/noetic/include/ros/names.h:
+/usr/include/pcl-1.10/pcl/conversions.h:
+
+/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/reference_governor/include/reference_governor/polyTraj.h:
+
+/usr/include/boost/config/no_tr1/complex.hpp:
+
+/usr/include/boost/preprocessor/seq/seq.hpp:
+
+/opt/ros/noetic/include/ros/service_traits.h:
+
+/usr/include/boost/move/adl_move_swap.hpp:
+
+/usr/include/c++/9/iostream:
+
+/usr/include/boost/detail/select_type.hpp:
 
 /usr/include/boost/variant/detail/hash_variant.hpp:
 
@@ -4665,48 +4679,6 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 
 /usr/include/boost/date_time/date_duration.hpp:
 
-/usr/include/c++/9/bits/stl_heap.h:
-
-/usr/include/boost/visit_each.hpp:
-
-/usr/include/asm-generic/bitsperlong.h:
-
-/usr/include/boost/predef/architecture/parisc.h:
-
-/opt/ros/noetic/include/std_msgs/Header.h:
-
-/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/include/polytope/line_segment.hpp:
-
-/usr/include/pcl-1.10/pcl/PCLHeader.h:
-
-/usr/include/log4cxx/logstring.h:
-
-/usr/include/boost/parameter/aux_/is_maybe.hpp:
-
-/opt/ros/noetic/include/ros/service_client.h:
-
-/usr/include/boost/fusion/support/is_sequence.hpp:
-
-/usr/include/boost/type_traits/has_trivial_destructor.hpp:
-
-/opt/ros/noetic/include/ros/steady_timer.h:
-
-/usr/include/boost/fusion/view/single_view/detail/distance_impl.hpp:
-
-/usr/include/boost/core/explicit_operator_bool.hpp:
-
-/usr/include/pcl-1.10/pcl/conversions.h:
-
-/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/reference_governor/include/reference_governor/polyTraj.h:
-
-/usr/include/boost/config/no_tr1/complex.hpp:
-
-/usr/include/boost/preprocessor/seq/seq.hpp:
-
-/opt/ros/noetic/include/ros/service_traits.h:
-
-/usr/include/boost/move/adl_move_swap.hpp:
-
 /usr/include/eigen3/Eigen/src/SparseCore/SparseDot.h:
 
 /usr/include/boost/smart_ptr/detail/spinlock_std_atomic.hpp:
@@ -4757,19 +4729,33 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 
 /usr/include/boost/config/detail/posix_features.hpp:
 
-/usr/include/x86_64-linux-gnu/c++/9/bits/error_constants.h:
-
-/usr/include/eigen3/Eigen/src/SparseLU/SparseLU_SupernodalMatrix.h:
-
-/opt/ros/noetic/include/geometry_msgs/AccelStamped.h:
-
-/usr/include/boost/algorithm/string/detail/find_format_all.hpp:
-
 /usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h:
 
 /usr/include/boost/smart_ptr/detail/atomic_count_std_atomic.hpp:
 
 /usr/include/boost/mpl/aux_/config/msvc.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/time64.h:
+
+/usr/include/log4cxx/helpers/object.h:
+
+/usr/include/boost/mpl/empty_fwd.hpp:
+
+/usr/include/boost/algorithm/string/split.hpp:
+
+/usr/include/c++/9/set:
+
+/usr/include/boost/fusion/view/joint_view/detail/end_impl.hpp:
+
+/usr/include/eigen3/Eigen/src/SparseCore/SparseTriangularView.h:
+
+/usr/include/eigen3/Eigen/SparseQR:
+
+/usr/include/boost/mpl/inherit_linearly.hpp:
+
+/usr/include/boost/predef/platform/windows_store.h:
+
+/usr/include/boost/mpl/plus.hpp:
 
 /usr/include/boost/container_hash/hash_fwd.hpp:
 
@@ -4782,6 +4768,22 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 /usr/include/boost/fusion/mpl/begin.hpp:
 
 /usr/include/boost/algorithm/string/find_iterator.hpp:
+
+/usr/include/x86_64-linux-gnu/c++/9/bits/gthr-default.h:
+
+/usr/include/eigen3/Eigen/src/misc/Image.h:
+
+/usr/include/eigen3/Eigen/src/OrderingMethods/Ordering.h:
+
+/usr/include/boost/heap/detail/tree_iterator.hpp:
+
+/usr/include/boost/filesystem.hpp:
+
+/usr/include/c++/9/fstream:
+
+/usr/include/boost/type_traits/conversion_traits.hpp:
+
+/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/include/polytope/geo_utils.hpp:
 
 /usr/include/eigen3/Eigen/SparseLU:
 
@@ -4879,21 +4881,15 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 
 /usr/include/boost/parameter/aux_/pack/is_named_argument.hpp:
 
-/usr/include/x86_64-linux-gnu/c++/9/bits/gthr-default.h:
+/usr/include/boost/heap/detail/stable_heap.hpp:
 
-/usr/include/eigen3/Eigen/src/misc/Image.h:
+/opt/ros/noetic/include/geometry_msgs/Quaternion.h:
 
-/usr/include/eigen3/Eigen/src/OrderingMethods/Ordering.h:
+/usr/include/eigen3/Eigen/src/Core/arch/CUDA/Half.h:
 
-/usr/include/boost/heap/detail/tree_iterator.hpp:
+/usr/include/boost/mpl/pop_front_fwd.hpp:
 
-/usr/include/boost/filesystem.hpp:
-
-/usr/include/c++/9/fstream:
-
-/usr/include/boost/type_traits/conversion_traits.hpp:
-
-/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/include/polytope/geo_utils.hpp:
+/opt/ros/noetic/include/ros/names.h:
 
 /opt/ros/noetic/include/pcl_msgs/PolygonMesh.h:
 
@@ -5008,6 +5004,14 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 /opt/ros/noetic/include/ros/message_traits.h:
 
 /usr/include/boost/mpl/list/aux_/O1_size.hpp:
+
+/usr/include/x86_64-linux-gnu/c++/9/bits/error_constants.h:
+
+/usr/include/eigen3/Eigen/src/SparseLU/SparseLU_SupernodalMatrix.h:
+
+/opt/ros/noetic/include/geometry_msgs/AccelStamped.h:
+
+/usr/include/boost/algorithm/string/detail/find_format_all.hpp:
 
 /usr/include/boost/fusion/support/tag_of_fwd.hpp:
 
@@ -5204,6 +5208,8 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 /usr/include/c++/9/bits/random.tcc:
 
 /usr/include/boost/mpl/aux_/push_front_impl.hpp:
+
+/usr/include/boost/blank.hpp:
 
 /usr/include/boost/config/detail/select_platform_config.hpp:
 
@@ -5445,7 +5451,11 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 
 /usr/include/boost/date_time/date_formatting_locales.hpp:
 
-/usr/include/boost/blank.hpp:
+/usr/include/boost/detail/container_fwd.hpp:
+
+/usr/include/boost/iostreams/positioning.hpp:
+
+/usr/include/boost/mpl/vector/aux_/pop_front.hpp:
 
 /usr/include/boost/iostreams/seek.hpp:
 
@@ -6087,9 +6097,9 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 
 /usr/include/boost/mpl/aux_/value_wknd.hpp:
 
-/usr/include/boost/mpl/aux_/preprocessed/gcc/and.hpp:
-
 /usr/include/boost/predef/compiler/comeau.h:
+
+/usr/include/boost/mpl/aux_/preprocessed/gcc/and.hpp:
 
 /usr/include/boost/mpl/back_inserter.hpp:
 
@@ -6171,9 +6181,9 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 
 /usr/include/boost/mpl/front_fwd.hpp:
 
-/usr/include/boost/optional/detail/optional_trivially_copyable_base.hpp:
-
 /usr/include/boost/predef/os/bsd.h:
+
+/usr/include/boost/optional/detail/optional_trivially_copyable_base.hpp:
 
 /usr/include/boost/parameter/aux_/name.hpp:
 
@@ -6411,10 +6421,6 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 
 /usr/include/boost/next_prior.hpp:
 
-/usr/include/boost/none_t.hpp:
-
-/usr/include/boost/numeric/conversion/detail/int_float_mixture.hpp:
-
 /usr/include/boost/numeric/conversion/bounds.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h:
@@ -6607,9 +6613,9 @@ CMakeFiles/dap_node.dir/src/planner_node.cpp.o: /home/cz_linux/Documents/Deviati
 
 /usr/include/boost/range/detail/sfinae.hpp:
 
-/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/grid_map_planner/include/dyn_a_star_planner/dyn_a_star.h:
-
 /usr/include/boost/fusion/view/single_view/single_view.hpp:
+
+/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/grid_map_planner/include/dyn_a_star_planner/dyn_a_star.h:
 
 /usr/include/boost/predef/hardware/simd/x86.h:
 

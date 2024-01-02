@@ -49,21 +49,22 @@ void ReferenceGovernor::setNewTraj(Eigen::Matrix<double, 3, -1> coefs, double t_
     traj_set = true;
     ROS_INFO("New reference trajectory of order %ld received.", coefs.cols()-1);
     
-    /* Log file */
-    double _log_t = (ros::Time::now() - start_log_ts).toSec();
-    vector<string> log_tags;
-    vector<double> log_data;
-    for(int i=0; i<coefs.cols(); i++){
-        log_tags.push_back("coef_x_"+to_string(i));
-        log_tags.push_back("coef_y_"+to_string(i));
-        log_tags.push_back("coef_z_"+to_string(i));
-        log_data.push_back(coefs(0,i));
-        log_data.push_back(coefs(1,i));
-        log_data.push_back(coefs(2,i));
+    if(enable_log){
+        double _log_t = (ros::Time::now() - start_log_ts).toSec();
+        vector<string> log_tags;
+        vector<double> log_data;
+        for(int i=0; i<coefs.cols(); i++){
+            log_tags.push_back("coef_x_"+to_string(i));
+            log_tags.push_back("coef_y_"+to_string(i));
+            log_tags.push_back("coef_z_"+to_string(i));
+            log_data.push_back(coefs(0,i));
+            log_data.push_back(coefs(1,i));
+            log_data.push_back(coefs(2,i));
+        }
+        logger_ptr->logData(_log_t, log_tags, log_data);
+        logger_ptr->logData(_log_t, "traj_time_horizon", t_horizon);
+        logger_ptr->logData(_log_t, "traj_plan_time", (ros::Time::now() - start_time).toSec());
     }
-    logger_ptr->logData(_log_t, log_tags, log_data);
-    logger_ptr->logData(_log_t, "traj_time_horizon", t_horizon);
-    logger_ptr->logData(_log_t, "traj_plan_time", (ros::Time::now() - start_time).toSec());
 }
 
 ReferenceGovernor::RefState ReferenceGovernor::getRefCmd_Full(){
@@ -144,11 +145,12 @@ void ReferenceGovernor::timer1Cb(const ros::TimerEvent&){
         ROS_INFO_ONCE("Flight commander found quadrotor driver connected!");
     }
 
-    /* Log file */
-    double _log_t = (ros::Time::now() - start_log_ts).toSec();
-    logger_ptr->logData(_log_t, "goal_reached", goal_reached);
-    logger_ptr->logData(_log_t, "cmd_offboard", cmd_offb);
-
+    if(enable_log){
+        double _log_t = (ros::Time::now() - start_log_ts).toSec();
+        logger_ptr->logData(_log_t, "goal_reached", goal_reached);
+        logger_ptr->logData(_log_t, "cmd_offboard", cmd_offb);
+    }
+    
     if(goal_reached){
         if(land_after_complete){
             if(current_ctrl_mode != 0){

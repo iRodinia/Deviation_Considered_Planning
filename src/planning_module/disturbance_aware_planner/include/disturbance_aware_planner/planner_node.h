@@ -18,12 +18,15 @@
 #include "disturbance_aware_planner/global_map_process.h"
 #include "disturbance_aware_planner/polytraj_optimizer.h"
 
+#include "flight_logger/logger.h"
+
 namespace disturbance_aware_planner{
 
 class DisturbanceAwarePlanner{
 public:
     DisturbanceAwarePlanner(ros::NodeHandle* nodehandle);
     ~DisturbanceAwarePlanner() {};
+    void setLogger(FlightLogger* logger_ptr);
 
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
@@ -54,6 +57,10 @@ private:
     Eigen::Vector3d start_pos, goal_pos;
     double replan_t_hori;
     ros::Duration replan_dur = ros::Duration(0.0);
+
+    bool enable_log;
+    ros::Time start_log_ts;
+    FlightLogger* logger_ptr;
 };
 
 }
