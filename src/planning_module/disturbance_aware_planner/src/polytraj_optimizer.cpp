@@ -64,6 +64,8 @@ void PolyTrajOptimizer::initParameters(ros::NodeHandle& nh){
     coef_c1 = Coef(0, 0, 0);
     coef_c2 = Coef(0, 0, 0);
     rest_coefs = Coefs(3, poly_order - 2);
+    rest_coefs.setZero();
+    reset_optim = true;
     opter = nlopt::opt(nlopt::LN_COBYLA, rest_coefs.size());
     ready_for_optim = false;
 }
@@ -79,24 +81,45 @@ void PolyTrajOptimizer::setStates(const Point init_p, const Point init_v, const 
     coef_c0 = init_p;   // fixed
     coef_c1 = init_v;   // fixed
     coef_c2 = 0.5 * init_a;   // fixed
-    rest_coefs.setZero();
 
-    Eigen::Vector3d k1 = init_p + init_v*pred_T + 0.5*init_a*pred_T*pred_T;
-    Eigen::Vector3d k2 = init_v + init_a*pred_T;
+    if(reset_optim){
+        Eigen::Vector3d k1 = init_p + init_v*pred_T + 0.5*init_a*pred_T*pred_T;
+        Eigen::Vector3d k2 = init_v + init_a*pred_T;
 
-    Eigen::MatrixXd inv_mat(2, 2);
-    inv_mat(0,0) = 4 / (pred_T*pred_T*pred_T);
-    inv_mat(0,1) = -1 / (pred_T*pred_T);
-    inv_mat(1,0) = -3 / (pred_T*pred_T*pred_T*pred_T);
-    inv_mat(1,1) = 1 / (pred_T*pred_T*pred_T);
+        Eigen::MatrixXd inv_mat(2, 2);
+        inv_mat(0,0) = 4 / (pred_T*pred_T*pred_T);
+        inv_mat(0,1) = -1 / (pred_T*pred_T);
+        inv_mat(1,0) = -3 / (pred_T*pred_T*pred_T*pred_T);
+        inv_mat(1,1) = 1 / (pred_T*pred_T*pred_T);
+        
+        Eigen::MatrixXd b_mat(2, 3);
+        b_mat.row(0) = (goal_p - k1).transpose();
+        b_mat.row(1) = (goal_v - k2).transpose();
+
+        Eigen::Matrix2Xd default_coefs = inv_mat * b_mat;
+        rest_coefs.block<3,1>(0,0) = default_coefs.row(0).transpose();   // float
+        rest_coefs.block<3,1>(0,1) = default_coefs.row(1).transpose();   // float
+        reset_optim = false;
+    }
     
-    Eigen::MatrixXd b_mat(2, 3);
-    b_mat.row(0) = (goal_p - k1).transpose();
-    b_mat.row(1) = (goal_v - k2).transpose();
+    // rest_coefs.setZero();
 
-    Eigen::Matrix2Xd default_coefs = inv_mat * b_mat;
-    rest_coefs.block<3,1>(0,0) = default_coefs.row(0).transpose();   // float
-    rest_coefs.block<3,1>(0,1) = default_coefs.row(1).transpose();   // float
+    // Eigen::Vector3d k1 = init_p + init_v*pred_T + 0.5*init_a*pred_T*pred_T;
+    // Eigen::Vector3d k2 = init_v + init_a*pred_T;
+
+    // Eigen::MatrixXd inv_mat(2, 2);
+    // inv_mat(0,0) = 4 / (pred_T*pred_T*pred_T);
+    // inv_mat(0,1) = -1 / (pred_T*pred_T);
+    // inv_mat(1,0) = -3 / (pred_T*pred_T*pred_T*pred_T);
+    // inv_mat(1,1) = 1 / (pred_T*pred_T*pred_T);
+    
+    // Eigen::MatrixXd b_mat(2, 3);
+    // b_mat.row(0) = (goal_p - k1).transpose();
+    // b_mat.row(1) = (goal_v - k2).transpose();
+
+    // Eigen::Matrix2Xd default_coefs = inv_mat * b_mat;
+    // rest_coefs.block<3,1>(0,0) = default_coefs.row(0).transpose();   // float
+    // rest_coefs.block<3,1>(0,1) = default_coefs.row(1).transpose();   // float
 
     ready_for_optim = true;
 }
@@ -162,6 +185,9 @@ bool PolyTrajOptimizer::optimize(){
         rest_coefs(0,i) = optim_x[i];
         rest_coefs(1,i) = optim_x[poly_order-2+i];
         rest_coefs(2,i) = optim_x[2*poly_order-4+i];
+    }
+    if(frs_cost_save <= 0.1){
+        reset_optim = true;
     }
     return true;
 }

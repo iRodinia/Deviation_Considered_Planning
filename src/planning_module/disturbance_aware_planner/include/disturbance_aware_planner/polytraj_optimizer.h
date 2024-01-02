@@ -167,6 +167,7 @@ public:
     Point goal_p_, goal_v_;
     Coef coef_c0, coef_c1, coef_c2;   // determined by the initial conditions in setStates(*).
     Coefs rest_coefs;
+    bool reset_optim;
     Eigen::MatrixXd smooth_cost_Q;
     QuadRotor quad;
     nlopt::opt opter;
