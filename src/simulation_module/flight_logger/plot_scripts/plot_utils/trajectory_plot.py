@@ -23,9 +23,11 @@ class TrajPloter(object):
             'traj_linestyle': 'dotted',
             'ref_label': 'Reference Trajectory',
             'pos_label': 'Quadrotor Track',
-            'line_width': 1.5,
+            'line_width': 2.0,
+            'disturb_color': 'slategrey',
+            'disturb_transp': 0.3,
         }
-        
+        self.plot_disturb = True
         self.draw_ref_signal = False
         self.draw_ref_traj = True
         self.draw_real_signal = True
@@ -81,10 +83,33 @@ class TrajPloter(object):
             print('Reference trajectory coefficients mismatch!')
             self.data_prepared = False
             return
+        
+        if self.plot_disturb:
+            self.disturb_h = data_loader.get_param('disturb_cylinder_h')
+            self.disturb_rad = data_loader.get_param('disturb_cylinder_rad')
+            self.disturb_bias = data_loader.get_param('disturb_cylinder_bias')
+            self.disturb_trans_mat = np.zeros((4,4))
+            self.disturb_trans_mat[0,0] = data_loader.get_param('trans_mat_00')
+            self.disturb_trans_mat[0,1] = data_loader.get_param('trans_mat_01')
+            self.disturb_trans_mat[0,2] = data_loader.get_param('trans_mat_02')
+            self.disturb_trans_mat[0,3] = data_loader.get_param('trans_mat_03')
+            self.disturb_trans_mat[1,0] = data_loader.get_param('trans_mat_10')
+            self.disturb_trans_mat[1,1] = data_loader.get_param('trans_mat_11')
+            self.disturb_trans_mat[1,2] = data_loader.get_param('trans_mat_12')
+            self.disturb_trans_mat[1,3] = data_loader.get_param('trans_mat_13')
+            self.disturb_trans_mat[2,0] = data_loader.get_param('trans_mat_20')
+            self.disturb_trans_mat[2,1] = data_loader.get_param('trans_mat_21')
+            self.disturb_trans_mat[2,2] = data_loader.get_param('trans_mat_22')
+            self.disturb_trans_mat[2,3] = data_loader.get_param('trans_mat_23')
+            self.disturb_trans_mat[3,3] = 1
+            
+            if self.disturb_h is None or self.disturb_rad is None or self.disturb_bias is None:
+                print('Unable to plot disturbance model.')
+                self.plot_disturb = False
 
         self.data_prepared = True
         
-    def plot(self, plot_handle: plt.Axes):
+    def plot(self, plot_handle: Axes3D):
         if not self.data_prepared:
             print('Data not loaded. Return...')
             return
@@ -106,7 +131,7 @@ class TrajPloter(object):
             for i in range(len(self.ref_traj_hori)):
                 _th = self.ref_traj_hori[i]
                 _traj = []
-                for _t in np.linspace(0, _th-1.0, 20, endpoint=True):   # _th-1.0 is a modification for better illustrating the result
+                for _t in np.linspace(0, _th, 20, endpoint=True):   # _th-1.0 is a modification for better illustrating the result
                     _tmp_x = 0
                     _tmp_y = 0
                     _tmp_z = 0
@@ -127,6 +152,29 @@ class TrajPloter(object):
                                     color=self.plot_settings['ref_color'], 
                                     linestyle=self.plot_settings['traj_linestyle'], 
                                     linewidth=self.plot_settings['line_width'])
+                    
+        if self.plot_disturb:
+            if self.disturb_h is None or self.disturb_rad is None or self.disturb_bias is None:
+                print('Unable to plot disturbance model.')
+                self.plot_disturb = False
+                return
+            u = np.linspace(0, 2 * np.pi, 25)
+            v = np.linspace(0, np.pi, 25)
+            for i in range(3):
+                k = (i+1) / 3.0
+                x = k * (self.disturb_h / 2 * np.outer(np.cos(u), np.sin(v)) + (self.disturb_h / 2 - self.disturb_bias))
+                y = k * self.disturb_rad * np.outer(np.sin(u), np.sin(v))
+                z = k * self.disturb_rad * np.outer(np.ones(np.size(u)), np.cos(v))
+                d = np.outer(np.ones(np.size(u)), np.ones(np.size(v)))
+                org_crds = np.stack((x, y, z, d))
+                new_crds = np.zeros(org_crds.shape)
+                for m in range(org_crds.shape[1]):
+                    for n in range(org_crds.shape[2]):
+                        new_crds[:,m,n] = self.disturb_trans_mat @ org_crds[:,m,n]
+                plot_handle.plot_surface(new_crds[0,:], new_crds[1,:], new_crds[2,:], 
+                                         color=self.plot_settings['disturb_color'], alpha=self.plot_settings['disturb_transp'])
+                
+            
                 
 
 if __name__ == "__main__":

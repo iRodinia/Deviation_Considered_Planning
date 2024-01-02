@@ -10,7 +10,6 @@ class PlanResultPlot(object):
         self.data_prepared = False
         self.plot_settings = {
             'plan_sec_color': 'royalblue',
-            'plan_sec_linestyle': '-',
             'average_color': 'firebrick',
             'average_linestyle': 'dashed',
             'line_width': 1.5,
@@ -29,7 +28,6 @@ class PlanResultPlot(object):
             return
         self.traj_plan_sec = np.array(traj_plan_sec)
         self.avg_sec = self.traj_plan_sec.sum() / len(traj_plan_sec)
-        
         self.data_prepared = True
     
     def change_setting(self, key: str, val_str: str):
@@ -43,7 +41,7 @@ class PlanResultPlot(object):
             print('Data not loaded. Return...')
             return
         
-        handle.stem(self.traj_plan_sec, linefmt=self.plot_settings['plan_sec_linestyle'], 
+        handle.stem(self.traj_plan_sec, linefmt=self.plot_settings['plan_sec_color'], 
                     markerfmt='o', use_line_collection=True)
         handle.axhline(self.avg_sec, 0, self.traj_plan_sec.shape[0], 
                        linestyle=self.plot_settings['average_linestyle'],
