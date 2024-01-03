@@ -155,7 +155,7 @@ public:
     static void wrapTotalConstraints(unsigned m, double *result, unsigned n, const double* x, double* grad, void* f_data);
 
     int pred_N;
-    double pred_dt, pred_T;
+    double pred_dt, pred_T, replan_dt;
     int poly_order;
     int smoothness_cost_order;   // 3: minimize jerk, 4: minimize snap
     int max_faces_num, constrained_point_num, total_cons_num;

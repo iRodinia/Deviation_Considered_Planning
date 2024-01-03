@@ -11,6 +11,7 @@
 #include "grid_map/grid_map.h"
 #include "polytope/emvp.hpp"
 #include "grid_map_planner/planner_interface.h"
+#include "flight_logger/logger.h"
 
 namespace disturbance_aware_planner{
 
@@ -23,6 +24,8 @@ public:
                         std::vector<Eigen::MatrixX4d>& polygons, Eigen::Vector3d& goal_pos, Eigen::Vector3d& goal_vel_dir);
     inline bool isPathGenerated();
     inline bool isSFCGenerated();
+
+    // void logRefPath(FlightLogger* logger_ptr);
 
     std::vector<Eigen::Vector3d> ref_path;
     std::vector<double> ref_time_alloc;

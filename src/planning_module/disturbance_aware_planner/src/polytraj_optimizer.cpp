@@ -28,6 +28,9 @@ void PolyTrajOptimizer::initParameters(ros::NodeHandle& nh){
             }
         }
     }
+    double replan_freq;
+    nh.param("Commander/replan_frequency", replan_freq, 1.5);
+    replan_dt = std::max(1 / replan_freq - 0.01, 0.5);
 
     double mass, arm_len, kf, km;
     Eigen::Matrix<double, 3, 3> Inertia = Eigen::Matrix<double, 3, 3>::Zero();
@@ -161,9 +164,9 @@ bool PolyTrajOptimizer::optimize(){
     std::vector<double> cons_tolerance(total_cons_num, 0.05);
     opter.add_inequality_mconstraint(PolyTrajOptimizer::wrapTotalConstraints, this, cons_tolerance);
 
-    opter.set_xtol_rel(1e-2);
+    // opter.set_xtol_rel(1e-2);
     // opter.set_maxeval(1e3);
-    opter.set_maxtime(0.5);
+    opter.set_maxtime(replan_dt);
 
     std::vector<double> optim_x(rest_coefs.size(), 0.0);
     for(int i=0; i<poly_order-2; i++){
@@ -186,9 +189,10 @@ bool PolyTrajOptimizer::optimize(){
         rest_coefs(1,i) = optim_x[poly_order-2+i];
         rest_coefs(2,i) = optim_x[2*poly_order-4+i];
     }
-    if(frs_cost_save <= 0.1){
+    if(w_frs*frs_cost_save <= 1e-2){
         reset_optim = true;
     }
+    ready_for_optim = false;
     return true;
 }
 
