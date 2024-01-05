@@ -114,21 +114,6 @@
         <param name="max_disturb_ratio"               value="0.5" />
     </group>
 
-    <node name="dap_planner" pkg="disturbance_aware_planner" type="dap_node" output="screen" required="true">
-        <remap from="/grid_map/cloud_in"                        to="$(arg global_map_topic)"/>
-        <remap from="/grid_map/uav_pose_in"                     to="$(arg uav_pose_topic)"/>
-        <remap from="/grid_map/local_map"                       to="$(arg uav_local_sensing_map_topic)"/>
-        <remap from="/grid_map/local_map_inflate"               to="$(arg uav_local_sensing_inflated_map_topic)"/>
-
-        <remap from="/global_map_process/global_reference_path"           to="$(arg global_ref_path_topic)"/>
-        <remap from="/global_map_process/global_polygons"                 to="$(arg global_ref_sfc_topic)"/>
-
-        <remap from="crazyflie/pose_and_att"          to="$(arg uav_pose_topic)"/>
-        <remap from="crazyflie/vel_and_angrate"       to="$(arg uav_vel_topic)"/>
-        <remap from="crazyflie/ctrl_mode"             to="$(arg uav_ctrl_mode_topic)"/>
-        <remap from="planner/ref_polytraj"            to="$(arg local_ref_traj_topic)"/>
-    </node>
-
     <node name="reference_governor" pkg="reference_governor" type="reference_governor_node" output="screen" required="true">
         <remap from="planner/ref_polytraj"            to="$(arg local_ref_traj_topic)"/>
         <remap from="crazyflie/pose_and_att"          to="$(arg uav_pose_topic)"/>
@@ -145,6 +130,6 @@
         <remap from="disturbances/FnaDisturbance_map"  to="$(arg disturb_model_map_topic)"/>
     </node>
 
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find disturbance_aware_planner)/rviz_config/global_plan_test.rviz" required="true" />
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find disturbance_aware_planner)/rviz_config/map_test.rviz" required="true" />
 
 </launch>
