@@ -4,5 +4,5 @@ Name: disturbance_sources
 Description: Description of disturbance_sources
 Version: 0.0.0
 Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
+Libs: -L${prefix}/lib -ldisturbance_sources
 Requires: pcl_ros roscpp sensor_msgs std_msgs tf2_ros sensor_msgs flight_logger

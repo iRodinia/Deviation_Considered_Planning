@@ -116,7 +116,7 @@ if(NOT "/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/di
   endforeach()
 endif()
 
-set(libraries "")
+set(libraries "disturbance_sources")
 foreach(library ${libraries})
   # keep build configuration keywords, target names and absolute libraries as-is
   if("${library}" MATCHES "^(debug|optimized|general)$")

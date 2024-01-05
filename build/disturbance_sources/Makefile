@@ -1420,6 +1420,19 @@ disturbance_sources_genpy/fast:
 .PHONY : disturbance_sources_genpy/fast
 
 #=============================================================================
+# Target rules for targets named disturbance_map
+
+# Build rule for target.
+disturbance_map: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 disturbance_map
+.PHONY : disturbance_map
+
+# fast build rule for target.
+disturbance_map/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/disturbance_map.dir/build.make CMakeFiles/disturbance_map.dir/build
+.PHONY : disturbance_map/fast
+
+#=============================================================================
 # Target rules for targets named disturbance_sources_node
 
 # Build rule for target.
@@ -1483,6 +1496,30 @@ gtest_main: cmake_check_build_system
 gtest_main/fast:
 	$(MAKE) $(MAKESILENT) -f gtest/googletest/CMakeFiles/gtest_main.dir/build.make gtest/googletest/CMakeFiles/gtest_main.dir/build
 .PHONY : gtest_main/fast
+
+src/disturb_loader.o: src/disturb_loader.cpp.o
+.PHONY : src/disturb_loader.o
+
+# target to build an object file
+src/disturb_loader.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/disturbance_map.dir/build.make CMakeFiles/disturbance_map.dir/src/disturb_loader.cpp.o
+.PHONY : src/disturb_loader.cpp.o
+
+src/disturb_loader.i: src/disturb_loader.cpp.i
+.PHONY : src/disturb_loader.i
+
+# target to preprocess a source file
+src/disturb_loader.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/disturbance_map.dir/build.make CMakeFiles/disturbance_map.dir/src/disturb_loader.cpp.i
+.PHONY : src/disturb_loader.cpp.i
+
+src/disturb_loader.s: src/disturb_loader.cpp.s
+.PHONY : src/disturb_loader.s
+
+# target to generate assembly for a file
+src/disturb_loader.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/disturbance_map.dir/build.make CMakeFiles/disturbance_map.dir/src/disturb_loader.cpp.s
+.PHONY : src/disturb_loader.cpp.s
 
 src/ellipsoidal_disturb.o: src/ellipsoidal_disturb.cpp.o
 .PHONY : src/ellipsoidal_disturb.o
@@ -1617,11 +1654,15 @@ help:
 	@echo "... topic_tools_generate_messages_lisp"
 	@echo "... topic_tools_generate_messages_nodejs"
 	@echo "... topic_tools_generate_messages_py"
+	@echo "... disturbance_map"
 	@echo "... disturbance_sources_node"
 	@echo "... gmock"
 	@echo "... gmock_main"
 	@echo "... gtest"
 	@echo "... gtest_main"
+	@echo "... src/disturb_loader.o"
+	@echo "... src/disturb_loader.i"
+	@echo "... src/disturb_loader.s"
 	@echo "... src/ellipsoidal_disturb.o"
 	@echo "... src/ellipsoidal_disturb.i"
 	@echo "... src/ellipsoidal_disturb.s"

@@ -118,7 +118,7 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-#  LIBRARIES disturbance_sources
+  LIBRARIES ${PROJECT_NAME}
   CATKIN_DEPENDS pcl_ros roscpp sensor_msgs std_msgs tf2_ros sensor_msgs flight_logger
 #  DEPENDS system_lib
 )
@@ -140,6 +140,9 @@ include_directories(
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/disturbance_sources.cpp
 # )
+add_library(disturbance_map
+  src/disturb_loader.cpp
+)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -168,6 +171,9 @@ add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catk
 #   ${catkin_LIBRARIES}
 # )
 target_link_libraries(${PROJECT_NAME}_node
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(disturbance_map
   ${catkin_LIBRARIES}
 )
 
