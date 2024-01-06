@@ -42,3 +42,13 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
   /usr/src/googletest/googletest/CMakeLists.txt:91 (include)
 This warning is for project developers.  Use -Wno-dev to suppress it.
 [0m
+[31mCMake Error at /home/cz_linux/Documents/Deviation_Considered_Planning/devel/share/disturbance_sources/cmake/disturbance_sourcesConfig.cmake:173 (message):
+  Project 'disturbance_aware_planner' tried to find library
+  'disturbance_sources'.  The library is neither a target nor built/installed
+  properly.  Did you compile project 'disturbance_sources'? Did you
+  find_package() it before the subdirectory containing its code is included?
+[36mCall Stack (most recent call first):[0m
+  /opt/ros/noetic/share/catkin/cmake/catkinConfig.cmake:76 (find_package)
+  CMakeLists.txt:12 (find_package)
+
+[0m

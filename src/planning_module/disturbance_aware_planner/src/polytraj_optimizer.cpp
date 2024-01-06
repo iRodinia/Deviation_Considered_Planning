@@ -30,7 +30,7 @@ void PolyTrajOptimizer::initParameters(ros::NodeHandle& nh){
     }
     double replan_freq;
     nh.param("Commander/replan_frequency", replan_freq, 1.5);
-    replan_dt = std::max(1 / replan_freq - 0.01, 0.5);
+    replan_dt = std::max(1 / replan_freq - 0.2, 0.5);
 
     double mass, arm_len, kf, km;
     Eigen::Matrix<double, 3, 3> Inertia = Eigen::Matrix<double, 3, 3>::Zero();
@@ -44,25 +44,6 @@ void PolyTrajOptimizer::initParameters(ros::NodeHandle& nh){
     nh.param("Model/nominal_vel", uav_vel, 1.2);
     quad.setParams(9.8066, mass, Inertia, arm_len, kf, km);
 
-    nh.param("FanDisturbance/center_pos_x", cylinder_pos(0), 0.0);
-    nh.param("FanDisturbance/center_pos_y", cylinder_pos(1), 0.0);
-    nh.param("FanDisturbance/center_pos_z", cylinder_pos(2), 0.0);
-    nh.param("FanDisturbance/center_dir_x", cylinder_dir(0), 1.0);
-    nh.param("FanDisturbance/center_dir_y", cylinder_dir(1), 0.0);
-    nh.param("FanDisturbance/center_dir_z", cylinder_dir(2), 0.0);
-    if(cylinder_dir.norm() == 0){
-        cylinder_dir(0) = 1;
-    }
-    else{
-        cylinder_dir.normalize();
-    }
-    nh.param("FanDisturbance/fan_radius", cylinder_rad, 0.3);
-    nh.param("FanDisturbance/wind_range", cylinder_h, 1.0);
-    nh.param("FanDisturbance/center_bias", cylinder_center_bias, 0.2);
-    nh.param("FanDisturbance/max_disturb_ratio", max_disturb_ratio, 0.1);
-    max_disturb_ratio = std::max(max_disturb_ratio, 0.0);
-    min_disturb_ratio = 0.05 * max_disturb_ratio;
-
     coef_c0 = Coef(0, 0, 0);
     coef_c1 = Coef(0, 0, 0);
     coef_c2 = Coef(0, 0, 0);
@@ -71,6 +52,7 @@ void PolyTrajOptimizer::initParameters(ros::NodeHandle& nh){
     reset_optim = true;
     opter = nlopt::opt(nlopt::LN_COBYLA, rest_coefs.size());
     ready_for_optim = false;
+    disturb_map_set = false;
 }
 
 void PolyTrajOptimizer::setStates(const Point init_p, const Point init_v, const Point init_a, 
@@ -125,6 +107,11 @@ void PolyTrajOptimizer::setStates(const Point init_p, const Point init_v, const 
     // rest_coefs.block<3,1>(0,1) = default_coefs.row(1).transpose();   // float
 
     ready_for_optim = true;
+}
+
+void PolyTrajOptimizer::setEnvironment(const DisturbMap::Ptr _ptr){
+    disturb_ptr = _ptr;
+    disturb_map_set = true;
 }
 
 void PolyTrajOptimizer::setCollisionConstraints(const std::vector<Eigen::MatrixX4d>& constraints, const std::vector<double>& time_allocs){
@@ -189,7 +176,7 @@ bool PolyTrajOptimizer::optimize(){
         rest_coefs(1,i) = optim_x[poly_order-2+i];
         rest_coefs(2,i) = optim_x[2*poly_order-4+i];
     }
-    if(w_frs*frs_cost_save <= 1e-2){
+    if(w_frs*frs_cost_save <= 0.5){
         reset_optim = true;
     }
     ready_for_optim = false;
@@ -289,7 +276,7 @@ double PolyTrajOptimizer::calcFRSCost(std::vector<double>& grad){
     Eigen::Matrix<double, 17, 17> F = Eigen::Matrix<double, 17, 17>::Zero();
     F.block<4,4>(13,13) = Eigen::Matrix<double, 4, 4>::Identity();
     for(int i=0; i<pred_N; i++){
-        Eigen::Vector4d disturb = getMotorNoise(flat_states[i].segment<3>(0));
+        Eigen::Vector4d disturb = getMotorNoise(flat_states[i]);
         for(int j=0; j<4; j++){
             disturb(j) = disturb(j) * disturb(j);
         }
@@ -335,28 +322,11 @@ void PolyTrajOptimizer::getFlatStatesInputes(std::vector<quadState>& return_stat
     }
 }
 
-Eigen::Vector4d PolyTrajOptimizer::getMotorNoise(Point pos){
+Eigen::Vector4d PolyTrajOptimizer::getMotorNoise(quadState st){
+    if(!disturb_map_set){
+        return Eigen::Vector4d(0, 0, 0, 0);
+    }
     Eigen::Vector4d nominal_inputs = quad.getNominalInputs();
-    Eigen::Vector3d vec_cp = pos - cylinder_pos;
-    if(vec_cp.norm() == 0){
-        return nominal_inputs * max_disturb_ratio * pred_dt;
-    }
-    else{
-        double len_proj = vec_cp.dot(cylinder_dir);
-        double rad_len = vec_cp.cross(cylinder_dir).norm();
-        double disturb_frac = 0.0;
-        if(len_proj > 0){
-            if(len_proj <= (cylinder_h-cylinder_center_bias) && rad_len <= cylinder_rad){
-                disturb_frac = std::max(min_disturb_ratio, 1 - len_proj / (cylinder_h-cylinder_center_bias) - rad_len / cylinder_rad);
-                // disturb_frac = pow(1 - len_proj / (cylinder_h-cylinder_center_bias), 2);
-            }
-        }
-        else{
-            if(len_proj > -cylinder_center_bias && rad_len <= cylinder_rad){
-                disturb_frac = std::max(min_disturb_ratio, 1 + len_proj / cylinder_center_bias - rad_len / cylinder_rad);
-                // disturb_frac = pow(1 + len_proj / cylinder_center_bias, 2);
-            }
-        }
-        return nominal_inputs * max_disturb_ratio * disturb_frac * pred_dt;
-    }
+    double d_ratio = disturb_ptr->getRatio(st.segment<3>(0));
+    return nominal_inputs * pred_dt * d_ratio;
 }

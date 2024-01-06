@@ -37,7 +37,31 @@ ReferenceGovernor::ReferenceGovernor(ros::NodeHandle* node): nh(*node){
     cmd_offb = false;
     mode_change_count = 0;
     at_goal_pos_count = 0;
-    enable_log = false;
+    
+    nh.param("Log/enable_log", enable_log, false);
+    if(enable_log){
+        string log_folder_name;
+	    nh.param("Log/log_folder_name", log_folder_name, string("default_folder"));
+        logger_ptr = std::shared_ptr<FlightLogger>(new FlightLogger(log_folder_name, "reference_governor"));
+        vector<string> tags = {
+            "goal_reached", "cmd_offboard", "traj_time_horizon", "traj_plan_time",
+        };
+        int _order;
+        nh.param("Optimization/poly_order", _order, 4);
+        for(int i=0; i<=_order; i++){
+            tags.push_back("coef_x_"+to_string(i));
+            tags.push_back("coef_y_"+to_string(i));
+            tags.push_back("coef_z_"+to_string(i));
+        }
+		logger_ptr->setDataTags(tags);
+        dumpParams();
+    }
+}
+
+ReferenceGovernor::~ReferenceGovernor(){
+    if(enable_log){
+        logger_ptr->saveFile();
+    }
 }
 
 void ReferenceGovernor::setNewTraj(Eigen::Matrix<double, 3, -1> coefs, double t_horizon, ros::Time start_time){
@@ -92,9 +116,10 @@ ReferenceGovernor::RefState ReferenceGovernor::getRefCmd_Full(){
     return result;
 }
 
-void ReferenceGovernor::setLogger(FlightLogger* _ptr){
-	logger_ptr = _ptr;
-	enable_log = true;
+void ReferenceGovernor::dumpParams(){
+	if(!enable_log){
+        return;
+    }
 	logger_ptr->logParameter("cmd_freq", cmd_freq);
     logger_ptr->logParameter("land_after_complete", land_after_complete);
 	start_log_ts = ros::Time::now();
@@ -286,32 +311,7 @@ int main(int argc, char** argv){
     ros::NodeHandle nh;
     ReferenceGovernor governor(&nh);
 
-    bool log_enable = false;
-	nh.param("Log/enable_log", log_enable, false);
-	string log_folder_name;
-	nh.param("Log/log_folder_name", log_folder_name, string("default_folder"));
-	FlightLogger logger(log_folder_name, "reference_governor");
-	if(log_enable){
-		vector<string> tags = {
-            "goal_reached", "cmd_offboard", "traj_time_horizon", "traj_plan_time",
-        };
-        int _order;
-        nh.param("Optimization/poly_order", _order, 4);
-        for(int i=0; i<=_order; i++){
-            tags.push_back("coef_x_"+to_string(i));
-            tags.push_back("coef_y_"+to_string(i));
-            tags.push_back("coef_z_"+to_string(i));
-        }
-		logger.setDataTags(tags);
-        logger.logParameter("traj_poly_order", _order);
-		governor.setLogger(&logger);
-	}
-
     ros::spin();
-
-    if(log_enable){
-		logger.saveFile();
-	}
 
     return 0;
 }

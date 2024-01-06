@@ -22,6 +22,7 @@ find_package(catkin REQUIRED COMPONENTS
   grid_map_planner
   reference_governor
   flight_logger
+  disturbance_sources
 )
 
 ## System dependencies are found with CMake's conventions
@@ -118,7 +119,7 @@ find_package(NLopt REQUIRED)
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES ${PROJECT_NAME} reference_governor
+  LIBRARIES ${PROJECT_NAME} reference_governor disturbance_sources
   CATKIN_DEPENDS roscpp rospy std_msgs grid_map grid_map_planner flight_logger
 #  DEPENDS Eigen3
 )
@@ -161,7 +162,7 @@ add_dependencies(dap_polytraj_optimizer ${${PROJECT_NAME}_EXPORTED_TARGETS} ${ca
 # add_executable(${PROJECT_NAME}_node src/disturbance_aware_planner_node.cpp)
 add_executable(dap_node 
   src/planner_node.cpp
-  )
+)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the

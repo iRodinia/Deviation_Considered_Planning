@@ -141,6 +141,6 @@ bool FlightLogger::saveFile(){
         }
     }
     fout.close();
-    cout << CLOSE << endl;
+    cout << CLOSE;
     return true;
 }

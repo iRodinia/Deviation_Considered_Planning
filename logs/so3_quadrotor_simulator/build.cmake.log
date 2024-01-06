@@ -99,6 +99,6 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
   CMakeLists.txt:29 (catkin_package)
 
 [0m
-[36m--[0m Configuring done (1.6s)
+[36m--[0m Configuring done (1.4s)
 [36m--[0m Generating done (0.0s)
 [36m--[0m Build files have been written to: /home/cz_linux/Documents/Deviation_Considered_Planning/build/so3_quadrotor_simulator

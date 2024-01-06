@@ -15,6 +15,7 @@ public:
     void initSettings(const ros::NodeHandle nh);
     void loadMap(const std::vector<float> buffer);
     bool isInited();
+    bool hasMap();
     double getRatio(Eigen::Vector3d pos);
     
     inline void posToIndex(const Eigen::Vector3d& pos, Eigen::Vector3i& id);
@@ -24,10 +25,12 @@ public:
     inline bool isInMap(const Eigen::Vector3i& idx);
     inline bool isInMap(const Eigen::Vector3d& pos);
 
-private:
-    double getRatio(Eigen::Vector3i idx);
+    typedef std::shared_ptr<DisturbMap> Ptr;
 
-    bool initialized;
+private:
+    double getRatio_idx(Eigen::Vector3i idx);
+
+    bool initialized, has_map;
     int buffer_size;
     Eigen::Vector3d map_origin_, map_size_;
     Eigen::Vector3d map_min_boundary_, map_max_boundary_;  // map range in pos

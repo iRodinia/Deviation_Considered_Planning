@@ -12,7 +12,7 @@ try:
     from catkin.environment_cache import generate_environment_script
 except ImportError:
     # search for catkin package in all workspaces and prepend to path
-    for workspace in '/home/cz_linux/Documents/Deviation_Considered_Planning/devel;/home/cz_linux/catkin_overlay_ws/devel;/opt/ros/noetic;/home/cz_linux/Documents/catkin_ws_build/devel;/home/cz_linux/Documents/catkin_ws_make/devel;/home/cz_linux/Documents/ego-planner-swarm/devel;/home/cz_linux/Documents/crazyswarm/ros_ws/devel'.split(';'):
+    for workspace in '/home/cz_linux/catkin_overlay_ws/devel;/opt/ros/noetic;/home/cz_linux/Documents/catkin_ws_build/devel;/home/cz_linux/Documents/catkin_ws_make/devel;/home/cz_linux/Documents/ego-planner-swarm/devel;/home/cz_linux/Documents/crazyswarm/ros_ws/devel'.split(';'):
         python_path = os.path.join(workspace, 'lib/python3/dist-packages')
         if os.path.isdir(os.path.join(python_path, 'catkin')):
             sys.path.insert(0, python_path)

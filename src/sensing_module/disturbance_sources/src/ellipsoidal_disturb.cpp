@@ -63,7 +63,7 @@ EllipseDisturb::EllipseDisturb(ros::NodeHandle* node): nh(*node){
     nh.param("/grid_map/world_frame_name", world_frame, string("world"));
     nh.param("/grid_map/max_disturb_ratio", max_ratio, 0.5);
 
-    disturb_map_pub = nh.advertise<std_msgs::Float32MultiArray>("disturbances/FnaDisturbance_map", 1);
+    disturb_map_pub = nh.advertise<std_msgs::Float32MultiArray>("disturbances/FanDisturbance_map", 1);
     disturb_vis_pub = nh.advertise<sensor_msgs::PointCloud2>("disturbances/FanDisturbance_vis", 5);
     get_disturb_ratio = nh.advertiseService("get_disturb_ratio", &EllipseDisturb::getDisturbRatioSrv, this);
     timer1 = nh.createTimer(ros::Rate(1.0), &EllipseDisturb::timer1Cb, this);

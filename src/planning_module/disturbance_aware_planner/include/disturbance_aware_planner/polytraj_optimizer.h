@@ -5,12 +5,14 @@
 #include <string>
 #include <cmath>
 #include <numeric>
+#include <memory>
 
 #include <Eigen/Eigen>
 #include <Eigen/Eigenvalues>
 #include <ros/ros.h>
 #include <nlopt.hpp>
 
+#include "disturbance_loader/disturb_loader.h"
 #include "disturbance_aware_planner/math_utils/quadrotor_rk4.h"
 
 namespace disturbance_aware_planner{
@@ -140,6 +142,7 @@ public:
     ~PolyTrajOptimizer() {}
     void initParameters(ros::NodeHandle &nh);
     void setStates(const Point init_p, const Point init_v, const Point init_a, const Point goal_p, const Point goal_vdir);
+    void setEnvironment(const DisturbMap::Ptr _ptr);
     void setCollisionConstraints(const std::vector<Eigen::MatrixX4d>& constraints, const std::vector<double>& time_allocs);
 
     bool optimize();
@@ -147,6 +150,8 @@ public:
     Coefs getTrajectoryCoefficients();
     Polynomial<3> poly_traj;
     std::vector<ConvexHull<3>> constraints_;
+    DisturbMap::Ptr disturb_ptr;
+    bool disturb_map_set;
 
     static double wrapTotalCost(const std::vector<double>& x, std::vector<double>& grad, void* data);
     double calcSmoothnessCost(std::vector<double>& grad);
@@ -174,17 +179,8 @@ public:
     double uav_vel;
     bool ready_for_optim;
 
-    /* Fan Disturbance Model */
-    /* a cylinder with height cylinder_h and radius cylinder_rad */
-    /* assume the fan is placed at cylinder_pos and heading to cylinder_dir */
-    /* then the fan center is at length cylinder_center_bias along the middle symmetric line of the cylinder (from the bottom) */
-    Eigen::Vector3d cylinder_pos, cylinder_dir;
-    double cylinder_rad, cylinder_h;
-    double cylinder_center_bias;
-    double max_disturb_ratio, min_disturb_ratio;
-
     void getFlatStatesInputes(std::vector<quadState>& return_states, std::vector<quadInput>& return_inputes);
-    Eigen::Vector4d getMotorNoise(Point pos);
+    Eigen::Vector4d getMotorNoise(quadState st);
 
 public:
     typedef std::shared_ptr<PolyTrajOptimizer> Ptr;

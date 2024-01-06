@@ -6,6 +6,7 @@ DisturbanceAwarePlanner::DisturbanceAwarePlanner(ros::NodeHandle* nh): nh_(*nh){
     local_pos_sub = nh_.subscribe<geometry_msgs::PoseStamped>("crazyflie/pose_and_att", 1, &DisturbanceAwarePlanner::subPosCb, this);
     local_vel_sub = nh_.subscribe<geometry_msgs::TwistStamped>("crazyflie/vel_and_angrate", 1, &DisturbanceAwarePlanner::subVelCb, this);
     flight_mode_sub = nh_.subscribe<std_msgs::Int16>("crazyflie/ctrl_mode", 1, &DisturbanceAwarePlanner::subModeCb, this);
+    disturb_map_sub = nh_.subscribe<std_msgs::Float32MultiArray>("disturbances/map_data", 1, &DisturbanceAwarePlanner::subDisturbCb, this);
     ref_traj_pub = nh_.advertise<reference_governor::polyTraj>("planner/ref_polytraj", 1);
 
     double replan_freq;   // frequency for conducting replanning
@@ -26,13 +27,34 @@ DisturbanceAwarePlanner::DisturbanceAwarePlanner(ros::NodeHandle* nh): nh_(*nh){
     global_ptr.reset(new GlobalMapProcessor(nh_));
     opter_ptr.reset(new PolyTrajOptimizer);
     opter_ptr->initParameters(nh_);
+    disturb_ptr.reset(new DisturbMap);
+    disturb_ptr->initSettings(nh_);
+    opter_ptr->setEnvironment(disturb_ptr);
 
-    enable_log = false;
+    nh_.param("Log/enable_log", enable_log, false);
+    if(enable_log){
+        string log_folder_name;
+	    nh_.param("Log/log_folder_name", log_folder_name, string("default_folder"));
+        logger_ptr = std::shared_ptr<FlightLogger>(new FlightLogger(log_folder_name, "global_planner"));
+        vector<string> tags = {
+            "ref_path_px", "ref_path_py", "ref_path_pz", 
+            "ref_path_vx", "ref_path_vy", "ref_path_vz", 
+        };
+		logger_ptr->setDataTags(tags);
+        dumpParams();
+    }
 }
 
-void DisturbanceAwarePlanner::setLogger(FlightLogger* _ptr){
-	logger_ptr = _ptr;
-	enable_log = true;
+DisturbanceAwarePlanner::~DisturbanceAwarePlanner(){
+    if(enable_log){
+        logger_ptr->saveFile();
+    }
+}
+
+void DisturbanceAwarePlanner::dumpParams(){
+    if(!enable_log){
+        return;
+    }
 	logger_ptr->logParameter("start_pos_x", start_pos(0));
     logger_ptr->logParameter("start_pos_y", start_pos(1));
     logger_ptr->logParameter("start_pos_z", start_pos(2));
@@ -56,12 +78,24 @@ void DisturbanceAwarePlanner::subModeCb(const std_msgs::Int16::ConstPtr& msg){
     current_ctrl_mode = msg->data;
 }
 
+void DisturbanceAwarePlanner::subDisturbCb(const std_msgs::Float32MultiArray::ConstPtr& msg){
+    if(disturb_ptr->hasMap()){
+        return;
+    }
+    vector<float> map_data = msg->data;
+    disturb_ptr->loadMap(map_data);
+}
+
 void DisturbanceAwarePlanner::timer1Cb(const ros::TimerEvent&){     // call at each replanning iteration
     if(!global_ptr->isSFCGenerated() || !global_ptr->isPathGenerated()){
         return;
     }
     if(current_ctrl_mode != 2){
         ROS_INFO("Replanning process waiting for offboard control mode.");
+        return;
+    }
+    if(!disturb_ptr->isInited()){
+        ROS_INFO("Replanning process waiting for disturbance map initialization.");
         return;
     }
     ros::Time t_start = ros::Time::now();
@@ -129,26 +163,6 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "commander_node");
     ros::NodeHandle nh;
     DisturbanceAwarePlanner cmder(&nh);
-
-    bool log_enable = false;
-	nh.param("Log/enable_log", log_enable, false);
-	string log_folder_name;
-	nh.param("Log/log_folder_name", log_folder_name, string("default_folder"));
-	FlightLogger logger(log_folder_name, "global_planner");
-	if(log_enable){
-		vector<string> tags = {
-            "ref_path_px", "ref_path_py", "ref_path_pz", 
-            "ref_path_vx", "ref_path_vy", "ref_path_vz", 
-        };
-		logger.setDataTags(tags);
-		cmder.setLogger(&logger);
-	}
-
-    ros::spin();
-
-    if(log_enable){
-		logger.saveFile();
-	}
 
     ros::spin();
     return 0;

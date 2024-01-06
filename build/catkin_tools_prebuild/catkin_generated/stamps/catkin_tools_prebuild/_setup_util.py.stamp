@@ -268,7 +268,7 @@ if __name__ == '__main__':
 
         if not args.local:
             # environment at generation time
-            CMAKE_PREFIX_PATH = r'/home/cz_linux/Documents/Deviation_Considered_Planning/devel;/home/cz_linux/catkin_overlay_ws/devel;/opt/ros/noetic;/home/cz_linux/Documents/catkin_ws_build/devel;/home/cz_linux/Documents/catkin_ws_make/devel;/home/cz_linux/Documents/ego-planner-swarm/devel;/home/cz_linux/Documents/crazyswarm/ros_ws/devel'.split(';')
+            CMAKE_PREFIX_PATH = r'/home/cz_linux/catkin_overlay_ws/devel;/opt/ros/noetic;/home/cz_linux/Documents/catkin_ws_build/devel;/home/cz_linux/Documents/catkin_ws_make/devel;/home/cz_linux/Documents/ego-planner-swarm/devel;/home/cz_linux/Documents/crazyswarm/ros_ws/devel'.split(';')
         else:
             # don't consider any other prefix path than this one
             CMAKE_PREFIX_PATH = []

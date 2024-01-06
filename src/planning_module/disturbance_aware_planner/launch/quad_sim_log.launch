@@ -80,7 +80,7 @@
         <param name="predict_num"                     value="30" />
         <param name="predict_dt"                      value="0.05" />
         <param name="smoothness_cost_weight"          value="1.0" />
-        <param name="frs_cost_weight"                 value="0.05" />
+        <param name="frs_cost_weight"                 value="0.0" />
         <param name="terminal_cost_weight"            value="1.5" />
         <param name="max_single_convex_hull_faces"    value="20" />
         <param name="total_constrained_points_in_SFC" value="10" />
@@ -132,6 +132,7 @@
         <remap from="crazyflie/vel_and_angrate"       to="$(arg uav_vel_topic)"/>
         <remap from="crazyflie/ctrl_mode"             to="$(arg uav_ctrl_mode_topic)"/>
         <remap from="planner/ref_polytraj"            to="$(arg local_ref_traj_topic)"/>
+        <remap from="disturbances/map_data"           to="$(arg disturb_model_map_topic)"/>
     </node>
 
     <node name="reference_governor" pkg="reference_governor" type="reference_governor_node" output="screen" required="true">
@@ -168,7 +169,7 @@
 
     <node name="disturbance_model" pkg="disturbance_sources" type="disturbance_sources_node" output="screen" required="true">
         <remap from="disturbances/FanDisturbance_vis"  to="$(arg disturb_model_vis_topic)"/>
-        <remap from="disturbances/FnaDisturbance_map"  to="$(arg disturb_model_map_topic)"/>
+        <remap from="disturbances/FanDisturbance_map"  to="$(arg disturb_model_map_topic)"/>
     </node>
 
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find disturbance_aware_planner)/rviz_config/quad_sim_disturb_test.rviz" required="true" />

@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <cmath>
+#include <memory>
 #include <Eigen/Eigen>
 #include <Eigen/Eigenvalues>
 #include <Eigen/Geometry>
@@ -22,8 +23,8 @@
 class FakeDronePro{
 public:
     FakeDronePro(ros::NodeHandle* node);
-    ~FakeDronePro() {};
-    void setLogger(FlightLogger* logger_ptr);
+    ~FakeDronePro();
+    void dumpParams();
 
     int current_uav_mode = 0;
     Eigen::Vector3d ref_pos, current_pos;
@@ -35,9 +36,7 @@ public:
 private:
     ros::NodeHandle nh_;
     double sim_freq, sim_dt, T_c, damp_factor;
-    bool enable_log;
-    ros::Time start_log_ts;
-    
+
     ros::Publisher uav_pos_pub;   // include pos and att
     ros::Publisher uav_vel_pub;   // include vel and angrate
     ros::Publisher flight_mode_pub;   // 0: land, 1: takeoff, 2: offb_ctrl
@@ -55,7 +54,9 @@ private:
     void subModeCb(const std_msgs::Int16::ConstPtr& msg);
     void timer1Cb(const ros::TimerEvent&);
 
-    FlightLogger* logger_ptr;
+    bool enable_log;
+    ros::Time start_log_ts;
+    std::shared_ptr<FlightLogger> logger_ptr;
 };
 
 

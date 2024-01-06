@@ -1,6 +1,0 @@
-/usr/bin/ld: CMakeFiles/fake_drone_node.dir/src/fake_drone.cpp.o: in function `_GLOBAL__sub_I__Z15LOG_PATH_PREFIXB5cxx11':
-/home/cz_linux/Documents/Deviation_Considered_Planning/src/simulation_module/flight_logger/include/flight_logger/logger.h:17: undefined reference to `ros::package::getPath(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)'
-collect2: error: ld returned 1 exit status
-make[2]: *** [CMakeFiles/fake_drone_node.dir/build.make:119：/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/fake_drone/lib/fake_drone/fake_drone_node] 错误 1
-make[1]: *** [CMakeFiles/Makefile2:1213：CMakeFiles/fake_drone_node.dir/all] 错误 2
-make: *** [Makefile:146：all] 错误 2

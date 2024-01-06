@@ -439,6 +439,9 @@ disturbance_aware_planner_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 disturbance_aware_planner_SOURCE_DIR:STATIC=/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner
 
+//The directory containing a CMake configuration file for disturbance_sources.
+disturbance_sources_DIR:PATH=/home/cz_linux/Documents/Deviation_Considered_Planning/devel/share/disturbance_sources/cmake
+
 //The directory containing a CMake configuration file for dynamic_reconfigure.
 dynamic_reconfigure_DIR:PATH=/opt/ros/noetic/share/dynamic_reconfigure/cmake
 
@@ -528,7 +531,7 @@ gtest_hide_internal_symbols:BOOL=OFF
 gtest_main_LIB_DEPENDS:STATIC=general;gtest;
 
 //Path to a library.
-lib:FILEPATH=/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/flight_logger/lib/libflight_logger.so
+lib:FILEPATH=/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/disturbance_sources/lib/libdisturbance_sources.so
 
 //The directory containing a CMake configuration file for message_filters.
 message_filters_DIR:PATH=/opt/ros/noetic/share/message_filters/cmake

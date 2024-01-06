@@ -4,6 +4,7 @@
 #include <vector>
 #include <cmath>
 #include <string>
+#include <memory>
 #include <Eigen/Eigen>
 #include <ros/ros.h>
 #include <tf2/LinearMath/Quaternion.h>
@@ -27,11 +28,11 @@ class ReferenceGovernor{
 
 public:
     ReferenceGovernor(ros::NodeHandle* node);
-    ~ReferenceGovernor() {};
+    ~ReferenceGovernor();
     void setNewTraj(Eigen::Matrix<double, 3, -1> coefs, double t_horizon, ros::Time start_time);
     RefState getRefCmd_Full();
 
-    void setLogger(FlightLogger* logger_ptr);
+    void dumpParams();
 
 private:
     ros::NodeHandle nh;
@@ -80,7 +81,7 @@ private:
     void timer1Cb(const ros::TimerEvent&);   // call at each command iteration
     void timer2Cb(const ros::TimerEvent&);   // call at each traj plot iteration
 
-    FlightLogger* logger_ptr;
+    std::shared_ptr<FlightLogger> logger_ptr;
 };
 
 

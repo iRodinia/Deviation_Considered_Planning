@@ -4,5 +4,5 @@ Name: disturbance_aware_planner
 Description: Description of disturbance_aware_planner
 Version: 0.0.0
 Cflags: -I/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/disturbance_aware_planner/include
-Libs: -L${prefix}/lib -ldisturbance_aware_planner -lreference_governor
+Libs: -L${prefix}/lib -ldisturbance_aware_planner -lreference_governor -ldisturbance_sources
 Requires: roscpp rospy std_msgs grid_map grid_map_planner flight_logger

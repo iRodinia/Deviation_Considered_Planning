@@ -39,12 +39,40 @@ FakeDronePro::FakeDronePro(ros::NodeHandle* node): nh_(*node){
 
 	timer1 = nh_.createTimer(ros::Rate(sim_freq), &FakeDronePro::timer1Cb, this);
 
-	enable_log = false;
+	nh_.param("Log/enable_log", enable_log, false);
+    if(enable_log){
+        string log_folder_name;
+	    nh_.param("Log/log_folder_name", log_folder_name, string("default_folder"));
+        logger_ptr = std::shared_ptr<FlightLogger>(new FlightLogger(log_folder_name, "quadrotor"));
+        vector<string> tags = {
+			"ref_pos_x", "ref_pos_y", "ref_pos_z",
+			"ref_vel_x", "ref_vel_y", "ref_vel_z",
+			"ref_acc_x", "ref_acc_y", "ref_acc_z",
+			"ref_att_w", "ref_att_x", "ref_att_y", "ref_att_z",
+			"ref_angrate_x", "ref_angrate_y", "ref_angrate_z",
+			"ref_flight_mode",
+			"pos_x", "pos_y", "pos_z",
+			"vel_x", "vel_y", "vel_z",
+			"acc_x", "acc_y", "acc_z",
+			"att_w", "att_x", "att_y", "att_z",
+			"angrate_x", "angrate_y", "angrate_z",
+			"flight_mode",
+		};
+		logger_ptr->setDataTags(tags);
+        dumpParams();
+    }
 }
 
-void FakeDronePro::setLogger(FlightLogger* _ptr){
-	logger_ptr = _ptr;
-	enable_log = true;
+FakeDronePro::~FakeDronePro(){
+	if(enable_log){
+        logger_ptr->saveFile();
+    }
+}
+
+void FakeDronePro::dumpParams(){
+	if(!enable_log){
+        return;
+    }
 	logger_ptr->logParameter("sim_freq", sim_freq);
 	start_log_ts = ros::Time::now();
 }
@@ -215,36 +243,8 @@ int main (int argc, char** argv)
     ros::init(argc, argv, "fake_drone");
     ros::NodeHandle nh;
 	FakeDronePro drone(&nh);
-
-	bool log_enable = false;
-	nh.param("Log/enable_log", log_enable, false);
-	string log_folder_name;
-	nh.param("Log/log_folder_name", log_folder_name, string("default_folder"));
-	FlightLogger logger(log_folder_name, "quadrotor");
-	if(log_enable){
-		vector<string> tags = {
-			"ref_pos_x", "ref_pos_y", "ref_pos_z",
-			"ref_vel_x", "ref_vel_y", "ref_vel_z",
-			"ref_acc_x", "ref_acc_y", "ref_acc_z",
-			"ref_att_w", "ref_att_x", "ref_att_y", "ref_att_z",
-			"ref_angrate_x", "ref_angrate_y", "ref_angrate_z",
-			"ref_flight_mode",
-			"pos_x", "pos_y", "pos_z",
-			"vel_x", "vel_y", "vel_z",
-			"acc_x", "acc_y", "acc_z",
-			"att_w", "att_x", "att_y", "att_z",
-			"angrate_x", "angrate_y", "angrate_z",
-			"flight_mode",
-		};
-		logger.setDataTags(tags);
-		drone.setLogger(&logger);
-	}
     
 	ros::spin();
-
-	if(log_enable){
-		logger.saveFile();
-	}
 
     return 0;
 }

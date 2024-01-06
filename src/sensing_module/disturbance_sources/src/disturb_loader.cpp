@@ -2,6 +2,7 @@
 
 DisturbMap::DisturbMap(){
     initialized = false;
+    has_map = false;
 }
 
 void DisturbMap::initSettings(const ros::NodeHandle nh){
@@ -22,6 +23,7 @@ void DisturbMap::initSettings(const ros::NodeHandle nh){
     buffer_size = map_voxel_num_(0) * map_voxel_num_(1) * map_voxel_num_(2);
     disturb_buffer_ = std::vector<float>(buffer_size, 0.0);
     initialized = true;
+    has_map = false;
 }
 
 void DisturbMap::loadMap(const std::vector<float> buffer){
@@ -34,13 +36,18 @@ void DisturbMap::loadMap(const std::vector<float> buffer){
         return;
     }
     disturb_buffer_.assign(buffer.begin(), buffer.end());
+    has_map = true;
 }
 
 bool DisturbMap::isInited(){
     return initialized;
 }
 
-double DisturbMap::getRatio(Eigen::Vector3i idx){
+bool DisturbMap::hasMap(){
+    return has_map;
+}
+
+double DisturbMap::getRatio_idx(Eigen::Vector3i idx){
     if(!initialized || !isInMap(idx)){
         return 0;
     }
@@ -60,8 +67,7 @@ double DisturbMap::getRatio(Eigen::Vector3d pos){
     for (int i = 0; i < 2; i++)
 		for (int j = 0; j < 2; j++)
 			for (int k = 0; k < 2; k++){
-                Eigen::Vector3i _idx = near_vox + Eigen::Vector3i(i, j, k);
-                vertexes[i][j][k] = getRatio(_idx);
+                vertexes[i][j][k] = getRatio_idx(near_vox + Eigen::Vector3i(i, j, k));
             }
     double u = d_pos(0) / resolution_;
     double v = d_pos(1) / resolution_;
