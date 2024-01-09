@@ -1,0 +1,176 @@
+<launch>
+    <arg name="global_map_topic"              		     default="/global_map"/>
+    <arg name="global_ref_path_topic"              		 default="/global/ref_path"/>
+    <arg name="global_ref_sfc_topic"              		 default="/global/ref_sfc"/>
+    <arg name="local_ref_traj_topic"              		 default="/crazyflie/local_traj"/>
+    <arg name="uav_pose_topic"              		     default="/crazyflie/state_pose"/>
+    <arg name="uav_vel_topic"              		         default="/crazyflie/state_vel"/>
+    <arg name="uav_ctrl_mode_topic"              		 default="/crazyflie/state_ctrl_mode"/>
+    <arg name="uav_pose_cmd_topic"              		 default="/crazyflie/cmd_pose"/>
+    <arg name="uav_vel_cmd_topic"              		     default="/crazyflie/cmd_vel"/>
+    <arg name="uav_acc_cmd_topic"              		     default="/crazyflie/cmd_acc"/>
+    <arg name="uav_ctrl_mode_cmd_topic"              	 default="/crazyflie/cmd_ctrl_mode"/>
+    <arg name="uav_local_sensing_map_topic"              default="/crazyflie/local_map"/>
+    <arg name="uav_local_sensing_inflated_map_topic"     default="/crazyflie/local_map_inflated"/>
+    <arg name="disturb_model_vis_topic"                  default="/disturb/disturb_model_vis"/>
+    <arg name="disturb_model_map_topic"                  default="/disturb/disturb_model_map"/>
+    
+    <group ns="Log">
+        <param name="enable_log"                      value="false" />
+    </group>
+    
+    <group ns="global_map">
+        <param name="seed"                type="int"            value="94"/>
+        <param name="update_freq"         type="double"         value="1.0"/>
+        <param name="resolution"          type="double"         value="0.05"/>
+        <param name="x_length"            type="int"            value="100"/>
+        <param name="y_length"            type="int"            value="100"/>
+        <param name="z_length"            type="int"            value="50"/>
+        <param name="map_type"            type="int"            value="2"/>
+    </group>
+
+    <node name="global_map_node" pkg="global_map_gen" type="global_map_node" output="screen" required="true">
+        <remap from="/global_map"         to="$(arg global_map_topic)"/>
+    </node>
+
+    <group ns="grid_map">
+        <param name="resolution"                      value="0.05" /> 
+        <param name="map_size_x"                      value="5.1" /> 
+        <param name="map_size_y"                      value="5.1" /> 
+        <param name="map_size_z"                      value="3.0" />
+        <param name="uav_radius_inflation"            value="0.1" />
+        <param name="extra_inflation"                 value="0.15" />
+        <param name="visualization_truncate_height"   value="2.0"/>
+        <param name="virtual_ceil_height"             value="2.2"/>
+        <param name="ground_height"                   value="-0.01"/>
+        <param name="world_frame_name"                value="world"/>
+        <param name="visualization_frequency"         value="10.0"/>
+        <param name="local_sensing_range_xy"          value="1.2"/>
+        <param name="local_sensing_range_z"           value="0.8"/>
+    </group>
+
+    <group ns="Model">
+        <param name="mass"                            value="0.035" />
+        <param name="inertia_xx"                      value="1.4e-5" />
+        <param name="inertia_yy"                      value="1.4e-5" />
+        <param name="inertia_zz"                      value="2.17e-5" />
+        <param name="arm_length"                      value="0.0397" />
+        <param name="k_force"                         value="3.16e-10" />
+        <param name="k_moment"                        value="7.94e-12" />
+        <param name="nominal_vel"                     value="1.2" />
+    </group>
+
+    <group ns="Task">
+        <param name="start_pos_x"                     value="-2.1" />
+        <param name="start_pos_y"                     value="-1.9" />
+        <param name="hover_height"                    value="1.4" />
+        <param name="goal_pos_x"                      value="0.4" />
+        <param name="goal_pos_y"                      value="1.9" />
+        <param name="goal_pos_z"                      value="1.27" />
+        <param name="land_after_complete"             value="false" />
+    </group>
+
+    <group ns="grid_map_planner">
+        <param name="planner_type"                    value="1" /> 
+    </group>
+
+    <group ns="Optimization">
+        <param name="poly_order"                      value="4" />
+        <param name="predict_num"                     value="30" />
+        <param name="predict_dt"                      value="0.05" />
+        <param name="smoothness_cost_weight"          value="1.0" />
+        <param name="frs_cost_weight"                 value="0.0" />
+        <param name="terminal_cost_weight"            value="1.5" />
+        <param name="max_single_convex_hull_faces"    value="20" />
+        <param name="total_constrained_points_in_SFC" value="10" />
+        <param name="smoothness_cost_order"           value="4" />
+    </group>
+
+    <group ns="global_map_process">
+        <param name="plan_path_sfc_frequency"         value="1.5" />
+        <param name="visualization_frequency"         value="3.0" />
+    </group>
+
+    <group ns="Commander">
+        <param name="cmd_frequency"                   value="15.0" />
+        <param name="replan_frequency"                value="1.2" />
+        <param name="traj_plot_frequency"             value="3.0" />
+    </group>
+
+    <group ns="FanDisturbance">
+        <param name="resolution"                      value="0.05" />
+        <param name="map_size_x"                      value="5.1" /> 
+        <param name="map_size_y"                      value="5.1" /> 
+        <param name="map_size_z"                      value="3.0" />
+        <param name="ground_height"                   value="-0.01"/>
+        <rosparam>
+            source_num: 2
+            center_pos_x: [-0.2, 1.4]
+            center_pos_y: [-1.1, 1.2]
+            center_pos_z: [1.8, 2.1]
+            center_dir_x: [-1.0, -1.1]
+            center_dir_y: [1.0, -0.1]
+            center_dir_z: [-0.4, 0.05]
+            center_bias: [0.5, 0.5]
+            fan_radius: [0.8, 0.6]
+            wind_range: [2.8, 3.0]
+        </rosparam>
+        <param name="max_disturb_ratio"               value="0.5" />
+    </group>
+
+    <node name="dap_planner" pkg="disturbance_aware_planner" type="dap_node" output="screen" required="true">
+        <remap from="/grid_map/cloud_in"                        to="$(arg global_map_topic)"/>
+        <remap from="/grid_map/uav_pose_in"                     to="$(arg uav_pose_topic)"/>
+        <remap from="/grid_map/local_map"                       to="$(arg uav_local_sensing_map_topic)"/>
+        <remap from="/grid_map/local_map_inflate"               to="$(arg uav_local_sensing_inflated_map_topic)"/>
+
+        <remap from="/global_map_process/global_reference_path"           to="$(arg global_ref_path_topic)"/>
+        <remap from="/global_map_process/global_polygons"                 to="$(arg global_ref_sfc_topic)"/>
+
+        <remap from="crazyflie/pose_and_att"          to="$(arg uav_pose_topic)"/>
+        <remap from="crazyflie/vel_and_angrate"       to="$(arg uav_vel_topic)"/>
+        <remap from="crazyflie/ctrl_mode"             to="$(arg uav_ctrl_mode_topic)"/>
+        <remap from="planner/ref_polytraj"            to="$(arg local_ref_traj_topic)"/>
+        <remap from="disturbances/map_data"           to="$(arg disturb_model_map_topic)"/>
+    </node>
+
+    <node name="reference_governor" pkg="reference_governor" type="reference_governor_node" output="screen" required="true">
+        <remap from="planner/ref_polytraj"            to="$(arg local_ref_traj_topic)"/>
+        <remap from="crazyflie/pose_and_att"          to="$(arg uav_pose_topic)"/>
+        <remap from="crazyflie/vel_and_angrate"       to="$(arg uav_vel_topic)"/>
+        <remap from="crazyflie/ctrl_mode"             to="$(arg uav_ctrl_mode_topic)"/>
+        <remap from="crazyflie/pose_and_att_cmd"      to="$(arg uav_pose_cmd_topic)"/>
+        <remap from="crazyflie/vel_and_angrate_cmd"   to="$(arg uav_vel_cmd_topic)"/>
+        <remap from="crazyflie/acc_cmd"               to="$(arg uav_acc_cmd_topic)"/>
+        <remap from="crazyflie/mode_cmd"              to="$(arg uav_ctrl_mode_cmd_topic)"/>
+    </node>
+
+    <group ns="fake_drone">
+        <param name="place_x"                         value="-2.1" />
+        <param name="place_y"                         value="-1.9" />
+        <param name="place_z"                         value="0.05" />
+        <param name="place_yaw"                       value="0.0" />
+        <param name="frequency"                       value="12.0" />
+        <param name="time_constant"                   value="1.0" />
+    </group>
+
+    <!--<node name="fake_drone_node" pkg="fake_drone_pro" type="fake_drone_node" output="screen" required="true">-->
+    <node name="fake_drone_node" pkg="fake_drone_pro" type="fake_drone_node" output="screen" required="true">
+        <remap from="/uav/pos"                        to="$(arg uav_pose_topic)"/>
+        <remap from="/uav/vel"                        to="$(arg uav_vel_topic)"/>
+        <remap from="/uav/flight_mode"                to="$(arg uav_ctrl_mode_topic)"/>
+
+        <remap from="/uav/target_pos"                 to="$(arg uav_pose_cmd_topic)"/>
+        <remap from="/uav/target_vel"                 to="$(arg uav_vel_cmd_topic)"/>
+        <remap from="/uav/target_acc"                 to="$(arg uav_acc_cmd_topic)"/>
+        <remap from="/uav/target_mode"                to="$(arg uav_ctrl_mode_cmd_topic)"/>
+    </node>
+
+    <node name="disturbance_model" pkg="disturbance_sources" type="disturbance_sources_node" output="screen" required="true">
+        <remap from="disturbances/FanDisturbance_vis"  to="$(arg disturb_model_vis_topic)"/>
+        <remap from="disturbances/FanDisturbance_map"  to="$(arg disturb_model_map_topic)"/>
+    </node>
+
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find disturbance_aware_planner)/rviz_config/quad_sim_disturb_test.rviz" required="true" />
+
+</launch>

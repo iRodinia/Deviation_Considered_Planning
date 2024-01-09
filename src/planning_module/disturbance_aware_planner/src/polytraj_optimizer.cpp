@@ -30,7 +30,7 @@ void PolyTrajOptimizer::initParameters(ros::NodeHandle& nh){
     }
     double replan_freq;
     nh.param("Commander/replan_frequency", replan_freq, 1.5);
-    replan_dt = std::max(1 / replan_freq - 0.2, 0.5);
+    replan_dt = std::max(1 / replan_freq - 0.1, 0.5);
 
     double mass, arm_len, kf, km;
     Eigen::Matrix<double, 3, 3> Inertia = Eigen::Matrix<double, 3, 3>::Zero();

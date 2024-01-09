@@ -54,6 +54,7 @@ ReferenceGovernor::ReferenceGovernor(ros::NodeHandle* node): nh(*node){
             tags.push_back("coef_z_"+to_string(i));
         }
 		logger_ptr->setDataTags(tags);
+        logger_ptr->logParameter("traj_poly_order", _order);
         dumpParams();
     }
 }

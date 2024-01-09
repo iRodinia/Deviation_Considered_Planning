@@ -2,11 +2,11 @@
 
 EllipseDisturb::EllipseDisturb(ros::NodeHandle* node): nh(*node){
     double x_size, y_size, z_size, ground_height_;
-    nh.param("grid_map/resolution", resolution_, 0.05);
-    nh.param("grid_map/map_size_x", x_size, 5.0);
-    nh.param("grid_map/map_size_y", y_size, 5.0);
-    nh.param("grid_map/map_size_z", z_size, 2.5);
-    nh.param("grid_map/ground_height", ground_height_, -0.05);
+    nh.param("FanDisturbance/resolution", resolution_, 0.05);
+    nh.param("FanDisturbance/map_size_x", x_size, 5.0);
+    nh.param("FanDisturbance/map_size_y", y_size, 5.0);
+    nh.param("FanDisturbance/map_size_z", z_size, 2.5);
+    nh.param("FanDisturbance/ground_height", ground_height_, -0.05);
     resolution_inv_ = 1 / resolution_;
     map_origin_ = Eigen::Vector3d(-x_size / 2.0, -y_size / 2.0, ground_height_);
     map_size_ = Eigen::Vector3d(x_size, y_size, z_size);
@@ -111,7 +111,7 @@ void EllipseDisturb::dumpParams(){
         logger_ptr->logParameter("disturb_"+to_string(i)+"_cylinder_rad", range_r[i]);
         logger_ptr->logParameter("disturb_"+to_string(i)+"_cylinder_bias", range_a[i] - bias_a[i]);
         for(int j=0; j<3; j++){
-            for(int k=0; k<3; k++){
+            for(int k=0; k<4; k++){
                 logger_ptr->logParameter("disturb_"+to_string(i)+"_trans_mat_"+to_string(j)+to_string(k), trans_mat[i](j,k));
             }
         }

@@ -8,6 +8,8 @@
 
 # modified environment variables
 export CMAKE_PREFIX_PATH="/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/grid_map_planner:$CMAKE_PREFIX_PATH"
+export LD_LIBRARY_PATH="/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/grid_map_planner/lib:$LD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/grid_map_planner/lib/pkgconfig:$PKG_CONFIG_PATH"
 export PWD='/home/cz_linux/Documents/Deviation_Considered_Planning/build/grid_map_planner'
 export ROSLISP_PACKAGE_DIRECTORIES="/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/grid_map_planner/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
 export ROS_PACKAGE_PATH="/home/cz_linux/Documents/Deviation_Considered_Planning/src/planning_module/grid_map_planner:$ROS_PACKAGE_PATH"

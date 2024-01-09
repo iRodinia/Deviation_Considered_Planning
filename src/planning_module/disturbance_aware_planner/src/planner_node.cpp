@@ -82,8 +82,7 @@ void DisturbanceAwarePlanner::subDisturbCb(const std_msgs::Float32MultiArray::Co
     if(disturb_ptr->hasMap()){
         return;
     }
-    vector<float> map_data = msg->data;
-    disturb_ptr->loadMap(map_data);
+    disturb_ptr->loadMap(msg->data);
 }
 
 void DisturbanceAwarePlanner::timer1Cb(const ros::TimerEvent&){     // call at each replanning iteration
@@ -94,7 +93,7 @@ void DisturbanceAwarePlanner::timer1Cb(const ros::TimerEvent&){     // call at e
         ROS_INFO("Replanning process waiting for offboard control mode.");
         return;
     }
-    if(!disturb_ptr->isInited()){
+    if(!disturb_ptr->isInited() || !disturb_ptr->hasMap()){
         ROS_INFO("Replanning process waiting for disturbance map initialization.");
         return;
     }

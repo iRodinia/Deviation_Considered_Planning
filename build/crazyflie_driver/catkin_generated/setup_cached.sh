@@ -8,6 +8,8 @@
 
 # modified environment variables
 export CMAKE_PREFIX_PATH="/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/crazyflie_driver:$CMAKE_PREFIX_PATH"
+export LD_LIBRARY_PATH="/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/crazyflie_driver/lib:$LD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/crazyflie_driver/lib/pkgconfig:$PKG_CONFIG_PATH"
 export PWD='/home/cz_linux/Documents/Deviation_Considered_Planning/build/crazyflie_driver'
 export ROSLISP_PACKAGE_DIRECTORIES="/home/cz_linux/Documents/Deviation_Considered_Planning/devel/.private/crazyflie_driver/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
 export ROS_PACKAGE_PATH="/home/cz_linux/Documents/Deviation_Considered_Planning/src/control_module/crazyflie_driver:$ROS_PACKAGE_PATH"

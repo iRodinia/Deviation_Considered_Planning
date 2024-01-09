@@ -101,27 +101,53 @@ class TrajPloter(object):
             return
         
         if self.plot_disturb:
-            self.disturb_h = data_loader.get_param('disturb_cylinder_h')
-            self.disturb_rad = data_loader.get_param('disturb_cylinder_rad')
-            self.disturb_bias = data_loader.get_param('disturb_cylinder_bias')
-            self.disturb_trans_mat = np.zeros((4,4))
-            self.disturb_trans_mat[0,0] = data_loader.get_param('trans_mat_00')
-            self.disturb_trans_mat[0,1] = data_loader.get_param('trans_mat_01')
-            self.disturb_trans_mat[0,2] = data_loader.get_param('trans_mat_02')
-            self.disturb_trans_mat[0,3] = data_loader.get_param('trans_mat_03')
-            self.disturb_trans_mat[1,0] = data_loader.get_param('trans_mat_10')
-            self.disturb_trans_mat[1,1] = data_loader.get_param('trans_mat_11')
-            self.disturb_trans_mat[1,2] = data_loader.get_param('trans_mat_12')
-            self.disturb_trans_mat[1,3] = data_loader.get_param('trans_mat_13')
-            self.disturb_trans_mat[2,0] = data_loader.get_param('trans_mat_20')
-            self.disturb_trans_mat[2,1] = data_loader.get_param('trans_mat_21')
-            self.disturb_trans_mat[2,2] = data_loader.get_param('trans_mat_22')
-            self.disturb_trans_mat[2,3] = data_loader.get_param('trans_mat_23')
-            self.disturb_trans_mat[3,3] = 1
+            self.ellipse_num = data_loader.get_param('disturb_num')
+            if self.ellipse_num is None:
+                self.ellipse_num = 0
+            else:
+                self.ellipse_num = int(self.ellipse_num)
+            self.disturb_poses = []
+            self.disturb_dirs = []
+            self.disturb_hs = []
+            self.disturb_rads = []
+            self.disturb_biases = []
+            self.disturb_trans_mats = []
+            for i in range(self.ellipse_num):
+                self.disturb_poses.append([data_loader.get_param('disturb_'+str(i)+'_pos_x'),
+                                           data_loader.get_param('disturb_'+str(i)+'_pos_y'),
+                                           data_loader.get_param('disturb_'+str(i)+'_pos_z')])
+                self.disturb_dirs.append([data_loader.get_param('disturb_'+str(i)+'_dir_x'),
+                                          data_loader.get_param('disturb_'+str(i)+'_dir_y'),
+                                          data_loader.get_param('disturb_'+str(i)+'_dir_z')])
+                self.disturb_hs.append(data_loader.get_param('disturb_'+str(i)+'_cylinder_h'))
+                self.disturb_rads.append(data_loader.get_param('disturb_'+str(i)+'_cylinder_rad'))
+                self.disturb_biases.append(data_loader.get_param('disturb_'+str(i)+'_cylinder_bias'))
+                _trans_mat = np.zeros((4,4))
+                _trans_mat[0,0] = data_loader.get_param('disturb_'+str(i)+'_trans_mat_00')
+                _trans_mat[0,1] = data_loader.get_param('disturb_'+str(i)+'_trans_mat_01')
+                _trans_mat[0,2] = data_loader.get_param('disturb_'+str(i)+'_trans_mat_02')
+                _trans_mat[0,3] = data_loader.get_param('disturb_'+str(i)+'_trans_mat_03')
+                _trans_mat[1,0] = data_loader.get_param('disturb_'+str(i)+'_trans_mat_10')
+                _trans_mat[1,1] = data_loader.get_param('disturb_'+str(i)+'_trans_mat_11')
+                _trans_mat[1,2] = data_loader.get_param('disturb_'+str(i)+'_trans_mat_12')
+                _trans_mat[1,3] = data_loader.get_param('disturb_'+str(i)+'_trans_mat_13')
+                _trans_mat[2,0] = data_loader.get_param('disturb_'+str(i)+'_trans_mat_20')
+                _trans_mat[2,1] = data_loader.get_param('disturb_'+str(i)+'_trans_mat_21')
+                _trans_mat[2,2] = data_loader.get_param('disturb_'+str(i)+'_trans_mat_22')
+                _trans_mat[2,3] = data_loader.get_param('disturb_'+str(i)+'_trans_mat_23')
+                _trans_mat[3,3] = 1
+                self.disturb_trans_mats.append(_trans_mat)
             
-            if self.disturb_h is None or self.disturb_rad is None or self.disturb_bias is None:
-                print('Unable to plot disturbance model.')
+            if len(self.disturb_hs) == 0 or len(self.disturb_rads) == 0 or len(self.disturb_biases) == 0 or len(self.disturb_trans_mats) == 0:
+                print('Unable to plot disturbance range.')
                 self.plot_disturb = False
+            else:
+                self.disturb_poses = np.array(self.disturb_poses)
+                self.disturb_dirs = np.array(self.disturb_dirs)
+                self.disturb_hs = np.array(self.disturb_hs)
+                self.disturb_rads = np.array(self.disturb_rads)
+                self.disturb_biases = np.array(self.disturb_biases)
+                self.disturb_trans_mats = np.array(self.disturb_trans_mats)
 
         self.data_prepared = True
         
@@ -176,25 +202,32 @@ class TrajPloter(object):
                                     linewidth=self.plot_settings['line_width'])
                     
         if self.plot_disturb:
-            if self.disturb_h is None or self.disturb_rad is None or self.disturb_bias is None:
+            if len(self.disturb_hs) == 0 or len(self.disturb_rads) == 0 or len(self.disturb_biases) == 0 or len(self.disturb_trans_mats) == 0:
                 print('Unable to plot disturbance model.')
                 self.plot_disturb = False
                 return
+            if not self.ellipse_num:
+                return
             u = np.linspace(0, 2 * np.pi, 25)
             v = np.linspace(0, np.pi, 25)
-            for i in range(3):
-                k = (i+1) / 3.0
-                x = k * (self.disturb_h / 2 * np.outer(np.cos(u), np.sin(v)) + (self.disturb_h / 2 - self.disturb_bias))
-                y = k * self.disturb_rad * np.outer(np.sin(u), np.sin(v))
-                z = k * self.disturb_rad * np.outer(np.ones(np.size(u)), np.cos(v))
-                d = np.outer(np.ones(np.size(u)), np.ones(np.size(v)))
-                org_crds = np.stack((x, y, z, d))
-                new_crds = np.zeros(org_crds.shape)
-                for m in range(org_crds.shape[1]):
-                    for n in range(org_crds.shape[2]):
-                        new_crds[:,m,n] = self.disturb_trans_mat @ org_crds[:,m,n]
-                plot_handle.plot_surface(new_crds[0,:], new_crds[1,:], new_crds[2,:], 
-                                         color=self.plot_settings['disturb_color'], alpha=self.plot_settings['disturb_transp'])
+            for id in range(self.ellipse_num):
+                disturb_h = self.disturb_hs[id]
+                disturb_bias = self.disturb_biases[id]
+                disturb_rad = self.disturb_rads[id]
+                disturb_trans_mat = self.disturb_trans_mats[id]
+                for i in range(3):
+                    k = (i+1) / 3.0
+                    x = k * (disturb_h / 2 * np.outer(np.cos(u), np.sin(v)) + (disturb_h / 2 - disturb_bias))
+                    y = k * disturb_rad * np.outer(np.sin(u), np.sin(v))
+                    z = k * disturb_rad * np.outer(np.ones(np.size(u)), np.cos(v))
+                    d = np.outer(np.ones(np.size(u)), np.ones(np.size(v)))
+                    org_crds = np.stack((x, y, z, d))
+                    new_crds = np.zeros(org_crds.shape)
+                    for m in range(org_crds.shape[1]):
+                        for n in range(org_crds.shape[2]):
+                            new_crds[:,m,n] = disturb_trans_mat @ org_crds[:,m,n]
+                    plot_handle.plot_surface(new_crds[0,:], new_crds[1,:], new_crds[2,:], 
+                                            color=self.plot_settings['disturb_color'], alpha=self.plot_settings['disturb_transp'])
                 
             
                 
@@ -213,7 +246,7 @@ if __name__ == "__main__":
         plter.load_data(loader)
         fig = plt.figure("NNYY")
         ax = fig.add_axes([0.15,0.15,0.8,0.8], projection='3d')
-        plter.plot(ax)
+        plter.plot(ax) # type: ignore
         ax.legend()
         plt.show()
     

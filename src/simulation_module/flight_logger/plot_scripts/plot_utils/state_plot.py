@@ -31,6 +31,7 @@ class PositionPlot(object):
             'disturb_transp': 0.4,
         }
         self.plot_disturb = True
+        self.ellipse_num = 0
     
     def load_data(self, data_loader: DataLoader):
         if not data_loader.loaded:
@@ -65,19 +66,36 @@ class PositionPlot(object):
             self.uav_pos_ts.append(pos_times[i])
         
         if self.plot_disturb:
-            self.disturb_pos = np.array([data_loader.get_param('disturb_pos_x'),
-                                         data_loader.get_param('disturb_pos_y'),
-                                         data_loader.get_param('disturb_pos_z')])
-            self.disturb_dir = np.array([data_loader.get_param('disturb_dir_x'),
-                                         data_loader.get_param('disturb_dir_y'),
-                                         data_loader.get_param('disturb_dir_z')])
-            self.disturb_h = data_loader.get_param('disturb_cylinder_h')
-            self.disturb_rad = data_loader.get_param('disturb_cylinder_rad')
-            self.disturb_bias = data_loader.get_param('disturb_cylinder_bias')
+            self.ellipse_num = data_loader.get_param('disturb_num')
+            if self.ellipse_num is None:
+                self.ellipse_num = 0
+            else:
+                self.ellipse_num = int(self.ellipse_num)
+            self.disturb_poses = []
+            self.disturb_dirs = []
+            self.disturb_hs = []
+            self.disturb_rads = []
+            self.disturb_biases = []
+            for i in range(self.ellipse_num):
+                self.disturb_poses.append([data_loader.get_param('disturb_'+str(i)+'_pos_x'),
+                                           data_loader.get_param('disturb_'+str(i)+'_pos_y'),
+                                           data_loader.get_param('disturb_'+str(i)+'_pos_z')])
+                self.disturb_dirs.append([data_loader.get_param('disturb_'+str(i)+'_dir_x'),
+                                          data_loader.get_param('disturb_'+str(i)+'_dir_y'),
+                                          data_loader.get_param('disturb_'+str(i)+'_dir_z')])
+                self.disturb_hs.append(data_loader.get_param('disturb_'+str(i)+'_cylinder_h'))
+                self.disturb_rads.append(data_loader.get_param('disturb_'+str(i)+'_cylinder_rad'))
+                self.disturb_biases.append(data_loader.get_param('disturb_'+str(i)+'_cylinder_bias'))
             
-            if self.disturb_h is None or self.disturb_rad is None or self.disturb_bias is None:
+            if len(self.disturb_hs) == 0 or len(self.disturb_rads) == 0 or len(self.disturb_biases) == 0:
                 print('Unable to plot disturbance range.')
                 self.plot_disturb = False
+            else:
+                self.disturb_poses = np.array(self.disturb_poses)
+                self.disturb_dirs = np.array(self.disturb_dirs)
+                self.disturb_hs = np.array(self.disturb_hs)
+                self.disturb_rads = np.array(self.disturb_rads)
+                self.disturb_biases = np.array(self.disturb_biases)
 
         self.data_prepared = True
     
@@ -86,7 +104,37 @@ class PositionPlot(object):
             print('No such setting as [%s] in this plot.' % key)
         else:
             self.plot_settings[key] = val_str
+    
+    def check_disturb(self, pos: np.ndarray):
+        if not self.plot_disturb or not self.data_prepared or not self.ellipse_num:
+            return
         
+        for i in range(self.ellipse_num):
+            disturb_pose = self.disturb_poses[i]
+            disturb_dir = self.disturb_dirs[i]
+            disturb_h = self.disturb_hs[i]
+            disturb_rad = self.disturb_rads[i]
+            disturb_bias = self.disturb_biases[i]
+            
+            vec_CP = pos - disturb_pose
+            vec_CO = disturb_dir
+            alpha = np.arccos(np.dot(vec_CP, vec_CO) / (np.linalg.norm(vec_CP) * np.linalg.norm(vec_CO))) # type: ignore
+            sin_alpha = np.sin(alpha)
+            cos_alpha = np.cos(alpha)
+            range_a = disturb_h / 2
+            bias_a = range_a - disturb_bias
+            A = (range_a * sin_alpha)**2 + (disturb_rad * cos_alpha)**2
+            B = 2 * range_a * bias_a * sin_alpha**2
+            C = (bias_a * sin_alpha)**2 - (disturb_rad * cos_alpha)**2
+            cos_theta = (np.sqrt(B*B - 4*A*C) - B) / 2 / A
+            sin_theta = np.sqrt(1 - cos_theta**2)
+            ellipse_range = np.sqrt((range_a*cos_theta + bias_a)**2 + (disturb_rad*sin_theta)**2)
+            
+            if np.linalg.norm(vec_CP) <= ellipse_range:
+                return True
+        
+        return False
+            
     def plot(self, x_handle: plt.Axes, y_handle: plt.Axes, z_handle: plt.Axes):
         if not self.data_prepared:
             print('Data not loaded. Return...')
@@ -133,7 +181,7 @@ class PositionPlot(object):
         z_handle.set_xlabel('z /m')
         
         if self.plot_disturb:
-            if self.disturb_h is None or self.disturb_rad is None or self.disturb_bias is None:
+            if len(self.disturb_hs) == 0 or len(self.disturb_rads) == 0 or len(self.disturb_biases) == 0:
                 print('Unable to plot disturbance range.')
                 self.plot_disturb = False
                 return
@@ -141,19 +189,7 @@ class PositionPlot(object):
             disturb_area = []
             for i in range(uav_pos.shape[0]):
                 _p = uav_pos[i,:]
-                vec_cp = _p - self.disturb_pos
-                rad_len = np.linalg.norm(np.cross(vec_cp, self.disturb_dir))
-                proj_len = vec_cp.dot(self.disturb_dir)
-                if proj_len >= 0:
-                    if proj_len <= (self.disturb_h - self.disturb_bias) and rad_len <= self.disturb_rad:
-                        disturb_area.append(True)
-                    else:
-                        disturb_area.append(False)
-                else:
-                    if proj_len > -self.disturb_bias and rad_len <= self.disturb_rad:
-                        disturb_area.append(True)
-                    else:
-                        disturb_area.append(False)
+                disturb_area.append(self.check_disturb(_p))
                         
             x_handle.fill_between(uav_pos_t, uav_pos[:,0].min()-0.05, uav_pos[:,0].max()+0.05, where=disturb_area, 
                                   facecolor=self.plot_settings['disturb_color'], alpha=self.plot_settings['disturb_transp'])
